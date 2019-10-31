@@ -1,6 +1,5 @@
-package com.hasaker.vblog.base;
+package com.hasaker.vblog.common;
 
-import com.hasaker.vblog.common.Consts;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
