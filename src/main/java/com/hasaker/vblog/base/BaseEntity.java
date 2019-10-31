@@ -17,15 +17,15 @@ public class BaseEntity implements Serializable {
     private static final long serialVersionUID = -6023771566281922919L;
 
     /**
-     * 全局唯一ID
+     * 全局唯一ID(雪花算法生成)
      */
     private String id;
 
     /**
-     * 创建人
+     * 创建人ID
      */
     @TableField(fill = FieldFill.INSERT)
-    private Long createUser;
+    private String createUser;
 
     /**
      * 创建时间
@@ -34,24 +34,24 @@ public class BaseEntity implements Serializable {
     private Date createTime;
 
     /**
+     * 更新人ID
+     */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private String updateUser;
+
+    /**
      * 更新时间
      */
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
     /**
-     * 更新人
+     * 是否被删除(默认值0)
      */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Long updateUser;
+    private Integer isDeleted;
 
     /**
-     * 是否被删除
-     */
-    private String isDeleted;
-
-    /**
-     * 版本
+     * 版本(默认值0)
      */
     private Integer version;
 }
