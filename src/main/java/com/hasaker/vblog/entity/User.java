@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Date;
 
 /**
  * @author 余天堂
@@ -20,6 +20,8 @@ import java.util.List;
 public class User extends BaseEntity {
 
     private String account;
+
+    private String password;
 
     private String avatar;
 
@@ -37,5 +39,7 @@ public class User extends BaseEntity {
 
     private String region;
 
-    private List<String> location;
+    private String location;
+
+    private Date registerTime;
 }

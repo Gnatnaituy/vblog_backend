@@ -6,26 +6,20 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
 /**
  * @author 余天堂
- * @since 2019/10/31 17:00
- * 动态实体类
+ * @since 2019/11/3 18:08
+ * @description 
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Post extends BaseEntity {
+public class PostImage extends BaseEntity {
 
-    private String topicId;
+    private String postId;
 
-    private String content;
+    private String imageUrl;
 
-    private Integer visibility;
-
-    private String postUserId;
-
-    private Date postTime;
+    private Integer imageSize;
 }

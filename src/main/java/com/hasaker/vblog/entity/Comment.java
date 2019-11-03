@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 /**
  * @author 余天堂
  * @since 2019/10/31 22:48
@@ -21,7 +23,11 @@ public class Comment extends BaseEntity {
 
     private String targetUserId;
 
+    private String commentUserId;
+
     private String content;
 
     private Integer visibility;
+
+    private Date commentTime;
 }
