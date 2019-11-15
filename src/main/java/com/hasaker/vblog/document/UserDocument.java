@@ -1,7 +1,6 @@
 package com.hasaker.vblog.document;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author 余天堂
@@ -33,6 +32,4 @@ public class UserDocument {
     private String location;
 
     private Date registerTime;
-
-    private List<PostDocument> posts;
 }
