@@ -39,7 +39,7 @@ public class BaseException extends RuntimeException {
      */
     private String message;
 
-    public BaseException(String module, String code, String[] args, String message) {
+    private BaseException(String module, String code, String[] args, String message) {
         this.module = module;
         this.code = code;
         this.args = args;

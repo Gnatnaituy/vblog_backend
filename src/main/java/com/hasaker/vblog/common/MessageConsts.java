@@ -27,9 +27,6 @@ public class MessageConsts {
     /** 非法字符 */
     public static final String SQL_KEYWORD = "info.security.keyword.sql";
 
-    /** 业务流程处理中发现核心处理对象为空 */
-    public static final String ENTITY_EMPTY = "info.entity.empty";
-
     /** 不支持的请求方式 */
     public static final String NO_SUPPORT = "info.support.exception";
 
@@ -39,7 +36,11 @@ public class MessageConsts {
     /** 退出成功 */
     public static final String LOGOUT_SUCCESS = "user.logout.success";
 
-    public static final String INFO_ARG_ENTITY_EMPTY="info.arg.entity.empty";
+    /** 业务流程处理中发现核心处理对象为空 */
+    public static final String ENTITY_EMPTY = "info.entity.empty";
+
+    /** 参数为空 */
+    public static final String ARG_ENTITY_EMPTY="info.arg.entity.empty";
 
     /** 查询条件允许为""不允许为null */
     public static final String INFO_ARG_ENTITY_NULL="info.arg.entity.null";

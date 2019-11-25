@@ -9,13 +9,15 @@ import lombok.NoArgsConstructor;
 /**
  * @author 余天堂
  * @since 2019/11/3 18:19
- * @description 
+ * @description 好友关系类
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Friendship extends BaseEntity {
+
+    private static final long serialVersionUID = 201046591963360428L;
 
     private String userId;
 

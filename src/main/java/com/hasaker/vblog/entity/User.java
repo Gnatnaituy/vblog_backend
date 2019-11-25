@@ -11,13 +11,15 @@ import java.util.Date;
 /**
  * @author 余天堂
  * @since 2019/10/31 22:43
- * 用户实体类
+ * @description 用户实体类
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class User extends BaseEntity {
+
+    private static final long serialVersionUID = -618810997964397602L;
 
     private String account;
 

@@ -36,13 +36,13 @@ public class MessageUtils {
      */
     public static String message(String code) {
         MessageSource messageSource = SpringUtils.getBean(MessageSource.class);
-        try{
+        try {
             return messageSource.getMessage(code, null, LocaleContextHolder.getLocale());
-        }catch(Exception e){
+        } catch(Exception e){
             log.error(e.getMessage(),e);
+
             return "未知错误!";
         }
-
     }
 
 
