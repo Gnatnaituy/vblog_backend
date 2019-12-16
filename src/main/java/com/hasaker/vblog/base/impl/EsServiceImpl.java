@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.hasaker.vblog.base.EsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.query.*;
 
@@ -21,6 +22,12 @@ public class EsServiceImpl<T> implements EsService<T> {
         CommonExceptionEnum.NOT_NULL_ARG.isTrue(ObjectUtils.isNull(clazz), "clazz");
 
         return elasticsearchOperations.queryForList(searchQuery, clazz);
+    }
+
+    @Override
+    public Page<T> page(SearchQuery searchQuery, Class<T> clazz) {
+
+        return elasticsearchOperations.queryForPage(searchQuery, clazz);
     }
 
     @Override

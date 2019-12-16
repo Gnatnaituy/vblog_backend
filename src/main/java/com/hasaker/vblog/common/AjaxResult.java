@@ -100,7 +100,7 @@ public class AjaxResult<T> implements Serializable {
     
     /** 单例返回 */
     public AjaxResult<T> successT(T object) {
-        AjaxResult<T> ajaxResult = new AjaxResult<T>();
+        AjaxResult<T> ajaxResult = new AjaxResult<>();
         ajaxResult.setCode(Consts.SUCCESS);
         ajaxResult.setObject(object);
         
@@ -108,7 +108,7 @@ public class AjaxResult<T> implements Serializable {
     }
 
     public AjaxResult<T> successT(String message, T object) {
-        AjaxResult<T> ajaxResult = new AjaxResult<T>();
+        AjaxResult<T> ajaxResult = new AjaxResult<>();
         ajaxResult.setCode(Consts.SUCCESS);
         ajaxResult.setMessage(message);
         ajaxResult.setObject(object);

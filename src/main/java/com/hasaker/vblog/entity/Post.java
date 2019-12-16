@@ -1,10 +1,7 @@
 package com.hasaker.vblog.entity;
 
 import com.hasaker.vblog.base.BaseEntity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 
@@ -17,6 +14,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Post extends BaseEntity {
 
     private static final long serialVersionUID = 7086891429068468891L;

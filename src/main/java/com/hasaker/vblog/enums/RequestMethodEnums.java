@@ -1,18 +1,21 @@
 package com.hasaker.vblog.enums;
+
 /**
  * @author 余天堂
- * @since 2019/11/17 20:08
+ * @since 2019/11/17 20:10
  * @description 
  */
-public enum CommonYNEnums implements IEnum<CommonYNEnums> {
+public enum RequestMethodEnums implements IEnum<RequestMethodEnums> {
 
-    YES("1", "Y"),
-    NO("0", "N");
+    GET("GET", "GET"),
+    POST("POST", "POST"),
+    UPDATE("UPDATE", "UPDATE"),
+    DELETE("DELETE", "DELETE");
 
     private final String code;
     private final String info;
 
-    CommonYNEnums(String code, String info) {
+    RequestMethodEnums(String code, String info) {
         this.code = code;
         this.info = info;
     }

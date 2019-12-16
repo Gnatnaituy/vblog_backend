@@ -10,8 +10,7 @@ import org.springframework.data.elasticsearch.config.AbstractElasticsearchConfig
  * @since 2019/11/17 19:28
  * @description
  */
-public class ElasticsearchRestClientConfig extends AbstractElasticsearchConfiguration {
-
+public class EsRestClientConfig extends AbstractElasticsearchConfiguration {
 
     public RestHighLevelClient elasticsearchClient() {
 

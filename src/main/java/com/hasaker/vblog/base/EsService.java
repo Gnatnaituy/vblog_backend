@@ -1,5 +1,6 @@
 package com.hasaker.vblog.base;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.elasticsearch.core.query.DeleteQuery;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.data.elasticsearch.core.query.UpdateQuery;
@@ -9,6 +10,8 @@ import java.util.List;
 public interface EsService<T> {
 
     List<T> search(SearchQuery searchQuery, Class<T> clazz);
+
+    Page<T> page(SearchQuery searchQuery, Class<T> clazz);
 
     boolean createIndex(Class<T> clazz);
 

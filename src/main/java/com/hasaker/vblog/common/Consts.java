@@ -25,12 +25,16 @@ public final class Consts {
     public static final String VERSION = "version";
 
     // 逻辑删除标识符为0则该信息未删除,1为已删除
-    public static final Integer UNDELETE = 0;
+    public static final Integer UNDELETED = 0;
     public static final Integer DELETED = 1;
 
     // YN类型
     public static final Integer NO = 0;
     public static final Integer YES = 1;
+
+    // 布尔类型
+    public static final Integer FALSE = 0;
+    public static final Integer TRUE = 1;
 
     // 朋友圈可见性
     public static final Integer SECRET = 1;
