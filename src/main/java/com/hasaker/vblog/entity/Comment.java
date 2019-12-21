@@ -3,8 +3,6 @@ package com.hasaker.vblog.entity;
 import com.hasaker.vblog.base.BaseEntity;
 import lombok.*;
 
-import java.util.Date;
-
 /**
  * @author 余天堂
  * @since 2019/10/31 22:48
@@ -29,5 +27,5 @@ public class Comment extends BaseEntity {
 
     private Integer visibility;
 
-    private Date commentTime;
+    private Long commentTime;
 }
