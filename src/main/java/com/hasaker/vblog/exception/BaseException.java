@@ -1,28 +1,82 @@
 package com.hasaker.vblog.exception;
 
-import com.hasaker.vblog.enums.Status;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import com.hasaker.vblog.utils.MessageUtils;
 
 /**
- * @package com.hasaker.vblog.exception
  * @author 余天堂
- * @create 2019/12/22 00:59
- * @description BaseException
+ * @since 2019/11/15 09:43
+ * @description 
  */
-@EqualsAndHashCode(callSuper = true)
-@Data
-@AllArgsConstructor
 public class BaseException extends RuntimeException {
 
-    private Integer code;
+    /**
+     * serialVersionUID
+     */
+    private static final long serialVersionUID = 6786064051478878004L;
 
-    private String message;
+    /**
+     * 所属模块
+     */
+    private String module;
 
-    public BaseException(Status status) {
-        super(status.getMessage());
-        this.code = status.getCode();
-        this.message = status.getMessage();
+    /**
+     * 错误码
+     */
+    private String code;
+
+    /**
+     * 错误码对应的参数
+     */
+    private Object[] args;
+
+    /**
+     * 错误消息
+     */
+    private String defaultMessage;
+
+    public BaseException(String module, String code, Object[] args, String defaultMessage) {
+        this.module = module;
+        this.code = code;
+        this.args = args;
+        this.defaultMessage = defaultMessage;
+    }
+
+    public BaseException(String module, String code, Object[] args) {
+        this(module, code, args, null);
+    }
+
+    public BaseException(String code, String defaultMessage) {
+        this(null, code, null, defaultMessage);
+    }
+
+    public BaseException(String code, Object[] args) {
+        this(null, code, args, null);
+    }
+
+    public BaseException(String defaultMessage) {
+        this(null, null, null, defaultMessage);
+    }
+
+    public BaseException(String code, Object[] args, String message) {
+        this(null,code, args, message);
+    }
+
+    public BaseException(String code, Object[] args, String message, Throwable cause) {
+        super(message, cause);
+        this.code = code;
+        this.args = args;
+    }
+
+    @Override
+    public String getMessage() {
+        StringBuilder sb = new StringBuilder("ERROR CODE: ");
+        sb.append(code).append(", ERROR MESSAGE: ");
+        String message;
+        if (defaultMessage != null) {
+            message = MessageUtils.message(defaultMessage, args);
+            sb.append(message);
+        }
+
+        return sb.toString();
     }
 }

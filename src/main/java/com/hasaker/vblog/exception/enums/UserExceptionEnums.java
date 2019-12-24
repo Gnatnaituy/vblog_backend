@@ -1,13 +1,13 @@
 package com.hasaker.vblog.exception.enums;
 
-import com.hasaker.vblog.base.BaseException;
+import com.hasaker.vblog.exception.BaseExceptionAssert;
 
 /**
  * @author 余天堂
  * @since 2019/12/10 15:42
  * @description 
  */
-public enum UserExceptionEnums implements BaseException {
+public enum UserExceptionEnums implements BaseExceptionAssert {
 
     USER_NOT_FOUND("USER_NOT_FOUND","user not found");
 

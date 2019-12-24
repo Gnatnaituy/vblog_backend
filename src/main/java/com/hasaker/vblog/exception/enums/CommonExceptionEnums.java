@@ -1,13 +1,13 @@
 package com.hasaker.vblog.exception.enums;
 
-import com.hasaker.vblog.base.BaseException;
+import com.hasaker.vblog.exception.BaseExceptionAssert;
 
 /**
  * @author 余天堂
  * @since 2019/11/17 21:05
  * @description 
  */
-public enum CommonExceptionEnums implements BaseException {
+public enum CommonExceptionEnums implements BaseExceptionAssert {
 
     SUCCESS("200", "成功!"),
     BODY_NOT_MATCH("400","请求的数据格式不符!"),
