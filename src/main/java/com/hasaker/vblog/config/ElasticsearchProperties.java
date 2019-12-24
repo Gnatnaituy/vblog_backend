@@ -33,7 +33,7 @@ public class ElasticsearchProperties {
     /**
      * 集群名称
      */
-    private String clusterName = "elasticsearch";
+    private String clusterName = "elasticsearch_hasaker";
 
     /**
      * 集群节点
@@ -90,7 +90,7 @@ public class ElasticsearchProperties {
         /**
          * 副本数量
          */
-        private Integer numberOfReplicas = 2;
+        private Integer numberOfReplicas = 1;
 
     }
 

@@ -1,6 +1,7 @@
 package com.hasaker.vblog.config;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -26,6 +27,7 @@ import java.util.List;
  * @create 2019/12/22 01:14
  * @description ElasticsearchAutoConfiguration
  */
+@Slf4j
 @Configuration
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @EnableConfigurationProperties(ElasticsearchProperties.class)
@@ -41,7 +43,7 @@ public class ElasticsearchAutoConfiguration {
         List<String> clusterNodes = elasticsearchProperties.getClusterNodes();
         clusterNodes.forEach(node -> {
             try {
-                String[] parts = StringUtils.split(node, ";");
+                String[] parts = StringUtils.split(node, ":");
                 Assert.notNull(parts, "Must defined");
                 Assert.state(parts.length == 2, "Must be defined as 'host:port'");
                 httpHosts.add(new HttpHost(parts[0], Integer.parseInt(parts[1]), elasticsearchProperties.getSchema()));
