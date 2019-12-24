@@ -1,5 +1,6 @@
 package com.hasaker.vblog.exception.enums;
 
+import com.hasaker.vblog.common.MessageConsts;
 import com.hasaker.vblog.exception.BaseExceptionAssert;
 
 /**
@@ -14,7 +15,12 @@ public enum CommonExceptionEnums implements BaseExceptionAssert {
     SIGNATURE_NOT_MATCH("401","请求的数字签名不匹配!"),
     NOT_FOUND("404", "未找到该资源!"),
     INTERNAL_SERVER_ERROR("500", "服务器内部错误!"),
-    SERVER_BUSY("503","服务器正忙，请稍后再试!");
+    SERVER_BUSY("503","服务器正忙，请稍后再试!"),
+
+    NOT_NULL("100", MessageConsts.ENTITY_EMPTY),
+    NOT_NULL_ARG("101", MessageConsts.ARG_ENTITY_EMPTY),
+    ERROR_SNOWFLAKE_SIZE("102", MessageConsts.ERROR_SNOWFLAKE_SIZE),
+    OPERATION_FAILED("103", MessageConsts.OPERATION_FAILED);
 
     private String code;
 

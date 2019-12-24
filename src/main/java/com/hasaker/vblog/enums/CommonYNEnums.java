@@ -4,7 +4,7 @@ package com.hasaker.vblog.enums;
  * @since 2019/11/17 20:08
  * @description 
  */
-public enum YNEnums implements IEnum<YNEnums> {
+public enum CommonYNEnums implements IEnum<CommonYNEnums> {
 
     YES("1", "Y"),
     NO("0", "N");
@@ -12,7 +12,7 @@ public enum YNEnums implements IEnum<YNEnums> {
     private final String code;
     private final String info;
 
-    YNEnums(String code, String info) {
+    CommonYNEnums(String code, String info) {
         this.code = code;
         this.info = info;
     }

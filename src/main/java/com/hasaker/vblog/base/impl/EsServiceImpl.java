@@ -3,6 +3,7 @@ package com.hasaker.vblog.base.impl;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.hasaker.vblog.base.EsService;
+import com.hasaker.vblog.exception.enums.CommonExceptionEnums;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
@@ -18,8 +19,8 @@ public class EsServiceImpl<T> implements EsService<T> {
 
     @Override
     public List<T> search(SearchQuery searchQuery, Class<T> clazz) {
-        CommonExceptionEnum.NOT_NULL_ARG.isTrue(ObjectUtils.isNull(searchQuery), "searchQuery");
-        CommonExceptionEnum.NOT_NULL_ARG.isTrue(ObjectUtils.isNull(clazz), "clazz");
+        CommonExceptionEnums.NOT_NULL_ARG.isTrue(ObjectUtils.isNull(searchQuery), "searchQuery");
+        CommonExceptionEnums.NOT_NULL_ARG.isTrue(ObjectUtils.isNull(clazz), "clazz");
 
         return elasticsearchOperations.queryForList(searchQuery, clazz);
     }
@@ -32,21 +33,21 @@ public class EsServiceImpl<T> implements EsService<T> {
 
     @Override
     public boolean createIndex(Class<T> clazz) {
-        CommonExceptionEnum.NOT_NULL_ARG.isTrue(ObjectUtils.isNull(clazz), "clazz");
+        CommonExceptionEnums.NOT_NULL_ARG.isTrue(ObjectUtils.isNull(clazz), "clazz");
 
         return elasticsearchOperations.putMapping(clazz) && elasticsearchOperations.createIndex(clazz);
     }
 
     @Override
     public boolean deleteIndex(Class<T> clazz) {
-        CommonExceptionEnum.NOT_NULL_ARG.isTrue(ObjectUtils.isNull(clazz), "clazz");
+        CommonExceptionEnums.NOT_NULL_ARG.isTrue(ObjectUtils.isNull(clazz), "clazz");
 
         return elasticsearchOperations.deleteIndex(clazz);
     }
 
     @Override
     public void indexDocument(T document) {
-        CommonExceptionEnum.NOT_NULL_ARG.isTrue(ObjectUtils.isNull(document), "document");
+        CommonExceptionEnums.NOT_NULL_ARG.isTrue(ObjectUtils.isNull(document), "document");
 
         IndexQuery indexQuery = new IndexQueryBuilder().withObject(document).build();
 
@@ -55,7 +56,7 @@ public class EsServiceImpl<T> implements EsService<T> {
 
     @Override
     public void bulkIndexDocuments(List<T> documents) {
-        CommonExceptionEnum.NOT_NULL_ARG.isTrue(ObjectUtils.isNull(documents), "documents");
+        CommonExceptionEnums.NOT_NULL_ARG.isTrue(ObjectUtils.isNull(documents), "documents");
 
         List<IndexQuery> indexQueries = new ArrayList<>(documents.size());
         for (T document : documents) {
@@ -67,24 +68,24 @@ public class EsServiceImpl<T> implements EsService<T> {
 
     @Override
     public String deleteDocument(Class<T> clazz, String documentId) {
-        CommonExceptionEnum.NOT_NULL_ARG.isTrue(ObjectUtils.isNull(clazz), "clazz");
-        CommonExceptionEnum.NOT_NULL_ARG.isTrue(StringUtils.isEmpty(documentId), "documentId");
+        CommonExceptionEnums.NOT_NULL_ARG.isTrue(ObjectUtils.isNull(clazz), "clazz");
+        CommonExceptionEnums.NOT_NULL_ARG.isTrue(StringUtils.isEmpty(documentId), "documentId");
 
         return elasticsearchOperations.delete(clazz, documentId);
     }
 
     @Override
     public void deleteDocument(DeleteQuery deleteQuery, Class<T> clazz) {
-        CommonExceptionEnum.NOT_NULL_ARG.isTrue(ObjectUtils.isNull(deleteQuery), "deleteQuery");
-        CommonExceptionEnum.NOT_NULL_ARG.isTrue(ObjectUtils.isNull(clazz), "clazz");
+        CommonExceptionEnums.NOT_NULL_ARG.isTrue(ObjectUtils.isNull(deleteQuery), "deleteQuery");
+        CommonExceptionEnums.NOT_NULL_ARG.isTrue(ObjectUtils.isNull(clazz), "clazz");
 
         elasticsearchOperations.delete(deleteQuery, clazz);
     }
 
     @Override
     public List<String> bulkDeleteDocument(Class<T> clazz, List<String> documentIds) {
-        CommonExceptionEnum.NOT_NULL_ARG.isTrue(ObjectUtils.isNull(clazz), "clazz");
-        CommonExceptionEnum.NOT_NULL_ARG.isTrue(ObjectUtils.isNull(documentIds), "documentIds");
+        CommonExceptionEnums.NOT_NULL_ARG.isTrue(ObjectUtils.isNull(clazz), "clazz");
+        CommonExceptionEnums.NOT_NULL_ARG.isTrue(ObjectUtils.isNull(documentIds), "documentIds");
 
         List<String> deletedDocumentIds = new ArrayList<>(documentIds.size());
         for (String documentId : documentIds) {
@@ -96,14 +97,14 @@ public class EsServiceImpl<T> implements EsService<T> {
 
     @Override
     public void updateDocument(UpdateQuery updateQuery) {
-        CommonExceptionEnum.NOT_NULL_ARG.isTrue(ObjectUtils.isNull(updateQuery), "updateQuery");
+        CommonExceptionEnums.NOT_NULL_ARG.isTrue(ObjectUtils.isNull(updateQuery), "updateQuery");
 
         elasticsearchOperations.update(updateQuery);
     }
 
     @Override
     public void bulkUpdateDocuments(List<UpdateQuery> updateQueries) {
-        CommonExceptionEnum.NOT_NULL_ARG.isTrue(ObjectUtils.isNull(updateQueries), "updateQueries");
+        CommonExceptionEnums.NOT_NULL_ARG.isTrue(ObjectUtils.isNull(updateQueries), "updateQueries");
 
         elasticsearchOperations.bulkUpdate(updateQueries);
     }

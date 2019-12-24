@@ -25,7 +25,18 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
-  
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-configuration-processor</artifactId>
+    </dependency>
+
+    <!-- Spring data elasticsearch -->
+    <dependency>
+      <groupId>org.springframework.data</groupId>
+      <artifactId>spring-data-elasticsearch</artifactId>
+      <version>3.2.1.RELEASE</version>
+    </dependency>
+
     <dependency>
       <groupId>com.baomidou</groupId>
       <artifactId>mybatis-plus</artifactId>
@@ -42,13 +53,6 @@
       <groupId>com.alibaba</groupId>
       <artifactId>fastjson</artifactId>
       <version>1.2.62</version>
-    </dependency>
-
-    <!-- Spring data elasticsearch -->
-    <dependency>
-      <groupId>org.springframework.data</groupId>
-      <artifactId>spring-data-elasticsearch</artifactId>
-      <version>3.2.1.RELEASE</version>
     </dependency>
   </dependencies>
 
