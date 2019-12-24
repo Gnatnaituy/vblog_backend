@@ -17,11 +17,11 @@ public class Comment extends BaseEntity {
 
     private static final long serialVersionUID = 5213807671160609429L;
 
-    private String postId;
+    private Long postId;
 
-    private String targetUserId;
+    private Long targetUserId;
 
-    private String commentUserId;
+    private Long commentUserId;
 
     private String content;
 

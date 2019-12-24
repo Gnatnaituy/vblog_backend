@@ -19,13 +19,13 @@ public class Post extends BaseEntity {
 
     private static final long serialVersionUID = 7086891429068468891L;
 
-    private String topicId;
+    private Long topicId;
 
     private String content;
 
     private Integer visibility;
 
-    private String postUserId;
+    private Long postUserId;
 
     private Date postTime;
 }

@@ -19,7 +19,7 @@ public class BaseEntity implements Serializable {
     /**
      * 全局唯一ID(雪花算法生成)
      */
-    private String id;
+    private Long id;
 
     /**
      * 创建人ID

@@ -19,9 +19,9 @@ public class Vote extends BaseEntity {
 
     private static final long serialVersionUID = -5842088763229665281L;
 
-    private String postId;
+    private Long postId;
 
-    private String voteUserId;
+    private Long voteUserId;
 
     private Date voteTime;
 }

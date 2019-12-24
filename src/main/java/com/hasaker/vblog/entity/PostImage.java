@@ -17,7 +17,7 @@ public class PostImage extends BaseEntity {
 
     private static final long serialVersionUID = -4575068402038558681L;
 
-    private String postId;
+    private Long postId;
 
     private String imageUrl;
 

@@ -17,9 +17,9 @@ public class Friendship extends BaseEntity {
 
     private static final long serialVersionUID = 201046591963360428L;
 
-    private String userId;
+    private Long userId;
 
-    private String friendId;
+    private Long friendId;
 
     private String remark;
 }
