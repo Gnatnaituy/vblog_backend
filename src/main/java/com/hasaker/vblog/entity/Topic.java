@@ -15,13 +15,9 @@ import lombok.*;
 @Builder
 public class Topic extends BaseEntity {
 
-    private static final long serialVersionUID = 1566694921915328948L;
+    // 话题名称
+    private String name;
 
-    private String topicName;
-
-    private String topicLogo;
-
-    private String topicType;
-
-    private String topicDesc;
+    // 话题描述
+    private String description;
 }

@@ -3,8 +3,6 @@ package com.hasaker.vblog.entity;
 import com.hasaker.vblog.base.BaseEntity;
 import lombok.*;
 
-import java.util.Date;
-
 /**
  * @author 余天堂
  * @since 2019/10/31 17:00
@@ -17,15 +15,12 @@ import java.util.Date;
 @Builder
 public class Post extends BaseEntity {
 
-    private static final long serialVersionUID = 7086891429068468891L;
-
-    private Long topicId;
-
+    // 动态内容
     private String content;
 
+    // 动态可见性
     private Integer visibility;
 
-    private Long postUserId;
-
-    private Date postTime;
+    // 地址ID
+    private Long locationId;
 }

@@ -15,17 +15,18 @@ import lombok.*;
 @Builder
 public class Comment extends BaseEntity {
 
-    private static final long serialVersionUID = 5213807671160609429L;
-
+    // 评论动态ID
     private Long postId;
 
+    // 回复对象用户ID
     private Long targetUserId;
 
+    // 评论用户ID
     private Long commentUserId;
 
+    // 评论内容
     private String content;
 
+    // 可见性
     private Integer visibility;
-
-    private Long commentTime;
 }

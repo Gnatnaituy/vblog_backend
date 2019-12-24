@@ -3,8 +3,6 @@ package com.hasaker.vblog.entity;
 import com.hasaker.vblog.base.BaseEntity;
 import lombok.*;
 
-import java.util.Date;
-
 /**
  * @author 余天堂
  * @since 2019/10/31 22:43
@@ -17,29 +15,36 @@ import java.util.Date;
 @Builder
 public class User extends BaseEntity {
 
-    private static final long serialVersionUID = -618810997964397602L;
-
+    // 用户账号/用户名
     private String account;
 
+    // 密码
     private String password;
 
-    private String avatar;
-
-    private String background;
-
+    // 昵称
     private String nickname;
 
+    // 真实姓名
     private String realname;
 
+    // 性别
     private String gender;
 
+    // 年龄
     private Integer age;
 
+    // 签名
     private String bio;
 
-    private String region;
+    // 国家
+    private String country;
 
-    private String location;
+    // 省
+    private String province;
 
-    private Date registerTime;
+    // 市
+    private String city;
+
+    // 用户状态
+    private String status;
 }

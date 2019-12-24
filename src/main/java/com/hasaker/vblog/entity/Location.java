@@ -4,20 +4,24 @@ import com.hasaker.vblog.base.BaseEntity;
 import lombok.*;
 
 /**
+ * @package com.hasaker.vblog.entity
  * @author 余天堂
- * @since 2019/10/31 22:52
- * @description 点赞实体类
+ * @create 2019/12/24 20:46
+ * @description Location
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Vote extends BaseEntity {
+public class Location extends BaseEntity {
 
     // 动态ID
     private Long postId;
 
-    // 点赞用户ID
-    private Long voteUserId;
+    // 经度
+    private Double longitude;
+
+    // 维度
+    private Double latitude;
 }

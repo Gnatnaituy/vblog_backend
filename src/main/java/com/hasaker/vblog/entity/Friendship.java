@@ -15,11 +15,15 @@ import lombok.*;
 @Builder
 public class Friendship extends BaseEntity {
 
-    private static final long serialVersionUID = 201046591963360428L;
-
+    // 用户ID
     private Long userId;
 
+    // 好友ID
     private Long friendId;
 
+    // 好友备注
     private String remark;
+
+    // 好友权限
+    private String visibility;
 }

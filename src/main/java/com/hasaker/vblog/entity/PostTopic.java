@@ -4,22 +4,21 @@ import com.hasaker.vblog.base.BaseEntity;
 import lombok.*;
 
 /**
+ * @package com.hasaker.vblog.entity
  * @author 余天堂
- * @since 2019/11/3 18:08
- * @description 动态图片类
+ * @create 2019/12/24 20:27
+ * @description PostTopic
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PostImage extends BaseEntity {
+public class PostTopic extends BaseEntity {
 
-    private static final long serialVersionUID = -4575068402038558681L;
-
+    // 动态ID
     private Long postId;
 
-    private String imageUrl;
-
-    private Integer imageSize;
+    // 话题ID
+    private Long topicId;
 }

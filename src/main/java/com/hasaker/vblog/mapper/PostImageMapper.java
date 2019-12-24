@@ -1,7 +1,6 @@
 package com.hasaker.vblog.mapper;
 
 import com.hasaker.vblog.base.BaseMapper;
-import com.hasaker.vblog.entity.PostImage;
 
 /**
  * @package com.hasaker.vblog.mapper
