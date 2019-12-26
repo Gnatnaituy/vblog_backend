@@ -7,6 +7,7 @@ vblog:
         number-of-replicas: 1
         number-of-shards: 3
 
+
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/vblog?characterEncoding=utf8&useSSL=false
