@@ -3,7 +3,6 @@ package com.hasaker.vblog;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 
 /**
  * @package com.hasaker.vblog
@@ -12,7 +11,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
  * @description VBlogApplication
  */
 @MapperScan("com.hasaker.vblog.mapper")
-@SpringBootApplication(exclude = { DataSourceAutoConfiguration.class })
+@SpringBootApplication
 public class VBlogApplication {
 
     public static void main(String[] args) {
