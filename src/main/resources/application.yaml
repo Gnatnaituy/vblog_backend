@@ -9,6 +9,9 @@ vblog:
 
 
 spring:
+  messages:
+    basename: i18n/messages
+    fallbackToSystemLocale: false
   datasource:
     url: jdbc:mysql://localhost:3306/vblog?characterEncoding=utf8&useSSL=false
     username: root
