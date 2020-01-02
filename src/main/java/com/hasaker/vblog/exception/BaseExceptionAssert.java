@@ -20,9 +20,9 @@ public interface BaseExceptionAssert extends BaseResponseEnum, BaseAssert {
     @Override
     default BaseException newException(Object... args) {
         String msg;
-        if(StringUtils.isNotEmpty(this.getMessage())) {
+        if(StringUtils.isNotBlank(this.getMessage())) {
             msg = MessageFormat.format(this.getMessage(), args);
-        }else {
+        } else {
             msg = this.getCode();
         }
 

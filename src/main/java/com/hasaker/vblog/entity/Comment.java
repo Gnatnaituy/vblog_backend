@@ -16,13 +16,10 @@ import lombok.*;
 public class Comment extends BaseEntity {
 
     // 评论动态ID
-    private Long postId;
+    private Long targetPostId;
 
     // 回复对象用户ID
     private Long targetUserId;
-
-    // 评论用户ID
-    private Long commentUserId;
 
     // 评论内容
     private String content;

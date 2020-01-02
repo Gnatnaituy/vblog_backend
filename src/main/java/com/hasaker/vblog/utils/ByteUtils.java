@@ -19,6 +19,7 @@ public final class ByteUtils {
         System.arraycopy(buf1, 0, buffer, offset, buf1.length);
         offset += buf1.length;
         System.arraycopy(buf2, 0, buffer, offset, buf2.length);
+
         return buffer;
     }
 
@@ -33,6 +34,7 @@ public final class ByteUtils {
         System.arraycopy(buf2, 0, buffer, offset, buf2.length);
         offset += buf2.length;
         System.arraycopy(buf3, 0, buffer, offset, buf3.length);
+
         return buffer;
     }
 
@@ -50,6 +52,7 @@ public final class ByteUtils {
             sb.append(HEX_CHARS[hi]);
             sb.append(HEX_CHARS[lo]);
         }
+
         return sb.toString().trim();
     }
 
@@ -63,6 +66,7 @@ public final class ByteUtils {
         int hi = (b & 0xf0) >> 4;
         int lo = b & 0x0f;
         char[] cs = { HEX_CHARS[hi], HEX_CHARS[lo] };
+
         return new String(cs);
     }
 
@@ -70,6 +74,7 @@ public final class ByteUtils {
         if (s.length() != 2) {
             throw new IllegalArgumentException("Invalid length of string.");
         }
+
         char c1 = s.charAt(0);
         char c2 = s.charAt(1);
         int n1 = HEX_STRING.indexOf(c1);
@@ -81,6 +86,7 @@ public final class ByteUtils {
             throw new IllegalArgumentException("Invalid char in string: " + c2);
         }
         int n = (n1 << 4) + n2;
+
         return (byte) n;
     }
 
@@ -88,6 +94,7 @@ public final class ByteUtils {
         if (s.length() % 2 == 1) {
             throw new IllegalArgumentException("Invalid length of string.");
         }
+
         byte[] data = new byte[s.length() / 2];
         for (int i = 0; i < data.length; i++) {
             char c1 = s.charAt(i * 2);
@@ -103,6 +110,7 @@ public final class ByteUtils {
             int n = (n1 << 4) + n2;
             data[i] = (byte) n;
         }
+
         return data;
     }
 
