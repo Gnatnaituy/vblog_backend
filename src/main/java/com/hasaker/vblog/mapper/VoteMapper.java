@@ -1,7 +1,8 @@
 package com.hasaker.vblog.mapper;
 
-import com.hasaker.vblog.base.BaseMapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.hasaker.vblog.entity.Vote;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * @package com.hasaker.vblog.mapper
@@ -9,5 +10,6 @@ import com.hasaker.vblog.entity.Vote;
  * @create 2019/12/24 18:08
  * @description VoteMapper
  */
+@Mapper
 public interface VoteMapper extends BaseMapper<Vote> {
 }

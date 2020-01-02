@@ -31,7 +31,7 @@ import java.util.List;
 @Configuration
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @EnableConfigurationProperties(ElasticsearchProperties.class)
-public class ElasticsearchAutoConfiguration {
+public class ElasticsearchConfig {
 
     private final ElasticsearchProperties elasticsearchProperties;
 

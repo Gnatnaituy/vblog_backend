@@ -9,7 +9,8 @@ import com.hasaker.vblog.exception.BaseExceptionAssert;
  */
 public enum UserExceptionEnums implements BaseExceptionAssert {
 
-    USER_NOT_FOUND("USER_NOT_FOUND","user not found");
+    USER_NOT_EXISTS("USER_EXCEPTION_001","user not exists"),
+    NO_ROLE_FOUND_FOR_THIS_USER("USER_EXCEPTION_002", "no.role.found.for.this.user");
 
     private String code;
 
