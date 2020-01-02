@@ -29,6 +29,8 @@ public class MessageConsts {
     public static final String NO_SUPPORT = "info.support.exception";
     /** 登录成功 */
     public static final String LOGIN_SUCCESS = "user.login.success";
+    /** 登录失败 */
+    public static final String LOGIN_FAILED = "user.login.failed";
     /** 退出成功 */
     public static final String LOGOUT_SUCCESS = "user.logout.success";
     /** 业务流程处理中发现核心处理对象为空 */
