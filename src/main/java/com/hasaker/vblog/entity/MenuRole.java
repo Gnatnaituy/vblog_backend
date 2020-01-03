@@ -18,7 +18,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MenuRole extends BaseEntity {
 
+    // menuId
     private Long menuId;
 
+    // 角色ID
     private Long roleId;
 }

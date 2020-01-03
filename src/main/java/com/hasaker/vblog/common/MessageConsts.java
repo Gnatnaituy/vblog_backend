@@ -6,10 +6,9 @@ package com.hasaker.vblog.common;
  */
 public class MessageConsts {
 
-    /**
-     * 对象强行转换异常
-     */
+    /** 对象强行转换异常 */
     public static final String CAST_EXCEPTION = "info.cast.exception";
+    /** 雪花算法错误 */
     public static final String ERROR_SNOWFLAKE_SIZE = "info.error.snowflake.size.exception";
 
 
