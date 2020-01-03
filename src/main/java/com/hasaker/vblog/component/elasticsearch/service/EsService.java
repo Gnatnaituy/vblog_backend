@@ -1,4 +1,4 @@
-package com.hasaker.vblog.base;
+package com.hasaker.vblog.component.elasticsearch.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.elasticsearch.core.query.DeleteQuery;

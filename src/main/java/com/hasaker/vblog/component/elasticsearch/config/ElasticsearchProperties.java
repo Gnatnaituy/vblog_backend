@@ -1,4 +1,4 @@
-package com.hasaker.vblog.config.elasticsearch;
+package com.hasaker.vblog.component.elasticsearch.config;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

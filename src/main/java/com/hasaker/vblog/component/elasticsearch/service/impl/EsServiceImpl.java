@@ -1,17 +1,19 @@
-package com.hasaker.vblog.base.impl;
+package com.hasaker.vblog.component.elasticsearch.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.hasaker.vblog.base.EsService;
+import com.hasaker.vblog.component.elasticsearch.service.EsService;
 import com.hasaker.vblog.exception.enums.CommonExceptionEnums;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.query.*;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class EsServiceImpl<T> implements EsService<T> {
 
     @Autowired

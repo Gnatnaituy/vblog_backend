@@ -1,4 +1,4 @@
-package com.hasaker.vblog.config.elasticsearch;
+package com.hasaker.vblog.component.elasticsearch.config;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +15,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.elasticsearch.config.AbstractElasticsearchConfiguration;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
@@ -31,7 +32,7 @@ import java.util.List;
 @Configuration
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @EnableConfigurationProperties(ElasticsearchProperties.class)
-public class ElasticsearchConfig {
+public class ElasticsearchConfig extends AbstractElasticsearchConfiguration {
 
     private final ElasticsearchProperties elasticsearchProperties;
 
@@ -39,7 +40,7 @@ public class ElasticsearchConfig {
 
     @Bean
     @ConditionalOnMissingBean
-    public RestHighLevelClient restHighLevelClient() {
+    public RestHighLevelClient elasticsearchClient() {
         List<String> clusterNodes = elasticsearchProperties.getClusterNodes();
         clusterNodes.forEach(node -> {
             try {
