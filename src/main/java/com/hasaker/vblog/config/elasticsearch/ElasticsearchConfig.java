@@ -1,4 +1,4 @@
-package com.hasaker.vblog.config;
+package com.hasaker.vblog.config.elasticsearch;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -62,8 +62,8 @@ public class ElasticsearchConfig {
      * @param elasticsearchProperties   ElasticsearchProperties
      * @return {@link org.elasticsearch.client.RestHighLevelClient}
      */
-    private static RestHighLevelClient getRestHighLevelClient(RestClientBuilder restClientBuilder,
-                                                              ElasticsearchProperties elasticsearchProperties) {
+    private static RestHighLevelClient getRestHighLevelClient(
+            RestClientBuilder restClientBuilder, ElasticsearchProperties elasticsearchProperties) {
         // Callback use the default {@link RequestConfig} being set to the {@link CloseableHttpClient}
         restClientBuilder.setRequestConfigCallback(requestConfigBuilder -> {
             requestConfigBuilder.setConnectTimeout(elasticsearchProperties.getConnectTimeout());
