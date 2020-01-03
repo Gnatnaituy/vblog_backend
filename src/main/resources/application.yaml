@@ -17,3 +17,22 @@ spring:
     username: root
     password: 5523
     driver-class-name: com.mysql.cj.jdbc.Driver
+  redis:
+    cluster:
+      nodes: 127.0.0.1:6379,127.0.0.1:7001,127.0.0.1:7002,127.0.0.1:7003,127.0.0.1:7004,127.0.0.1:7005
+
+
+mybatis-plus:
+  mapper-locations: classpath:/mapper/*.xml
+  type-aliases-package: com.hasasker.vblog.entity
+  type-aliases-super-type: com.hasaker.vblog.base.BaseEntity
+  global-config:
+    db-config:
+      id-type: assign_id
+      logic-delete-field: is_deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      table-underline: true
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true

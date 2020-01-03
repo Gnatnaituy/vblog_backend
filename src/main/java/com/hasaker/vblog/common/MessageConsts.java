@@ -21,6 +21,8 @@ public class MessageConsts {
     public static final String EXCEPTION = "info.response.exception";
     /** 操作失败 */
     public static final String OPERATION_FAILED = "info.operation.failed";
+    /** 权限不足 */
+    public static final String FORBIDDEN = "info.forbidden";
 
 
     /** 非法字符 */
