@@ -1,8 +1,8 @@
 package com.hasaker.vblog.config.security;
 
+import com.hasaker.vblog.base.impl.VBlogUserDetailsService;
 import com.hasaker.vblog.common.AjaxResult;
 import com.hasaker.vblog.common.MessageConsts;
-import com.hasaker.vblog.service.VBlogUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

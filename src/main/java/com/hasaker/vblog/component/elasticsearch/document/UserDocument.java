@@ -1,4 +1,4 @@
-package com.hasaker.vblog.document;
+package com.hasaker.vblog.component.elasticsearch.document;
 
 import java.util.Date;
 

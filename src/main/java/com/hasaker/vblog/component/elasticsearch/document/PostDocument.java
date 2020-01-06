@@ -1,4 +1,9 @@
-package com.hasaker.vblog.document;
+package com.hasaker.vblog.component.elasticsearch.document;
+
+import org.elasticsearch.common.geo.GeoPoint;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.GeoPointField;
 
 import java.util.Date;
 import java.util.List;
@@ -8,8 +13,10 @@ import java.util.List;
  * @since 2019/11/3 17:42
  * @description 
  */
+@Document(indexName = "vblog-post")
 public class PostDocument {
 
+    @Id
     private String postId;
 
     private String postUserId;
@@ -29,6 +36,9 @@ public class PostDocument {
     private List<PostComment> comments;
 
     private Date postTime;
+
+    @GeoPointField
+    private GeoPoint location;
 
     private static class VoteUser {
 

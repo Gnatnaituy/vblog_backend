@@ -1,8 +1,10 @@
-package com.hasaker.vblog.service;
+package com.hasaker.vblog.base.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.hasaker.vblog.entity.Role;
 import com.hasaker.vblog.entity.User;
+import com.hasaker.vblog.service.RoleService;
+import com.hasaker.vblog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
