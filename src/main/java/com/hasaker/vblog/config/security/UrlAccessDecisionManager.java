@@ -1,6 +1,5 @@
 package com.hasaker.vblog.config.security;
 
-import com.hasaker.vblog.enums.RoleEnums;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.ConfigAttribute;
@@ -25,29 +24,15 @@ public class UrlAccessDecisionManager implements AccessDecisionManager {
     @Override
     public void decide(Authentication authentication, Object o, Collection<ConfigAttribute> collection)
             throws AccessDeniedException, InsufficientAuthenticationException {
-        for (ConfigAttribute configAttribute : collection) {
-            String needRole = configAttribute.getAttribute();
-            // 游客权限 直接通过
-            if (RoleEnums.GUEST.equalsStr(needRole)) {
-                return;
-            }
+        List<String> authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
 
-            List<String> authorities = authentication.getAuthorities().stream()
-                    .map(GrantedAuthority::getAuthority).collect(Collectors.toList());
-            if (RoleEnums.ADMIN.equalsStr(needRole)) {
-                if (authorities.contains(needRole)) {
-                    return;
-                }
-                throw new AccessDeniedException("你没有管理员权限!");
-            }
-            if (RoleEnums.USER.equalsStr(needRole)) {
-                if (authorities.contains(needRole)) {
-                    return;
-                }
-                throw new AccessDeniedException("请先登录!");
+        for (ConfigAttribute configAttribute : collection) {
+            if (!authorities.contains(configAttribute.getAttribute())) {
+                throw new AccessDeniedException("权限不足!");
             }
         }
-
     }
 
     @Override

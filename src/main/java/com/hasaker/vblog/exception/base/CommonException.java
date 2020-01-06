@@ -1,4 +1,4 @@
-package com.hasaker.vblog.exception;
+package com.hasaker.vblog.exception.base;
 
 /**
  * @package com.hasaker.vblog.base

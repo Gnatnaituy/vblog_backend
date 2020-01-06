@@ -1,5 +1,7 @@
 package com.hasaker.vblog.enums;
 
+import com.hasaker.vblog.base.IEnum;
+
 /**
  * @package com.hasaker.vblog.enums
  * @author 余天堂

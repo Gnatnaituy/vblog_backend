@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Date;
 
 /**
  * @author 余天堂
@@ -25,7 +25,7 @@ public class BaseEntity implements Serializable {
      * 创建人ID
      */
     @TableField(fill = FieldFill.INSERT)
-    private String createUser;
+    private Long createUser;
 
     /**
      * 创建时间
@@ -37,7 +37,7 @@ public class BaseEntity implements Serializable {
      * 更新人ID
      */
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private String updateUser;
+    private Long updateUser;
 
     /**
      * 更新时间

@@ -1,4 +1,4 @@
-package com.hasaker.vblog.exception;
+package com.hasaker.vblog.exception.base;
 
 import com.hasaker.vblog.utils.MessageUtils;
 

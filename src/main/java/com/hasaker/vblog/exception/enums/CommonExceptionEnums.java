@@ -1,7 +1,7 @@
 package com.hasaker.vblog.exception.enums;
 
 import com.hasaker.vblog.common.MessageConsts;
-import com.hasaker.vblog.exception.BaseExceptionAssert;
+import com.hasaker.vblog.exception.base.BaseExceptionAssert;
 
 /**
  * @author 余天堂

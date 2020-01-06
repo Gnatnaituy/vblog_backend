@@ -1,4 +1,4 @@
-package com.hasaker.vblog.enums;
+package com.hasaker.vblog.base;
 /**
  * @author 余天堂
  * @since 2019/11/17 20:07
