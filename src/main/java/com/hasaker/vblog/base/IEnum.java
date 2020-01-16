@@ -6,9 +6,11 @@ package com.hasaker.vblog.base;
  */
 public interface IEnum<E extends Enum<?>> {
 
-    public String getCode();
+    String getCode();
 
-    public String getInfo();
+    String getInfo();
 
-    public boolean equalsStr(String value);
+    default boolean equalsStr(String value) {
+        return this.getCode().equals(value);
+    }
 }

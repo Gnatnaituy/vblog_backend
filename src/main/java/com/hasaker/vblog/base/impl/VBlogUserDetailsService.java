@@ -22,10 +22,13 @@ import java.util.List;
 @Service
 public class VBlogUserDetailsService implements UserDetailsService {
 
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private RoleService roleService;
+    private final UserService userService;
+    private final RoleService roleService;
+
+    public VBlogUserDetailsService(UserService userService, RoleService roleService) {
+        this.userService = userService;
+        this.roleService = roleService;
+    }
 
 
     @Override

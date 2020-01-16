@@ -1,6 +1,8 @@
 package com.hasaker.vblog.enums;
 
 import com.hasaker.vblog.base.IEnum;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * @package com.hasaker.vblog.enums
@@ -8,6 +10,8 @@ import com.hasaker.vblog.base.IEnum;
  * @create 2020/1/2 10:42
  * @description ImageOwnerTypeEnums
  */
+@Getter
+@AllArgsConstructor
 public enum ImageOwnerTypeEnums implements IEnum<ImageOwnerTypeEnums> {
 
     POST("IMAGE_OWNER_TYPE_001", "Post's pictures"),
@@ -18,26 +22,4 @@ public enum ImageOwnerTypeEnums implements IEnum<ImageOwnerTypeEnums> {
 
     private final String code;
     private final String info;
-
-    ImageOwnerTypeEnums(String code, String info) {
-        this.code = code;
-        this.info = info;
-    }
-
-    @Override
-    public String getCode()
-    {
-        return code;
-    }
-
-    @Override
-    public String getInfo()
-    {
-        return info;
-    }
-
-    @Override
-    public boolean equalsStr(String value) {
-        return this.getCode().equals(value);
-    }
 }

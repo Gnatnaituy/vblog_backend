@@ -2,12 +2,16 @@ package com.hasaker.vblog.exception.enums;
 
 import com.hasaker.vblog.common.MessageConsts;
 import com.hasaker.vblog.exception.base.BaseExceptionAssert;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * @author 余天堂
  * @since 2019/11/17 21:05
  * @description 
  */
+@Getter
+@AllArgsConstructor
 public enum CommonExceptionEnums implements BaseExceptionAssert {
 
     SUCCESS("200", "成功!"),
@@ -23,21 +27,5 @@ public enum CommonExceptionEnums implements BaseExceptionAssert {
     OPERATION_FAILED("103", MessageConsts.OPERATION_FAILED);
 
     private String code;
-
     private String message;
-
-    CommonExceptionEnums(String code, String message) {
-        this.code = code;
-        this.message = message;
-    }
-
-    @Override
-    public String getCode() {
-        return this.code;
-    }
-
-    @Override
-    public String getMessage() {
-        return this.message;
-    }
 }

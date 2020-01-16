@@ -1,6 +1,8 @@
 package com.hasaker.vblog.enums;
 
 import com.hasaker.vblog.base.IEnum;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * @package com.hasaker.vblog.enums
@@ -8,6 +10,8 @@ import com.hasaker.vblog.base.IEnum;
  * @create 2020/1/2 16:59
  * @description UserStatusEnums
  */
+@Getter
+@AllArgsConstructor
 public enum UserStatusEnums implements IEnum<UserStatusEnums> {
 
     ENABLED("ENABLED", "User enabled"),
@@ -15,26 +19,4 @@ public enum UserStatusEnums implements IEnum<UserStatusEnums> {
 
     private final String code;
     private final String info;
-
-    UserStatusEnums(String code, String info) {
-        this.code = code;
-        this.info = info;
-    }
-
-    @Override
-    public String getCode()
-    {
-        return code;
-    }
-
-    @Override
-    public String getInfo()
-    {
-        return info;
-    }
-
-    @Override
-    public boolean equalsStr(String value) {
-        return this.getCode().equals(value);
-    }
 }
