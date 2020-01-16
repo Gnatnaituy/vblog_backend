@@ -1,7 +1,7 @@
 /* 2020/01/06 */
 create table vblog.user
 (
-    id             bigint(40)   not null comment '用户ID',
+    id             bigint(40)   primary key not null comment '用户ID',
 
     username       varchar(16)  not null comment '用户名/用户账户',
     password       varchar(255) not null comment '密码',
