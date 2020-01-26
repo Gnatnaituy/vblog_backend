@@ -18,7 +18,6 @@ spring:
     password: 5523
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-
 mybatis-plus:
   mapper-locations: classpath:/mapper/*.xml
   type-aliases-package: com.hasasker.vblog.entity
