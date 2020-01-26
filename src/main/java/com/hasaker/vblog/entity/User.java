@@ -1,14 +1,10 @@
 package com.hasaker.vblog.entity;
 
 import com.hasaker.vblog.base.BaseEntity;
-import com.hasaker.vblog.enums.UserStatusEnums;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.List;
 
 /**
  * @author 余天堂
@@ -19,7 +15,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class User extends BaseEntity implements UserDetails {
+public class User extends BaseEntity {
 
     // 用户账号/用户名
     private String username;
@@ -50,27 +46,4 @@ public class User extends BaseEntity implements UserDetails {
 
     // 用户状态
     private String status;
-
-    // 用户角色
-    private List<Role> authorities;
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return UserStatusEnums.ENABLED.equalsStr(status);
-    }
 }
