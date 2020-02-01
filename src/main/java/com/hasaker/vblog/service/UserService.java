@@ -11,5 +11,5 @@ import com.hasaker.vblog.entity.User;
  */
 public interface UserService extends BaseService<User> {
 
-    User loadUserByUsername(String username);
+    User findUserByUserName(String username);
 }

@@ -40,4 +40,17 @@ public final class Consts {
     public static final Integer SECRET = 1;
     public static final Integer FRIEND = 2;
     public static final Integer OPEN = 3;
+
+    // redis-key-前缀-shiro:cache:
+    public static final String PREFIX_SHIRO_CACHE = "shiro:cache:";
+    // redis-key-前缀-shiro:access_token:
+    public static final String PREFIX_SHIRO_ACCESS_TOKEN = "shiro:access_token:";
+    // redis-key-前缀-shiro:refresh_token:
+    public static final String PREFIX_SHIRO_REFRESH_TOKEN = "shiro:refresh_token:";
+    // JWT-account:
+    public static final String ACCOUNT = "account";
+    // JWT-currentTimeMillis:
+    public static final String CURRENT_TIME_MILLIS = "currentTimeMillis";
+    // Password max length
+    public static final Integer PASSWORD_MAX_LEN = 8;
 }

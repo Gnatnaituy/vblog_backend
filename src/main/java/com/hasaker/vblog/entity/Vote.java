@@ -17,7 +17,4 @@ public class Vote extends BaseEntity {
 
     // 动态ID
     private Long postId;
-
-    // 点赞用户ID
-    private Long voteUserId;
 }

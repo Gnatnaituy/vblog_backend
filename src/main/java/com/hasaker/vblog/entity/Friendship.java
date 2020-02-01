@@ -15,9 +15,6 @@ import lombok.*;
 @Builder
 public class Friendship extends BaseEntity {
 
-    // 用户ID
-    private Long userId;
-
     // 好友ID
     private Long friendId;
 

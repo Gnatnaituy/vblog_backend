@@ -1,7 +1,10 @@
 package com.hasaker.vblog.service.impl;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.hasaker.vblog.base.impl.BaseServiceImpl;
 import com.hasaker.vblog.entity.User;
+import com.hasaker.vblog.exception.base.CommonException;
+import com.hasaker.vblog.exception.enums.CommonExceptionEnums;
 import com.hasaker.vblog.exception.enums.UserExceptionEnums;
 import com.hasaker.vblog.mapper.UserMapper;
 import com.hasaker.vblog.service.UserService;
@@ -20,16 +23,10 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
     @Autowired
     private UserMapper userMapper;
 
-    /**
-     * 通过用户名获取用户
-     * @param username
-     * @return
-     */
     @Override
-    public User loadUserByUsername(String username) {
-        User user = userMapper.loadUserByUsername(username);
-        UserExceptionEnums.USER_NOT_EXISTS.assertNotNull(user);
+    public User findUserByUserName(String username) {
+        CommonExceptionEnums.NOT_NULL_ARG.isTrue(StringUtils.isBlank(username));
 
-        return user;
+        return userMapper.findUserByUserName(username);
     }
 }

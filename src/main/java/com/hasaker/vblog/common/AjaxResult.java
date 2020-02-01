@@ -1,5 +1,7 @@
 package com.hasaker.vblog.common;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,12 +15,18 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ApiModel(value = "AjaxResult")
 public class AjaxResult<T> implements Serializable {
 
     private static final long serialVersionUID = -6023771566281922918L;
 
+    @ApiModelProperty(value = "code")
     private String code;
+
+    @ApiModelProperty(value = "message")
     private String message;
+
+    @ApiModelProperty(value = "object")
     private T object;
 
     // 单例模式

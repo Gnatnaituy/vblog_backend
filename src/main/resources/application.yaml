@@ -13,14 +13,10 @@ spring:
     basename: i18n/messages
     fallbackToSystemLocale: false
   datasource:
-    url: jdbc:mysql://localhost:3306/vblog?characterEncoding=utf8&useSSL=false
+    url: jdbc:mysql://localhost:3306/vblog?characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: 5523
     driver-class-name: com.mysql.cj.jdbc.Driver
-  redis:
-    cluster:
-      nodes: 127.0.0.1:6379,127.0.0.1:7001,127.0.0.1:7002,127.0.0.1:7003,127.0.0.1:7004,127.0.0.1:7005
-
 
 mybatis-plus:
   mapper-locations: classpath:/mapper/*.xml
