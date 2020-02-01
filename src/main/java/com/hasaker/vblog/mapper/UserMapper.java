@@ -14,4 +14,7 @@ import org.apache.ibatis.annotations.Select;
  */
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
+
+    @Select("select * from user where username = #{username} and is_deleted = '0'")
+    User findUserByUserName(@Param("username") String username);
 }

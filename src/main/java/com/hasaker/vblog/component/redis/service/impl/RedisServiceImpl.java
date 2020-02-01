@@ -24,6 +24,7 @@ public class RedisServiceImpl implements RedisService {
 
     @Override
     public Object get(String key) {
+        redisOperations.
         return redisOperations.opsForValue().get(key);
     }
 }
