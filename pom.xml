@@ -5,36 +5,47 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.hasaker</groupId>
-    <artifactId>v_blog</artifactId>
+    <artifactId>vblog</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.7.RELEASE</version>
-    </parent>
-
     <modules>
+        <module>vblog-common</module>
+        <module>vblog-component</module>
         <module>vblog-user-server</module>
         <module>vblog-post-server</module>
         <module>vblog-registry-server</module>
         <module>vblog-config-server</module>
-        <module>vblog-component</module>
+        <module>vblog-oauth-server</module>
+        <module>vblog-feign</module>
+        <module>vblog-vo</module>
+        <module>vblog-vo/vblog-vo-post</module>
     </modules>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
-        <spring-cloud.version>Greenwich.RELEASE</spring-cloud.version>
+        <!--修改Language level-->
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <!--修改Java Compiler-->
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring-boot-dependencies.version>2.1.7.RELEASE</spring-boot-dependencies.version>
+        <spring-cloud-dependencies.version>Greenwich.RELEASE</spring-cloud-dependencies.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot-dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud.version}</version>
+                <version>${spring-cloud-dependencies.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
