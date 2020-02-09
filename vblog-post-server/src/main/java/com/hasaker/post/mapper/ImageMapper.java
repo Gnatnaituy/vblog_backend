@@ -1,7 +1,7 @@
 package com.hasaker.post.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.hasaker.common.entity.Image;
+import com.hasaker.user.entity.Image;
 
 /**
  * @package com.hasaker.vblog.mapper

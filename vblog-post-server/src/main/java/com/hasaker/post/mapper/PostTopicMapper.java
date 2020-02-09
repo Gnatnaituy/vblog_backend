@@ -1,7 +1,7 @@
 package com.hasaker.post.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.hasaker.common.entity.PostTopic;
+import com.hasaker.user.entity.PostTopic;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
