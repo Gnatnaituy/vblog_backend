@@ -1,6 +1,6 @@
 package com.hasaker.user.entity;
 
-import com.hasaker.user.base.BaseEntity;
+import com.hasaker.common.base.BaseEntity;
 import lombok.*;
 
 /**
