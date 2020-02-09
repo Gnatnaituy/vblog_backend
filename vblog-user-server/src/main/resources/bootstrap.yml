@@ -1,25 +1,14 @@
-server:
-  port: 9001
-
 spring:
-  application:
-    name: vblog-user-server
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql:///vblog_user?useUnicode=true&characterEncoding=utf8
-    username: root
-    password: 5523
   cloud:
     consul:
       host: localhost
       port: 8500
-      config:
-        format: yaml
-        prefix: config
-        data-key: data
-        default-context: ${spring.application.name}
-        profile-separator: ":"
       discovery:
-        service-name: ${spring.application.name}
-        instance-id: ${spring.application.name}:${server.port}
-        health-check-interval: 3s
+        service-name: vblog-user-server
+        instance-id: vblog-user-server
+      config:
+        enabled: true
+        format: properties
+        prefix: config
+        data-key: configuration
+        default-context: vblog-user-server
