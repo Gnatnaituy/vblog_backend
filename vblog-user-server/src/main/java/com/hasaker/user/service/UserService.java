@@ -1,6 +1,6 @@
 package com.hasaker.user.service;
 
-import com.hasaker.user.base.BaseService;
+import com.hasaker.common.base.BaseService;
 import com.hasaker.user.entity.User;
 
 /**

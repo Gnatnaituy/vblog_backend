@@ -1,6 +1,6 @@
 package com.hasaker.user.mapper;
 
-import com.hasaker.user.base.BaseMapper;
+import com.hasaker.common.base.BaseMapper;
 import com.hasaker.user.entity.Friendship;
 import org.apache.ibatis.annotations.Mapper;
 
