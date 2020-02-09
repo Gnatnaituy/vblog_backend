@@ -14,23 +14,26 @@
         <module>vblog-component</module>
         <module>vblog-user-server</module>
         <module>vblog-post-server</module>
-        <module>vblog-registry-server</module>
-        <module>vblog-config-server</module>
         <module>vblog-oauth-server</module>
         <module>vblog-feign</module>
         <module>vblog-vo</module>
-        <module>vblog-vo/vblog-vo-post</module>
     </modules>
 
     <properties>
         <java.version>1.8</java.version>
-        <!--修改Language level-->
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <!--修改Java Compiler-->
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring-boot-dependencies.version>2.1.7.RELEASE</spring-boot-dependencies.version>
-        <spring-cloud-dependencies.version>Greenwich.RELEASE</spring-cloud-dependencies.version>
+
+        <spring-boot-dependencies.version>2.2.2.RELEASE</spring-boot-dependencies.version>
+        <spring-cloud-dependencies.version>Hoxton.SR1</spring-cloud-dependencies.version>
+
+        <mybatis-plus.version>3.3.1</mybatis-plus.version>
+        <mysql-connector-java.version>8.0.18</mysql-connector-java.version>
+        <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
+        <springfox-swagger-ui.version>2.9.2</springfox-swagger-ui.version>
+        <lombok.version>1.18.10</lombok.version>
+        <fastjson.version>1.2.62</fastjson.version>
     </properties>
 
     <dependencyManagement>
@@ -57,6 +60,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
             </plugin>
         </plugins>
     </build>

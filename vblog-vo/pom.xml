@@ -13,6 +13,7 @@
 
     <modules>
         <module>vblog-vo-user</module>
+        <module>vblog-vo-post</module>
     </modules>
 
 </project>

@@ -1,7 +1,7 @@
 package com.hasaker.post.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.hasaker.user.entity.Location;
+import com.hasaker.post.entity.Location;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
