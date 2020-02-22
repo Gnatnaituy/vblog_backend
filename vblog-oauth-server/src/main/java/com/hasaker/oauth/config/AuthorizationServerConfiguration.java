@@ -74,16 +74,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
      */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-//        clients.jdbc(dataSource).passwordEncoder(passwordEncoder);
-        clients.inMemory()
-                .withClient("user-client")
-                .secret(passwordEncoder.encode("5523"))
-                .accessTokenValiditySeconds(3600)
-                .refreshTokenValiditySeconds(864000)
-                .redirectUris("http://localhost:9003/login") //单点登录时配置
-                .autoApprove(true) //自动授权配置
-                .scopes("all")
-                .authorizedGrantTypes("authorization_code","password","refresh_token");
+        clients.jdbc(dataSource).passwordEncoder(passwordEncoder);
     }
 
     /**
@@ -99,6 +90,6 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
         // 允许已授权用户访问 checkToken 接口
         security.checkTokenAccess("isAuthenticated()");
         // 允许已授权用户访问获取 token 接口
-        security.tokenKeyAccess("isAuthenticated()");
+        security.tokenKeyAccess("permitAll()");
     }
 }
