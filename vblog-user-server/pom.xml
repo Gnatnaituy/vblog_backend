@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>vblog-user-server</artifactId>
+    <artifactId>vblog-webUser-server</artifactId>
 
     <dependencies>
         <!-- 此处不能少 Consul健康检查需要通过Consul控制台得知 -->
@@ -30,6 +30,13 @@
             <artifactId>spring-cloud-starter-consul-config</artifactId>
         </dependency>
 
+        <!-- Spring cloud security oauth jwt -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-oauth2</artifactId>
+        </dependency>
+
+        <!-- Common and components -->
         <dependency>
             <groupId>com.hasaker</groupId>
             <artifactId>vblog-common</artifactId>
@@ -39,6 +46,12 @@
         <dependency>
             <groupId>com.hasaker</groupId>
             <artifactId>vblog-component-elasticsearch</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.hasaker</groupId>
+            <artifactId>vblog-component-redis</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>

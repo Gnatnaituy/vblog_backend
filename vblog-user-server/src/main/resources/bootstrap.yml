@@ -8,7 +8,7 @@ spring:
         instance-id: vblog-user-server
       config:
         enabled: true
-        format: properties
+        format: yaml
         prefix: config
         data-key: configuration
         default-context: vblog-user-server

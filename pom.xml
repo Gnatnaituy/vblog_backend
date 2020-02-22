@@ -12,6 +12,7 @@
     <modules>
         <module>vblog-common</module>
         <module>vblog-component</module>
+        <module>vblog-gateway-server</module>
         <module>vblog-user-server</module>
         <module>vblog-post-server</module>
         <module>vblog-oauth-server</module>

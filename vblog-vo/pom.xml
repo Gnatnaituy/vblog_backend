@@ -12,7 +12,7 @@
     <artifactId>vblog-vo</artifactId>
 
     <modules>
-        <module>vblog-vo-user</module>
+        <module>vblog-vo-webUser</module>
         <module>vblog-vo-post</module>
     </modules>
 
