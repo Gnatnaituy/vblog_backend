@@ -1,18 +1,18 @@
 package com.hasaker.common.exception.enums;
 
 import com.hasaker.common.consts.MessageConsts;
-import com.hasaker.common.exception.base.BaseExceptionAssert;
+import com.hasaker.common.exception.base.IExceptionAssert;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
  * @author 余天堂
  * @since 2019/11/17 21:05
- * @description 
+ * @description
  */
 @Getter
 @AllArgsConstructor
-public enum CommonExceptionEnums implements BaseExceptionAssert {
+public enum CommonExceptionEnums implements IExceptionAssert {
 
     SUCCESS("200", "成功!"),
     BODY_NOT_MATCH("400","请求的数据格式不符!"),
@@ -21,10 +21,8 @@ public enum CommonExceptionEnums implements BaseExceptionAssert {
     INTERNAL_SERVER_ERROR("500", "服务器内部错误!"),
     SERVER_BUSY("503","服务器正忙，请稍后再试!"),
 
-    NOT_NULL("100", MessageConsts.ENTITY_EMPTY),
-    NOT_NULL_ARG("101", MessageConsts.ARG_ENTITY_EMPTY),
-    ERROR_SNOWFLAKE_SIZE("102", MessageConsts.ERROR_SNOWFLAKE_SIZE),
-    OPERATION_FAILED("103", MessageConsts.OPERATION_FAILED);
+    NOT_NULL_ARG("101", MessageConsts.ARG_EMPTY),
+    OPERATION_FAILED("102", MessageConsts.FAILED);
 
     private String code;
     private String message;

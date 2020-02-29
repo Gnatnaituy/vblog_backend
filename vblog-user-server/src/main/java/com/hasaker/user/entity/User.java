@@ -20,6 +20,12 @@ public class User extends BaseEntity {
     // 用户账号/用户名
     private String username;
 
+    // 邮箱
+    private String email;
+
+    // 手机
+    private String phone;
+
     // 密码
     private String password;
 

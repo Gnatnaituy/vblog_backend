@@ -2,6 +2,7 @@ package com.hasaker.user.service;
 
 import com.hasaker.common.base.BaseService;
 import com.hasaker.user.entity.User;
+import com.hasaker.vo.user.response.ResponseUserOAuthVo;
 
 /**
  * @package com.hasaker.vblog.service
@@ -11,5 +12,5 @@ import com.hasaker.user.entity.User;
  */
 public interface UserService extends BaseService<User> {
 
-    User findUserByUserName(String username);
+    ResponseUserOAuthVo findUserByUserName(String username);
 }

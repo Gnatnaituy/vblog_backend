@@ -11,5 +11,12 @@
 
     <artifactId>vblog-feign-user</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.hasaker</groupId>
+            <artifactId>vblog-vo-user</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 
 </project>

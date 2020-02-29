@@ -12,6 +12,7 @@
     <modules>
         <module>vblog-common</module>
         <module>vblog-component</module>
+        <module>vblog-face-server</module>
         <module>vblog-user-server</module>
         <module>vblog-post-server</module>
         <module>vblog-oauth-server</module>
@@ -20,7 +21,7 @@
     </modules>
 
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>11</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -29,11 +30,10 @@
         <spring-cloud-dependencies.version>Hoxton.SR1</spring-cloud-dependencies.version>
 
         <mybatis-plus.version>3.3.1</mybatis-plus.version>
-        <mysql-connector-java.version>8.0.18</mysql-connector-java.version>
         <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
         <springfox-swagger-ui.version>2.9.2</springfox-swagger-ui.version>
-        <lombok.version>1.18.10</lombok.version>
         <fastjson.version>1.2.62</fastjson.version>
+        <hutool.version>5.1.3</hutool.version>
     </properties>
 
     <dependencyManagement>

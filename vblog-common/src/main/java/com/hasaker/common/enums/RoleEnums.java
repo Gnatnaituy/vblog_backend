@@ -19,5 +19,5 @@ public enum RoleEnums implements IEnum<RoleEnums> {
     GUEST("GUEST", "Guest");
 
     private final String code;
-    private final String info;
+    private final String message;
 }

@@ -19,10 +19,6 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-consul-discovery</artifactId>
         </dependency>
         <dependency>
@@ -30,17 +26,27 @@
             <artifactId>spring-cloud-starter-consul-config</artifactId>
         </dependency>
 
+        <!-- Spring cloud security oauth jwt -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-oauth2</artifactId>
+        </dependency>
+
+        <!-- Feign -->
+
+        <!-- Vo -->
+        <dependency>
+            <groupId>com.hasaker</groupId>
+            <artifactId>vblog-vo-user</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Common and components -->
         <dependency>
             <groupId>com.hasaker</groupId>
             <artifactId>vblog-common</artifactId>
             <version>${project.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.hasaker</groupId>
-            <artifactId>vblog-component-elasticsearch</artifactId>
-            <version>${project.version}</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 

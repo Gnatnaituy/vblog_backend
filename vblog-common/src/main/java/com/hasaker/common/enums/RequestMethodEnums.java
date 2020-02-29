@@ -7,7 +7,7 @@ import lombok.Getter;
 /**
  * @author 余天堂
  * @since 2019/11/17 20:10
- * @description 
+ * @description
  */
 @Getter
 @AllArgsConstructor
@@ -19,5 +19,5 @@ public enum RequestMethodEnums implements IEnum<RequestMethodEnums> {
     DELETE("DELETE", "DELETE");
 
     private final String code;
-    private final String info;
+    private final String message;
 }
