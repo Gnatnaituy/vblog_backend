@@ -21,5 +21,5 @@ public enum ImageOwnerTypeEnums implements IEnum<ImageOwnerTypeEnums> {
     TOPIC_BACKGROUND("IMAGE_OWNER_TYPE_005", "Topic's background");
 
     private final String code;
-    private final String info;
+    private final String message;
 }

@@ -19,10 +19,6 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-consul-discovery</artifactId>
         </dependency>
         <dependency>
@@ -43,18 +39,18 @@
             <version>0.9.1</version>
         </dependency>
 
+        <!-- Feign -->
+        <dependency>
+            <groupId>com.hasaker</groupId>
+            <artifactId>vblog-feign-user</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- Common and components -->
         <dependency>
             <groupId>com.hasaker</groupId>
             <artifactId>vblog-common</artifactId>
             <version>${project.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.hasaker</groupId>
-            <artifactId>vblog-component-redis</artifactId>
-            <version>${project.version}</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 

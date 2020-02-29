@@ -1,24 +1,29 @@
 package com.hasaker.common.exception.base;
 
+import com.hasaker.common.base.IEnum;
+import lombok.Getter;
+
 /**
  * @package com.hasaker.vblog.base
  * @author 余天堂
  * @create 2019/12/24 14:56
  * @description VBlogException
  */
-public class CommonException extends BaseException {
+@Getter
+public class CommonException extends RuntimeException {
 
-    private static final long serialVersionUID = -2121391155040696048L;
+    /**
+     * 错误码
+     */
+    private String code;
 
-    public CommonException(BaseResponseEnum responseEnum, Object[] args, String message) {
-        super(responseEnum.getCode(), args, message);
-    }
+    /**
+     * 错误消息
+     */
+    private String message;
 
-    public CommonException(BaseResponseEnum responseEnum, Object[] args, String message, Throwable cause) {
-        super(responseEnum.getCode(), args, message, cause);
-    }
-
-    public CommonException(BaseResponseEnum responseEnum) {
-        super(responseEnum.getCode(), responseEnum.getMessage());
+    public CommonException(IEnum responseEnum) {
+        this.code = responseEnum.getCode();
+        this.message = responseEnum.getMessage();
     }
 }

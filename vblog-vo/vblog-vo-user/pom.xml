@@ -9,7 +9,16 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>vblog-vo-webUser</artifactId>
+    <artifactId>vblog-vo-user</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.hasaker</groupId>
+            <artifactId>vblog-common</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 
 
 </project>

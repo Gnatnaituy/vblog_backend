@@ -9,7 +9,7 @@ import java.lang.reflect.Type;
  * @create 2019/12/26 23:46
  * @description ClassUtils
  */
-public class ClassUtils {
+public final class ClassUtils {
 
     public static <T> Class<T> getParameterizedType(Class<?> clazz) {
         return getParameterizedType(clazz, 0);

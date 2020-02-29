@@ -12,8 +12,16 @@
     <artifactId>vblog-feign</artifactId>
     <packaging>pom</packaging>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.hasaker</groupId>
+            <artifactId>vblog-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
     <modules>
-        <module>vblog-feign-webUser</module>
+        <module>vblog-feign-user</module>
         <module>vblog-feign-post</module>
     </modules>
 

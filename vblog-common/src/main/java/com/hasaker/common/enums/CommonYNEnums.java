@@ -7,7 +7,7 @@ import lombok.Getter;
 /**
  * @author 余天堂
  * @since 2019/11/17 20:08
- * @description 
+ * @description
  */
 @Getter
 @AllArgsConstructor
@@ -17,5 +17,5 @@ public enum CommonYNEnums implements IEnum<CommonYNEnums> {
     NO("0", "N");
 
     private final String code;
-    private final String info;
+    private final String message;
 }

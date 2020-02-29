@@ -1,17 +1,13 @@
 package com.hasaker.oauth.config;
 
-import com.hasaker.oauth.component.JwtTokenEnhancer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
-import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 /**
  * @package com.hasaker.oauth.config
@@ -43,19 +39,6 @@ public class TokenStoreConfig {
         @Bean
         public TokenEnhancer jwtTokenEnhancer(){
             return new JwtTokenEnhancer();
-        }
-    }
-
-    @Configuration
-    @ConditionalOnProperty(prefix = "oauth2.token.store", name = "type", havingValue = "jwt")
-    public static class RedisTokenStoreConfig {
-
-        @Autowired(required = false)
-        private RedisConnectionFactory redisConnectionFactory;
-
-        @Bean
-        public TokenStore redisTokenStore() {
-            return new RedisTokenStore(redisConnectionFactory);
         }
     }
 }

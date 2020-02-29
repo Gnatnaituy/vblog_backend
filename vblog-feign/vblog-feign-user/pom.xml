@@ -9,7 +9,14 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>vblog-feign-webUser</artifactId>
+    <artifactId>vblog-feign-user</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.hasaker</groupId>
+            <artifactId>vblog-vo-user</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 
 </project>

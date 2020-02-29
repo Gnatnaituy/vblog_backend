@@ -2,7 +2,7 @@ package com.hasaker.oauth.authentication.provider;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.hasaker.oauth.entity.WebUser;
-import com.hasaker.oauth.service.UserService;
+import com.hasaker.oauth.service.OAuthUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -22,7 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class WebLoginAuthenticationProvider implements AuthenticationProvider {
 
     @Autowired
-    private UserService userService;
+    private OAuthUserDetailService OAuthUserDetailService;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -32,7 +32,7 @@ public class WebLoginAuthenticationProvider implements AuthenticationProvider {
         Object password = authentication.getCredentials();
         this.verificationUser(principal, password);
 
-        WebUser webUser = userService.loadUserByUsername(principal.toString());
+        WebUser webUser = OAuthUserDetailService.loadUserByUsername(principal.toString());
         if (ObjectUtil.isNull(webUser)) {
             throw new BadCredentialsException("User not exists!");
         }
