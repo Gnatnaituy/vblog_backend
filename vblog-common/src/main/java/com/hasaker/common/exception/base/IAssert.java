@@ -1,5 +1,7 @@
 package com.hasaker.common.exception.base;
 
+import cn.hutool.core.util.ObjectUtil;
+
 /**
  * @package com.hasaker.vblog.base
  * @author 余天堂
@@ -9,6 +11,12 @@ package com.hasaker.common.exception.base;
 public interface IAssert {
 
     CommonException newException();
+
+    default void assertNotEmpty(Object object) {
+        if (ObjectUtil.isEmpty(object)) {
+            throw newException();
+        }
+    }
 
     default void isTrue(boolean condition) {
         if (condition) {

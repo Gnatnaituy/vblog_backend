@@ -39,4 +39,7 @@ public final class Consts {
     // Password max & min length
     public static final Integer PASSWORD_MIN_LEN = 8;
     public static final Integer PASSWORD_MAX_LEN = 16;
+
+    // JWT Assign Key
+    public static final String JWT_ASSIGN_KEY = "5523";
 }

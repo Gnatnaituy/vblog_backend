@@ -42,8 +42,9 @@
         <!-- Feign -->
         <dependency>
             <groupId>com.hasaker</groupId>
-            <artifactId>vblog-feign-user</artifactId>
+            <artifactId>vblog-feign-account</artifactId>
             <version>${project.version}</version>
+            <scope>compile</scope>
         </dependency>
 
         <!-- Common and components -->

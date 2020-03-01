@@ -1,5 +1,6 @@
 package com.hasaker.oauth.config;
 
+import com.hasaker.common.consts.Consts;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,7 +32,8 @@ public class TokenStoreConfig {
         @Bean
         public JwtAccessTokenConverter jwtAccessTokenConverter() {
             JwtAccessTokenConverter accessTokenConverter = new JwtAccessTokenConverter();
-            accessTokenConverter.setSigningKey("5523");
+            accessTokenConverter.setSigningKey(Consts.JWT_ASSIGN_KEY);
+            accessTokenConverter.setVerifierKey(Consts.JWT_ASSIGN_KEY);
 
             return accessTokenConverter;
         }

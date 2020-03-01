@@ -31,6 +31,11 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-oauth2</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.1</version>
+        </dependency>
 
         <dependency>
             <groupId>com.hasaker</groupId>
@@ -39,8 +44,9 @@
         </dependency>
         <dependency>
             <groupId>com.hasaker</groupId>
-            <artifactId>vblog-feign-user</artifactId>
+            <artifactId>vblog-feign-account</artifactId>
             <version>${project.version}</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

@@ -126,8 +126,8 @@
     <orderEntry type="library" name="Maven: io.jsonwebtoken:jjwt:0.9.1" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.10.1" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.10.1" level="project" />
-    <orderEntry type="module" module-name="vblog-feign-user" />
-    <orderEntry type="module" module-name="vblog-vo-user" />
+    <orderEntry type="module" module-name="vblog-feign-account" />
+    <orderEntry type="module" module-name="vblog-vo-account" />
     <orderEntry type="module" module-name="vblog-common" />
     <orderEntry type="library" name="Maven: org.springframework.cloud:spring-cloud-starter-openfeign:2.2.1.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.cloud:spring-cloud-openfeign-core:2.2.1.RELEASE" level="project" />

@@ -21,7 +21,7 @@
     </dependencies>
 
     <modules>
-        <module>vblog-feign-user</module>
+        <module>vblog-feign-account</module>
         <module>vblog-feign-post</module>
     </modules>
 

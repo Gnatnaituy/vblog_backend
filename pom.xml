@@ -9,22 +9,12 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
 
-    <modules>
-        <module>vblog-common</module>
-        <module>vblog-component</module>
-        <module>vblog-face-server</module>
-        <module>vblog-user-server</module>
-        <module>vblog-post-server</module>
-        <module>vblog-oauth-server</module>
-        <module>vblog-feign</module>
-        <module>vblog-vo</module>
-    </modules>
-
     <properties>
         <java.version>11</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
 
         <spring-boot-dependencies.version>2.2.2.RELEASE</spring-boot-dependencies.version>
         <spring-cloud-dependencies.version>Hoxton.SR1</spring-cloud-dependencies.version>
@@ -35,6 +25,17 @@
         <fastjson.version>1.2.62</fastjson.version>
         <hutool.version>5.1.3</hutool.version>
     </properties>
+
+    <modules>
+        <module>vblog-common</module>
+        <module>vblog-component</module>
+        <module>vblog-face-server</module>
+        <module>vblog-oauth-server</module>
+        <module>vblog-account-server</module>
+        <module>vblog-post-server</module>
+        <module>vblog-feign</module>
+        <module>vblog-vo</module>
+    </modules>
 
     <dependencyManagement>
         <dependencies>
@@ -60,6 +61,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
                 <configuration>
                     <encoding>${project.build.sourceEncoding}</encoding>
                     <source>${java.version}</source>

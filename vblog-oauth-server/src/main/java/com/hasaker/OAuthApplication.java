@@ -13,7 +13,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  */
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableFeignClients(basePackages = "com.hasaker.user.feign")
+@EnableFeignClients(basePackages = "com.hasaker.*.feign")
 public class OAuthApplication {
 
     public static void main(String[] args) {
