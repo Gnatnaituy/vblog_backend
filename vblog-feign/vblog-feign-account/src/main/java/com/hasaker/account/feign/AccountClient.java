@@ -2,10 +2,10 @@ package com.hasaker.account.feign;
 
 import com.hasaker.common.consts.Ajax;
 import com.hasaker.common.vo.OAuthUserVo;
+import com.hasaker.vo.account.request.RequestUserUpdateVo;
+import com.hasaker.vo.account.response.ResponseUserDetailVo;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @package com.hasaker.user.feign
@@ -14,9 +14,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @description UserClient
  */
 @FeignClient(value = "vblog-account-server")
+@RestController
 public interface AccountClient {
 
     @GetMapping("/account/{username}")
-    @ResponseBody
-    Ajax<OAuthUserVo> findUserByUsername(@PathVariable(value = "username") String username);
+    Ajax<OAuthUserVo> findUserByUsername(@PathVariable("username") String username);
+
+    @PostMapping("/account/register")
+    Ajax register(@RequestParam("username") String username, @RequestParam("password") String password);
+
+    @PostMapping("/account/change-password")
+    Ajax changePassword(@RequestParam("username") String username, @RequestParam("password") String password);
+
+    @PostMapping("/account/update")
+    Ajax update(RequestUserUpdateVo userUpdateVo);
+
+    @GetMapping("/account/detail/{username}")
+    Ajax<ResponseUserDetailVo> detail(@PathVariable("username") String username);
 }
