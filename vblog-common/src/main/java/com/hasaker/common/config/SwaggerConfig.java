@@ -30,7 +30,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(ApiInfo.DEFAULT)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.hasaker.vblog.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.hasaker.face.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }

@@ -1,12 +1,9 @@
 package com.hasaker.common.config;
 
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * @package com.hasaker.vblog.config
@@ -17,9 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 @Configuration
 @EnableTransactionManagement
 public class MyBatisPlusConfig {
-
-    @Autowired
-    private HttpServletRequest request;
 
     /**
      * 配置分页
