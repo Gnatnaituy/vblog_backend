@@ -10,7 +10,6 @@ import com.hasaker.account.mapper.UserMapper;
 import com.hasaker.account.service.RoleService;
 import com.hasaker.account.service.UserService;
 import com.hasaker.common.base.impl.BaseServiceImpl;
-import com.hasaker.common.consts.Consts;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
 import com.hasaker.common.vo.OAuthUserVo;
 import com.hasaker.vo.account.request.RequestUserUpdateVo;
@@ -65,7 +64,6 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
 
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper.eq("username", username);
-        userQueryWrapper.eq(Consts.IS_DELETED, Consts.NO);
         User user = this.getOne(userQueryWrapper);
         UserExceptionEnums.USERNAME_ALREADY_EXISTS.assertEmpty(user);
 

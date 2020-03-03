@@ -1,7 +1,10 @@
 package com.hasaker.account.entity;
 
 import com.hasaker.common.base.BaseEntity;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * @author 余天堂
@@ -12,7 +15,6 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class Friend extends BaseEntity {
 
     // 用户ID

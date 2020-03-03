@@ -14,7 +14,6 @@ import com.hasaker.account.service.UserService;
 import com.hasaker.common.base.impl.BaseServiceImpl;
 import com.hasaker.common.consts.Consts;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
-import com.hasaker.common.utils.IdUtils;
 import com.hasaker.vo.account.request.RequestFriendAddVo;
 import com.hasaker.vo.account.request.RequestFriendDeleteVo;
 import com.hasaker.vo.account.request.RequestFriendRemarkVo;
@@ -56,7 +55,6 @@ public class FriendServiceImpl extends BaseServiceImpl<FriendMapper, Friend> imp
         UserExceptionEnums.USER_NOT_EXISTS.assertNotEmpty(friend);
 
         Friend friendship = new Friend();
-        friendship.setId(IdUtils.nextId());
         friendship.setUserId(friendAddVo.getUserId());
         friendship.setFriendId(friendAddVo.getFriendId());
         friendship.setRemark(friend.getNickname());
@@ -80,7 +78,6 @@ public class FriendServiceImpl extends BaseServiceImpl<FriendMapper, Friend> imp
         QueryWrapper<Friend> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(Friend.USER_ID, friendDeleteVo.getUserId());
         queryWrapper.eq(Friend.FRIEND_ID, friendDeleteVo.getFriendId());
-        queryWrapper.eq(Consts.IS_DELETED, Consts.NO);
         Friend friend = this.getOne(queryWrapper);
         FriendExceptionEnums.FRIEND_NOT_EXISTS.assertNotEmpty(friend);
 
@@ -105,7 +102,6 @@ public class FriendServiceImpl extends BaseServiceImpl<FriendMapper, Friend> imp
         QueryWrapper<Friend> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(Friend.USER_ID, friendVisibilityVo.getUserId());
         queryWrapper.eq(Friend.FRIEND_ID, friendVisibilityVo.getFriendId());
-        queryWrapper.eq(Consts.IS_DELETED, Consts.NO);
         Friend friend = this.getOne(queryWrapper);
         FriendExceptionEnums.FRIEND_NOT_EXISTS.assertNotEmpty(friend);
 
@@ -130,7 +126,6 @@ public class FriendServiceImpl extends BaseServiceImpl<FriendMapper, Friend> imp
         QueryWrapper<Friend> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(Friend.USER_ID, friendRemarkVo.getUserId());
         queryWrapper.eq(Friend.FRIEND_ID, friendRemarkVo.getFriendId());
-        queryWrapper.eq(Consts.IS_DELETED, Consts.NO);
         Friend friend = this.getOne(queryWrapper);
         FriendExceptionEnums.FRIEND_NOT_EXISTS.assertNotEmpty(friend);
 
@@ -150,7 +145,6 @@ public class FriendServiceImpl extends BaseServiceImpl<FriendMapper, Friend> imp
 
         QueryWrapper<Friend> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(Friend.USER_ID, userId);
-        queryWrapper.eq(Consts.IS_DELETED, Consts.NO);
         List<Friend> friends = this.list(queryWrapper);
 
         if (ObjectUtil.isNotEmpty(friends)) {

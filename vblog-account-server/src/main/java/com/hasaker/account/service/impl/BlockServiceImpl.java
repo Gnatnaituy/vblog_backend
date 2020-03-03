@@ -9,7 +9,6 @@ import com.hasaker.account.service.BlockService;
 import com.hasaker.common.base.impl.BaseServiceImpl;
 import com.hasaker.common.consts.Consts;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
-import com.hasaker.common.utils.IdUtils;
 import com.hasaker.vo.account.request.RequestBlockVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +34,6 @@ public class BlockServiceImpl extends BaseServiceImpl<BlockMapper, Block> implem
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(blockVo.getBlockUserId());
 
         Block block = Convert.convert(Block.class, blockVo);
-        block.setId(IdUtils.nextId());
 
         return this.save(block);
     }
@@ -54,7 +52,6 @@ public class BlockServiceImpl extends BaseServiceImpl<BlockMapper, Block> implem
         QueryWrapper<Block> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(Block.USER_ID, unblockVo.getUserId());
         queryWrapper.eq(Block.BLOCK_USER_ID, unblockVo.getBlockUserId());
-        queryWrapper.eq(Consts.IS_DELETED, Consts.NO);
         Block block = this.getOne(queryWrapper);
         BlockExceptionEnums.BLOCK_NOT_EXISTS.assertNotEmpty(block);
 
