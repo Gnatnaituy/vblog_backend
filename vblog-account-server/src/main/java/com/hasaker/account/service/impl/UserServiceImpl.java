@@ -58,7 +58,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean createUser(String username, String password) {
+    public void createUser(String username, String password) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(username);
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(password);
 
@@ -71,7 +71,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
         user.setUsername(username);
         user.setPassword(password);
 
-        return this.save(user);
+        this.save(user);
     }
 
     /**
@@ -82,7 +82,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean changePassword(String username, String password) {
+    public void changePassword(String username, String password) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(username);
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(password);
 
@@ -91,7 +91,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
 
         user.setPassword(password);
 
-        return this.updateById(user);
+        this.updateById(user);
     }
 
     /**
@@ -101,7 +101,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean updateUser(RequestUserUpdateVo userUpdateVo) {
+    public void updateUser(RequestUserUpdateVo userUpdateVo) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(userUpdateVo.getUsername());
 
         User user = userMapper.findUserByUserName(userUpdateVo.getUsername());
@@ -110,7 +110,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
         User updatedUser = Convert.convert(User.class, userUpdateVo);
         updatedUser.setId(user.getId());
 
-        return this.updateById(updatedUser);
+        this.updateById(updatedUser);
     }
 
     /**

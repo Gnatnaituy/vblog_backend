@@ -25,30 +25,38 @@ public class AccountController {
     @ApiOperation(value = "登录使用")
     @GetMapping(value = "/{username}")
     public Ajax<OAuthUserVo> findUserByUsername(@PathVariable String username) {
+
         return Ajax.getInstance().successT(userService.findUserByUserName(username));
     }
 
-    @ApiOperation(value = "用户注册")
+    @ApiOperation(value = "注册使用")
     @PostMapping(value = "/register")
     public Ajax register(@RequestParam("username") String username, @RequestParam("password") String password) {
-        return userService.createUser(username, password) ? Ajax.success() : Ajax.failure();
+        userService.createUser(username, password);
+
+        return Ajax.success();
     }
 
     @ApiOperation(value = "修改密码")
     @PostMapping(value = "/change-password")
     public Ajax changePassword(@RequestParam("username") String username, @RequestParam("password") String password) {
-        return userService.changePassword(username, password) ? Ajax.success() : Ajax.failure();
+        userService.changePassword(username, password);
+
+        return Ajax.success();
     }
 
     @ApiOperation(value = "更新用户资料")
     @PostMapping(value = "/update")
     public Ajax update(RequestUserUpdateVo userUpdateVo) {
-        return userService.updateUser(userUpdateVo) ? Ajax.success() : Ajax.failure();
+        userService.updateUser(userUpdateVo);
+
+        return Ajax.success();
     }
 
     @ApiOperation(value = "用户详情")
     @GetMapping(value = "/detail/{username}")
     public Ajax<ResponseUserDetailVo> detail(@PathVariable("username") String username) {
+
         return Ajax.getInstance().successT(userService.userDetail(username));
     }
 }

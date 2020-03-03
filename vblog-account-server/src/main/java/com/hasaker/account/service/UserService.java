@@ -16,11 +16,11 @@ public interface UserService extends BaseService<User> {
 
     OAuthUserVo findUserByUserName(String username);
 
-    boolean createUser(String username, String password);
+    void createUser(String username, String password);
 
-    boolean changePassword(String username, String password);
+    void changePassword(String username, String password);
 
-    boolean updateUser(RequestUserUpdateVo userUpdateVo);
+    void updateUser(RequestUserUpdateVo userUpdateVo);
 
     ResponseUserDetailVo userDetail(String username);
 }

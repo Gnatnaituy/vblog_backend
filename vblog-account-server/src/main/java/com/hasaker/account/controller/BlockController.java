@@ -26,12 +26,16 @@ public class BlockController {
     @ApiOperation(value = "屏蔽用户")
     @PostMapping(value = "/block")
     public Ajax blockUser(@RequestBody RequestBlockVo blockVo) {
-        return blockService.blockUser(blockVo) ? Ajax.success() : Ajax.failure();
+        blockService.blockUser(blockVo);
+
+        return Ajax.success();
     }
 
     @ApiOperation(value = "取消屏蔽用户")
     @PostMapping(value = "/unblock")
     public Ajax unblockUser(@RequestBody RequestBlockVo unblockVo) {
-        return blockService.unblockUser(unblockVo) ? Ajax.success() : Ajax.failure();
+        blockService.unblockUser(unblockVo);
+
+        return Ajax.success();
     }
 }

@@ -29,25 +29,33 @@ public class FriendController {
     @ApiOperation(value = "添加好友")
     @PostMapping(value = "/add")
     public Ajax addFriend(@RequestBody RequestFriendAddVo addFriendVo) {
-        return friendService.addFriend(addFriendVo) ? Ajax.success() : Ajax.failure();
+        friendService.addFriend(addFriendVo);
+
+        return Ajax.success();
     }
 
     @ApiOperation(value = "删除好友")
     @PostMapping(value = "/delete")
     public Ajax deleteFriend(@RequestBody RequestFriendDeleteVo deleteFriendVo) {
-        return friendService.deleteFriend(deleteFriendVo) ? Ajax.success() : Ajax.failure();
+        friendService.deleteFriend(deleteFriendVo);
+
+        return Ajax.success();
     }
 
     @ApiOperation(value = "修改好友备注")
     @PostMapping(value = "/remark")
     public Ajax changeRemark(@RequestBody RequestFriendRemarkVo changeRemarkVo) {
-        return friendService.changeRemark(changeRemarkVo) ? Ajax.success() : Ajax.failure();
+        friendService.changeRemark(changeRemarkVo);
+
+        return Ajax.success();
     }
 
     @ApiOperation(value = "设置好友权限")
     @PostMapping(value = "/visibility")
     public Ajax changeVisibility(@RequestBody RequestFriendVisibilityVo changeVisibilityVo) {
-        return friendService.changeVisibility(changeVisibilityVo) ? Ajax.success() : Ajax.failure();
+        friendService.changeVisibility(changeVisibilityVo);
+
+        return Ajax.success();
     }
 
     @ApiOperation(value = "获取好友列表")

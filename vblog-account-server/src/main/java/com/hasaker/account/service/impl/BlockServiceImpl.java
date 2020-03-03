@@ -29,13 +29,13 @@ public class BlockServiceImpl extends BaseServiceImpl<BlockMapper, Block> implem
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean blockUser(RequestBlockVo blockVo) {
+    public void blockUser(RequestBlockVo blockVo) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(blockVo.getUserId());
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(blockVo.getBlockUserId());
 
         Block block = Convert.convert(Block.class, blockVo);
 
-        return this.save(block);
+        this.save(block);
     }
 
     /**
@@ -45,7 +45,7 @@ public class BlockServiceImpl extends BaseServiceImpl<BlockMapper, Block> implem
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean unblockUser(RequestBlockVo unblockVo) {
+    public void unblockUser(RequestBlockVo unblockVo) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(unblockVo.getUserId());
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(unblockVo.getBlockUserId());
 
@@ -57,6 +57,6 @@ public class BlockServiceImpl extends BaseServiceImpl<BlockMapper, Block> implem
 
         block.setIsDeleted(Consts.YES);
 
-        return this.updateById(block);
+        this.updateById(block);
     }
 }

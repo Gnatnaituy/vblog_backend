@@ -18,13 +18,13 @@ import java.util.List;
  */
 public interface FriendService extends BaseService<Friend> {
 
-    boolean addFriend(RequestFriendAddVo addFriendVo);
+    void addFriend(RequestFriendAddVo addFriendVo);
 
-    boolean deleteFriend(RequestFriendDeleteVo deleteFriendVo);
+    void deleteFriend(RequestFriendDeleteVo deleteFriendVo);
 
-    boolean changeVisibility(RequestFriendVisibilityVo changeVisibilityVo);
+    void changeVisibility(RequestFriendVisibilityVo changeVisibilityVo);
 
-    boolean changeRemark(RequestFriendRemarkVo changeRemarkVo);
+    void changeRemark(RequestFriendRemarkVo changeRemarkVo);
 
     List<ResponseFriendVo> listFriends(Long userId);
 }

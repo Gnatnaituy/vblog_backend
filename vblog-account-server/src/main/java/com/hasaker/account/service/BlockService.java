@@ -12,7 +12,7 @@ import com.hasaker.vo.account.request.RequestBlockVo;
  */
 public interface BlockService extends BaseService<Block> {
 
-    boolean blockUser(RequestBlockVo blockVo);
+    void blockUser(RequestBlockVo blockVo);
 
-    boolean unblockUser(RequestBlockVo unblockVo);
+    void unblockUser(RequestBlockVo unblockVo);
 }

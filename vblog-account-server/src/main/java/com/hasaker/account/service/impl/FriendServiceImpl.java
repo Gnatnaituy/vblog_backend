@@ -46,7 +46,7 @@ public class FriendServiceImpl extends BaseServiceImpl<FriendMapper, Friend> imp
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean addFriend(RequestFriendAddVo friendAddVo) {
+    public void addFriend(RequestFriendAddVo friendAddVo) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(friendAddVo);
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(friendAddVo.getUserId());
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(friendAddVo.getFriendId());
@@ -60,7 +60,7 @@ public class FriendServiceImpl extends BaseServiceImpl<FriendMapper, Friend> imp
         friendship.setRemark(friend.getNickname());
         friendship.setVisibility(VisibilityEnums.VISIBLE_FOR_BOTH.getCode());
 
-        return this.save(friendship);
+        this.save(friendship);
     }
 
     /**
@@ -70,7 +70,7 @@ public class FriendServiceImpl extends BaseServiceImpl<FriendMapper, Friend> imp
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean deleteFriend(RequestFriendDeleteVo friendDeleteVo) {
+    public void deleteFriend(RequestFriendDeleteVo friendDeleteVo) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(friendDeleteVo);
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(friendDeleteVo.getUserId());
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(friendDeleteVo.getFriendId());
@@ -83,7 +83,7 @@ public class FriendServiceImpl extends BaseServiceImpl<FriendMapper, Friend> imp
 
         friend.setIsDeleted(Consts.YES);
 
-        return this.updateById(friend);
+        this.updateById(friend);
     }
 
     /**
@@ -93,7 +93,7 @@ public class FriendServiceImpl extends BaseServiceImpl<FriendMapper, Friend> imp
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean changeVisibility(RequestFriendVisibilityVo friendVisibilityVo) {
+    public void changeVisibility(RequestFriendVisibilityVo friendVisibilityVo) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(friendVisibilityVo);
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(friendVisibilityVo.getUserId());
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(friendVisibilityVo.getFriendId());
@@ -107,7 +107,7 @@ public class FriendServiceImpl extends BaseServiceImpl<FriendMapper, Friend> imp
 
         friend.setVisibility(friendVisibilityVo.getVisibility());
 
-        return this.updateById(friend);
+        this.updateById(friend);
     }
 
     /**
@@ -117,7 +117,7 @@ public class FriendServiceImpl extends BaseServiceImpl<FriendMapper, Friend> imp
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean changeRemark(RequestFriendRemarkVo friendRemarkVo) {
+    public void changeRemark(RequestFriendRemarkVo friendRemarkVo) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(friendRemarkVo);
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(friendRemarkVo.getUserId());
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(friendRemarkVo.getFriendId());
@@ -131,7 +131,7 @@ public class FriendServiceImpl extends BaseServiceImpl<FriendMapper, Friend> imp
 
         friend.setRemark(friendRemarkVo.getRemark());
 
-        return this.updateById(friend);
+        this.updateById(friend);
     }
 
     /**
