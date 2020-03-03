@@ -15,11 +15,11 @@ import com.hasaker.common.base.impl.BaseServiceImpl;
 import com.hasaker.common.consts.Consts;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
 import com.hasaker.common.utils.IdUtils;
-import com.hasaker.vo.user.request.RequestFriendAddVo;
-import com.hasaker.vo.user.request.RequestFriendDeleteVo;
-import com.hasaker.vo.user.request.RequestFriendRemarkVo;
-import com.hasaker.vo.user.request.RequestFriendVisibilityVo;
-import com.hasaker.vo.user.response.ResponseFriendVo;
+import com.hasaker.vo.account.request.RequestFriendAddVo;
+import com.hasaker.vo.account.request.RequestFriendDeleteVo;
+import com.hasaker.vo.account.request.RequestFriendRemarkVo;
+import com.hasaker.vo.account.request.RequestFriendVisibilityVo;
+import com.hasaker.vo.account.response.ResponseFriendVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,7 +53,7 @@ public class FriendServiceImpl extends BaseServiceImpl<FriendMapper, Friend> imp
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(friendAddVo.getFriendId());
 
         User friend = userService.getById(friendAddVo.getUserId());
-        UserExceptionEnums.USER_NOT_FOUND.assertNotEmpty(friend);
+        UserExceptionEnums.USER_NOT_EXISTS.assertNotEmpty(friend);
 
         Friend friendship = new Friend();
         friendship.setId(IdUtils.nextId());

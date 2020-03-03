@@ -12,8 +12,20 @@ public interface IAssert {
 
     CommonException newException();
 
+    default void assertEmpty(Object object) {
+        if (ObjectUtil.isNotEmpty(object)) {
+            newException().setMessage(newException().getMessage() + ": "
+                    + object.getClass().getSimpleName() + "-"
+                    + object.toString());
+            throw newException();
+        }
+    }
+
     default void assertNotEmpty(Object object) {
         if (ObjectUtil.isEmpty(object)) {
+            newException().setMessage(newException().getMessage() + ": "
+                    + object.getClass().getSimpleName() + "-"
+                    + object.toString());
             throw newException();
         }
     }

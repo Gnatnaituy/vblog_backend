@@ -25,6 +25,10 @@ public class OAuthUser implements UserDetails {
 
     private String password;
 
+    private String nickname;
+
+    private String avatar;
+
     private List<GrantedAuthority> authorities;
 
     @Override

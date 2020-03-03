@@ -46,7 +46,11 @@
             <groupId>com.hasaker</groupId>
             <artifactId>vblog-feign-account</artifactId>
             <version>${project.version}</version>
-            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.hasaker</groupId>
+            <artifactId>vblog-vo-account</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

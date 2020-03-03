@@ -2,7 +2,7 @@ package com.hasaker.account.controller;
 
 import com.hasaker.account.service.BlockService;
 import com.hasaker.common.consts.Ajax;
-import com.hasaker.vo.user.request.RequestBlockVo;
+import com.hasaker.vo.account.request.RequestBlockVo;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

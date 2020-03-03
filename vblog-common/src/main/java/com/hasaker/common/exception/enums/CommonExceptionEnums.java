@@ -21,8 +21,9 @@ public enum CommonExceptionEnums implements IExceptionAssert {
     INTERNAL_SERVER_ERROR("500", "服务器内部错误!"),
     SERVER_BUSY("503","服务器正忙，请稍后再试!"),
 
-    NOT_NULL_ARG("101", MessageConsts.ARG_EMPTY),
-    OPERATION_FAILED("102", MessageConsts.FAILED);
+    NOT_NULL("101", MessageConsts.EMPTY_OBJECT),
+    NOT_NULL_ARG("102", MessageConsts.EMPTY_ARG),
+    OPERATION_FAILED("103", MessageConsts.FAILED);
 
     private String code;
     private String message;

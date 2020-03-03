@@ -33,7 +33,6 @@ public class TokenStoreConfig {
         public JwtAccessTokenConverter jwtAccessTokenConverter() {
             JwtAccessTokenConverter accessTokenConverter = new JwtAccessTokenConverter();
             accessTokenConverter.setSigningKey(Consts.JWT_ASSIGN_KEY);
-            accessTokenConverter.setVerifierKey(Consts.JWT_ASSIGN_KEY);
 
             return accessTokenConverter;
         }

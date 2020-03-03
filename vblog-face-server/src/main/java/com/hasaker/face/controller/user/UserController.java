@@ -2,8 +2,8 @@ package com.hasaker.face.controller.user;
 
 import com.hasaker.account.feign.AccountClient;
 import com.hasaker.common.consts.Ajax;
+import com.hasaker.common.vo.OAuthUserVo;
 import com.hasaker.face.controller.base.BaseController;
-import com.hasaker.vo.user.response.ResponseUserOAuthVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +24,7 @@ public class UserController extends BaseController {
     private AccountClient accountClient;
 
     @GetMapping(value = "/{username}")
-    public Ajax<ResponseUserOAuthVo> findUserByUsername(@PathVariable String username) {
+    public Ajax<OAuthUserVo> findUserByUsername(@PathVariable String username) {
         return accountClient.findUserByUsername(username);
     }
 

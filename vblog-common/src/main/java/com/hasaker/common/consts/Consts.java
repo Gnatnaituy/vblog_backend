@@ -23,8 +23,10 @@ public final class Consts {
     public static final String VERSION = "version";
 
     // 布尔类型
-    public static final Integer FALSE = 0;
     public static final Integer TRUE = 1;
+    public static final Integer FALSE = 0;
+    public static final Integer YES = 1;
+    public static final Integer NO = 0;
 
     // 朋友圈可见性
     public static final Integer SECRET = 1;

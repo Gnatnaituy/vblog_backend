@@ -2,6 +2,7 @@ package com.hasaker.common.exception.base;
 
 import com.hasaker.common.base.IEnum;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @package com.hasaker.vblog.base
@@ -10,6 +11,7 @@ import lombok.Getter;
  * @description VBlogException
  */
 @Getter
+@Setter
 public class CommonException extends RuntimeException {
 
     /**

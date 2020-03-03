@@ -14,7 +14,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum UserExceptionEnums implements IExceptionAssert {
 
-    USER_NOT_FOUND("USER_EXCEPTION_001", "User not found");
+    USER_NOT_EXISTS("USER_EXCEPTION_001", "User not exists"),
+    USERNAME_ALREADY_EXISTS("USER_EXCEPTION_002", "Username already exists");
 
     private String code;
     private String message;

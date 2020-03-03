@@ -1,4 +1,4 @@
-package com.hasaker.vo.user.response;
+package com.hasaker.vo.account.response;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

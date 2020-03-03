@@ -10,7 +10,7 @@ import com.hasaker.common.base.impl.BaseServiceImpl;
 import com.hasaker.common.consts.Consts;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
 import com.hasaker.common.utils.IdUtils;
-import com.hasaker.vo.user.request.RequestBlockVo;
+import com.hasaker.vo.account.request.RequestBlockVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
