@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServletRequest;
  * @create 2020/1/2 13:48
  * @description MyBatisPlusConfig
  */
-@EnableTransactionManagement
 @Configuration
+@EnableTransactionManagement
 public class MyBatisPlusConfig {
 
     @Autowired
@@ -35,13 +35,4 @@ public class MyBatisPlusConfig {
 
         return paginationInterceptor;
     }
-
-
-//    /**
-//     * 配置自定义ID生成器
-//     */
-//    @Bean
-//    public IdentifierGenerator identifierGenerator() {
-//        return new SnowFlakeIdGenerator();
-//    }
 }
