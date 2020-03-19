@@ -10,5 +10,7 @@ public interface RedisService {
 
     boolean hasKey(String key);
 
-    Object get(String key);
+    <T> void save(String key, T value);
+
+    <T> T get(String key, Class<T> clazz);
 }

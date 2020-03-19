@@ -1,6 +1,6 @@
 package com.hasaker.account.exception.enums;
 
-import com.hasaker.common.exception.base.IExceptionAssert;
+import com.hasaker.common.exception.base.BaseExceptionAssert;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -12,7 +12,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum FriendExceptionEnums implements IExceptionAssert {
+public enum FriendExceptionEnums implements BaseExceptionAssert {
 
     FRIEND_NOT_EXISTS("FRIEND_EXCEPTION_001", "Friend not exists");
 

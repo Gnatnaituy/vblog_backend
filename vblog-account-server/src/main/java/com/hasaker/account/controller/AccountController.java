@@ -1,10 +1,10 @@
 package com.hasaker.account.controller;
 
 import com.hasaker.account.service.UserService;
-import com.hasaker.common.consts.Ajax;
-import com.hasaker.common.vo.OAuthUserVo;
-import com.hasaker.vo.account.request.RequestUserUpdateVo;
-import com.hasaker.vo.account.response.ResponseUserDetailVo;
+import com.hasaker.account.vo.request.RequestUserUpdateVo;
+import com.hasaker.account.vo.response.ResponseUserDetailVo;
+import com.hasaker.account.vo.response.ResponseUserOAuthVo;
+import com.hasaker.common.vo.Ajax;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +24,7 @@ public class AccountController {
 
     @ApiOperation(value = "登录使用")
     @GetMapping(value = "/{username}")
-    public Ajax<OAuthUserVo> findUserByUsername(@PathVariable String username) {
+    public Ajax<ResponseUserOAuthVo> findUserByUsername(@PathVariable String username) {
 
         return Ajax.getInstance().successT(userService.findUserByUserName(username));
     }

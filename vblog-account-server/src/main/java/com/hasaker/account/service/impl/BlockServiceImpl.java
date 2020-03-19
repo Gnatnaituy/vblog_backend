@@ -6,10 +6,10 @@ import com.hasaker.account.entity.Block;
 import com.hasaker.account.exception.enums.BlockExceptionEnums;
 import com.hasaker.account.mapper.BlockMapper;
 import com.hasaker.account.service.BlockService;
+import com.hasaker.account.vo.request.RequestBlockVo;
 import com.hasaker.common.base.impl.BaseServiceImpl;
 import com.hasaker.common.consts.Consts;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
-import com.hasaker.vo.account.request.RequestBlockVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,9 +1,9 @@
 package com.hasaker.account.feign;
 
-import com.hasaker.common.consts.Ajax;
-import com.hasaker.common.vo.OAuthUserVo;
-import com.hasaker.vo.account.request.RequestUserUpdateVo;
-import com.hasaker.vo.account.response.ResponseUserDetailVo;
+import com.hasaker.account.vo.request.RequestUserUpdateVo;
+import com.hasaker.account.vo.response.ResponseUserDetailVo;
+import com.hasaker.account.vo.response.ResponseUserOAuthVo;
+import com.hasaker.common.vo.Ajax;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.*;
  * @create 2020/2/22 15:29
  * @description UserClient
  */
-@FeignClient(value = "vblog-account-server")
+@FeignClient(name = "VBLOG-ACCOUNT", url = "127.0.0.1:9001")
 @RestController
 public interface AccountClient {
 
     @GetMapping("/account/{username}")
-    Ajax<OAuthUserVo> findUserByUsername(@PathVariable("username") String username);
+    Ajax<ResponseUserOAuthVo> findUserByUsername(@PathVariable("username") String username);
 
     @PostMapping("/account/register")
     Ajax register(@RequestParam("username") String username, @RequestParam("password") String password);

@@ -26,7 +26,18 @@
             <artifactId>spring-cloud-starter-consul-config</artifactId>
         </dependency>
 
-        <!-- Vo -->
+        <!-- common -->
+        <dependency>
+            <groupId>com.hasaker</groupId>
+            <artifactId>vblog-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- component -->
+
+        <!-- feign -->
+
+        <!-- vo -->
         <dependency>
             <groupId>com.hasaker</groupId>
             <artifactId>vblog-vo-account</artifactId>
@@ -34,12 +45,6 @@
             <scope>compile</scope>
         </dependency>
 
-        <!-- Common and components -->
-        <dependency>
-            <groupId>com.hasaker</groupId>
-            <artifactId>vblog-common</artifactId>
-            <version>${project.version}</version>
-        </dependency>
     </dependencies>
 
 </project>

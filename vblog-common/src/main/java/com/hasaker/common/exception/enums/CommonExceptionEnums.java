@@ -1,7 +1,7 @@
 package com.hasaker.common.exception.enums;
 
 import com.hasaker.common.consts.MessageConsts;
-import com.hasaker.common.exception.base.IExceptionAssert;
+import com.hasaker.common.exception.base.BaseExceptionAssert;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -12,7 +12,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum CommonExceptionEnums implements IExceptionAssert {
+public enum CommonExceptionEnums implements BaseExceptionAssert {
 
     SUCCESS("200", "成功!"),
     BODY_NOT_MATCH("400","请求的数据格式不符!"),

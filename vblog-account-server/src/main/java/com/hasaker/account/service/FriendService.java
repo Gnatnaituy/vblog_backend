@@ -1,12 +1,12 @@
 package com.hasaker.account.service;
 
 import com.hasaker.account.entity.Friend;
+import com.hasaker.account.vo.request.RequestFriendAddVo;
+import com.hasaker.account.vo.request.RequestFriendDeleteVo;
+import com.hasaker.account.vo.request.RequestFriendRemarkVo;
+import com.hasaker.account.vo.request.RequestFriendVisibilityVo;
+import com.hasaker.account.vo.response.ResponseFriendVo;
 import com.hasaker.common.base.BaseService;
-import com.hasaker.vo.account.request.RequestFriendAddVo;
-import com.hasaker.vo.account.request.RequestFriendDeleteVo;
-import com.hasaker.vo.account.request.RequestFriendRemarkVo;
-import com.hasaker.vo.account.request.RequestFriendVisibilityVo;
-import com.hasaker.vo.account.response.ResponseFriendVo;
 
 import java.util.List;
 

@@ -31,22 +31,34 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-oauth2</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
-            <version>0.9.1</version>
-        </dependency>
 
+        <!-- common -->
         <dependency>
             <groupId>com.hasaker</groupId>
             <artifactId>vblog-common</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <!-- component -->
+        <dependency>
+            <groupId>com.hasaker</groupId>
+            <artifactId>vblog-component-redis</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- feign -->
         <dependency>
             <groupId>com.hasaker</groupId>
             <artifactId>vblog-feign-account</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.hasaker</groupId>
+            <artifactId>vblog-feign-oauth</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- vo -->
         <dependency>
             <groupId>com.hasaker</groupId>
             <artifactId>vblog-vo-account</artifactId>

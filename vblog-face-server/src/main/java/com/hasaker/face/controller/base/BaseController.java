@@ -1,14 +1,11 @@
 package com.hasaker.face.controller.base;
 
-import cn.hutool.core.util.StrUtil;
-import com.hasaker.common.consts.Consts;
 import com.hasaker.common.consts.RequestConsts;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 
 import javax.servlet.http.HttpServletRequest;
-import java.nio.charset.StandardCharsets;
 
 /**
  * @package com.hasaker.face.controller.base
@@ -20,28 +17,18 @@ public class BaseController {
 
     @Autowired
     private HttpServletRequest request;
+    @Autowired
+    private TokenStore tokenStore;
 
-    public String getUsername() {
-        String authorization = request.getHeader(RequestConsts.AUTHORIZATION);
-        String jwtToken = StrUtil.subAfter(authorization, "bearer ", false);
-
-        Claims claims = Jwts.parser()
-                .setSigningKey(Consts.JWT_ASSIGN_KEY.getBytes(StandardCharsets.UTF_8))
-                .parseClaimsJws(jwtToken)
-                .getBody();
-
-        return claims.getAudience();
+    public Long getUserId() {
+        OAuth2AccessToken accessToken = tokenStore.readAccessToken(request
+                .getHeader(RequestConsts.AUTHORIZATION).split(" ")[1]);
+        return Long.valueOf(accessToken.getAdditionalInformation().get("userId").toString());
     }
 
-    public Object getTokenInfo() {
-        String authorization = request.getHeader(RequestConsts.AUTHORIZATION);
-        String jwtToken = StrUtil.subAfter(authorization, "bearer ", false);
-
-        Claims claims = Jwts.parser()
-                .setSigningKey(Consts.JWT_ASSIGN_KEY.getBytes(StandardCharsets.UTF_8))
-                .parseClaimsJws(jwtToken)
-                .getBody();
-
-        return claims;
+    public String getUsername() {
+        OAuth2AccessToken accessToken = tokenStore.readAccessToken(request
+                .getHeader(RequestConsts.AUTHORIZATION).split(" ")[1]);
+        return accessToken.getAdditionalInformation().get("user_name").toString();
     }
 }

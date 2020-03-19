@@ -1,6 +1,6 @@
 package com.hasaker.common.exception.base;
 
-import com.hasaker.common.base.IEnum;
+import com.hasaker.common.base.BaseEnum;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,7 +24,7 @@ public class CommonException extends RuntimeException {
      */
     private String message;
 
-    public CommonException(IEnum responseEnum) {
+    public CommonException(BaseEnum responseEnum) {
         this.code = responseEnum.getCode();
         this.message = responseEnum.getMessage();
     }

@@ -1,7 +1,7 @@
 package com.hasaker.oauth.authentication.provider;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.hasaker.oauth.entity.OAuthUser;
+import com.hasaker.oauth.entity.OAuthUserDetails;
 import com.hasaker.oauth.service.OAuthUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -32,21 +32,21 @@ public class WebLoginAuthenticationProvider implements AuthenticationProvider {
         Object password = authentication.getCredentials();
 
         if (ObjectUtil.isEmpty(principal)) {
-            throw new BadCredentialsException("the account cannot be empty");
+            throw new BadCredentialsException("The username cannot be empty");
         }
         if (ObjectUtil.isEmpty(password)) {
-            throw new BadCredentialsException("the password cannot be empty");
+            throw new BadCredentialsException("The password cannot be empty");
         }
 
-        OAuthUser oAuthUser = OAuthUserDetailService.loadUserByUsername(principal.toString());
-        if (ObjectUtil.isNull(oAuthUser)) {
+        OAuthUserDetails oAuthUserDetails = OAuthUserDetailService.loadUserByUsername(principal.toString());
+        if (ObjectUtil.isNull(oAuthUserDetails)) {
             throw new BadCredentialsException("User not exists!");
         }
-        if (!passwordEncoder.matches(password.toString(), oAuthUser.getPassword())) {
+        if (!passwordEncoder.matches(password.toString(), oAuthUserDetails.getPassword())) {
             throw new BadCredentialsException("Wrong password!");
         }
 
-        return new UsernamePasswordAuthenticationToken(oAuthUser, password, oAuthUser.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(oAuthUserDetails, password, oAuthUserDetails.getAuthorities());
     }
 
     @Override

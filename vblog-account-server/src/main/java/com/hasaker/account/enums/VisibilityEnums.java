@@ -1,6 +1,6 @@
 package com.hasaker.account.enums;
 
-import com.hasaker.common.base.IEnum;
+import com.hasaker.common.base.BaseEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -12,7 +12,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum VisibilityEnums implements IEnum<VisibilityEnums> {
+public enum VisibilityEnums implements BaseEnum<VisibilityEnums> {
 
     VISIBLE_FOR_BOTH("VISIBILITY_001", "Visible for both side"),
     NOT_VISIBLE_FOR_FRIEND("VISIBILITY_002", "Don't let friend see my posts"),

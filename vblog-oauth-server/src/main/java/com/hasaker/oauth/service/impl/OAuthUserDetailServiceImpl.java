@@ -2,8 +2,8 @@ package com.hasaker.oauth.service.impl;
 
 import cn.hutool.core.convert.Convert;
 import com.hasaker.account.feign.AccountClient;
-import com.hasaker.common.vo.OAuthUserVo;
-import com.hasaker.oauth.entity.OAuthUser;
+import com.hasaker.account.vo.response.ResponseUserOAuthVo;
+import com.hasaker.oauth.entity.OAuthUserDetails;
 import com.hasaker.oauth.service.OAuthUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -23,12 +23,12 @@ public class OAuthUserDetailServiceImpl implements OAuthUserDetailService {
     private AccountClient accountClient;
 
     @Override
-    public OAuthUser loadUserByUsername(String username) throws UsernameNotFoundException {
-        OAuthUserVo oAuthUserVo = accountClient.findUserByUsername(username).getData();
-        OAuthUser oAuthUser = Convert.convert(OAuthUser.class, oAuthUserVo);
-        oAuthUser.setAuthorities(AuthorityUtils.commaSeparatedStringToAuthorityList(
-                String.join(",", oAuthUserVo.getRoles())));
+    public OAuthUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        ResponseUserOAuthVo userOAuthVo = accountClient.findUserByUsername(username).getData();
+        OAuthUserDetails oAuthUserDetails = Convert.convert(OAuthUserDetails.class, userOAuthVo);
+        oAuthUserDetails.setAuthorities(AuthorityUtils.commaSeparatedStringToAuthorityList(
+                String.join(",", userOAuthVo.getRoles())));
 
-        return oAuthUser;
+        return oAuthUserDetails;
     }
 }

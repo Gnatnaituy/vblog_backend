@@ -1,7 +1,7 @@
 package com.hasaker.common.handler;
 
-import com.hasaker.common.consts.Ajax;
 import com.hasaker.common.exception.base.CommonException;
+import com.hasaker.common.vo.Ajax;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler({ HttpRequestMethodNotSupportedException.class })
     public Ajax handleException(HttpRequestMethodNotSupportedException e) {
-        e.printStackTrace();
+        log.error(e.getLocalizedMessage(), e);
 
         return Ajax.failure(e.getMessage());
     }
@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = CommonException.class)
     @ResponseBody
     public Ajax commonExceptionHandler(CommonException e) {
-        e.printStackTrace();
+        log.error(e.getLocalizedMessage(), e);
 
         Ajax ajax = new Ajax();
         ajax.setCode(e.getCode());
@@ -55,7 +55,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = RuntimeException.class)
     @ResponseBody
     public Ajax runtimeExceptionHandler(Exception e) {
-        e.printStackTrace();
+        log.error(e.getLocalizedMessage(), e);
 
         return Ajax.failure(e.getMessage());
     }
@@ -68,7 +68,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
     public Ajax exceptionHandler(Exception e) {
-        e.printStackTrace();
+        log.error(e.getLocalizedMessage(), e);
 
         return Ajax.failure(e.getMessage());
     }

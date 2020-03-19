@@ -1,12 +1,12 @@
 package com.hasaker.account.controller;
 
 import com.hasaker.account.service.FriendService;
-import com.hasaker.common.consts.Ajax;
-import com.hasaker.vo.account.request.RequestFriendAddVo;
-import com.hasaker.vo.account.request.RequestFriendDeleteVo;
-import com.hasaker.vo.account.request.RequestFriendRemarkVo;
-import com.hasaker.vo.account.request.RequestFriendVisibilityVo;
-import com.hasaker.vo.account.response.ResponseFriendVo;
+import com.hasaker.account.vo.request.RequestFriendAddVo;
+import com.hasaker.account.vo.request.RequestFriendDeleteVo;
+import com.hasaker.account.vo.request.RequestFriendRemarkVo;
+import com.hasaker.account.vo.request.RequestFriendVisibilityVo;
+import com.hasaker.account.vo.response.ResponseFriendVo;
+import com.hasaker.common.vo.Ajax;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

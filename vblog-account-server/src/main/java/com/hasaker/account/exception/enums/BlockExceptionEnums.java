@@ -1,6 +1,6 @@
 package com.hasaker.account.exception.enums;
 
-import com.hasaker.common.exception.base.IExceptionAssert;
+import com.hasaker.common.exception.base.BaseExceptionAssert;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -12,7 +12,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum BlockExceptionEnums implements IExceptionAssert {
+public enum BlockExceptionEnums implements BaseExceptionAssert {
 
     BLOCK_NOT_EXISTS("BLOCK_EXCEPTION_001", "Block not exists");
 

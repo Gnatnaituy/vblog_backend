@@ -1,6 +1,6 @@
 package com.hasaker.account.exception.enums;
 
-import com.hasaker.common.exception.base.IExceptionAssert;
+import com.hasaker.common.exception.base.BaseExceptionAssert;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -12,7 +12,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum UserExceptionEnums implements IExceptionAssert {
+public enum UserExceptionEnums implements BaseExceptionAssert {
 
     USER_NOT_EXISTS("USER_EXCEPTION_001", "User not exists"),
     USERNAME_ALREADY_EXISTS("USER_EXCEPTION_002", "Username already exists");

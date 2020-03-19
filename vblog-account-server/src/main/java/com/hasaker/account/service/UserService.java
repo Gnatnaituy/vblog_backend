@@ -1,10 +1,10 @@
 package com.hasaker.account.service;
 
 import com.hasaker.account.entity.User;
+import com.hasaker.account.vo.request.RequestUserUpdateVo;
+import com.hasaker.account.vo.response.ResponseUserDetailVo;
+import com.hasaker.account.vo.response.ResponseUserOAuthVo;
 import com.hasaker.common.base.BaseService;
-import com.hasaker.common.vo.OAuthUserVo;
-import com.hasaker.vo.account.request.RequestUserUpdateVo;
-import com.hasaker.vo.account.response.ResponseUserDetailVo;
 
 /**
  * @package com.hasaker.vblog.service
@@ -14,7 +14,7 @@ import com.hasaker.vo.account.response.ResponseUserDetailVo;
  */
 public interface UserService extends BaseService<User> {
 
-    OAuthUserVo findUserByUserName(String username);
+    ResponseUserOAuthVo findUserByUserName(String username);
 
     void createUser(String username, String password);
 

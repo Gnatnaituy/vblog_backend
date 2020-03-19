@@ -1,16 +1,12 @@
 package com.hasaker.common.consts;
 
+import cn.hutool.core.codec.Base64;
+
 /**
  * @author 余天堂
  * @since 2019/10/31 17:40
  */
 public final class Consts {
-
-    public static final String EMPTY = "";
-
-    // 常用状态
-    public static final String SUCCESS = "1";
-    public static final String FAILURE = "0";
 
     // 数据库字段名
     public static final String ID = "id";
@@ -23,6 +19,8 @@ public final class Consts {
     public static final String VERSION = "version";
 
     // 布尔类型
+    public static final String SUCCESS = "1";
+    public static final String FAILURE = "0";
     public static final Integer TRUE = 1;
     public static final Integer FALSE = 0;
     public static final Integer YES = 1;
@@ -43,5 +41,7 @@ public final class Consts {
     public static final Integer PASSWORD_MAX_LEN = 16;
 
     // JWT Assign Key
-    public static final String JWT_ASSIGN_KEY = "5523";
+    public static final String JWT_ASSIGN_KEY = Base64.encode("djshfsdjfhsdjafjsdhfjsdahfjsdfjsdjnbvd" +
+            "jsjfsdmsdjhjsdhfjsdfhjsdbvjvdsbvsdbjfhsdjfhsdjfhsdjfsdjfsdjfhsdjfhsdjfssdhfsdjfgsdhfghdsgfsdhfs" +
+            "sdhfsdjhfjsdfhsdhfjsdfhsdjfhsdhjfjhsdhjhfjsdhjfhjsdhjfhjsdhjfhsdfhjdshjjfhd");
 }

@@ -25,7 +25,7 @@ public final class MessageConsts {
     /** 退出成功 */
     public static final String LOGOUT_SUCCESS = "logout success";
     /** 参数为空 */
-    public static final String EMPTY_ARG="Empty argument";
+    public static final String EMPTY_ARG="empty argument";
     /** 参数为空 */
-    public static final String EMPTY_OBJECT="Empty object";
+    public static final String EMPTY_OBJECT="empty object";
 }

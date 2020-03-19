@@ -9,14 +9,16 @@ import com.hasaker.account.exception.enums.UserExceptionEnums;
 import com.hasaker.account.mapper.UserMapper;
 import com.hasaker.account.service.RoleService;
 import com.hasaker.account.service.UserService;
+import com.hasaker.account.vo.request.RequestUserUpdateVo;
+import com.hasaker.account.vo.response.ResponseUserDetailVo;
+import com.hasaker.account.vo.response.ResponseUserOAuthVo;
 import com.hasaker.common.base.impl.BaseServiceImpl;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
-import com.hasaker.common.vo.OAuthUserVo;
-import com.hasaker.vo.account.request.RequestUserUpdateVo;
-import com.hasaker.vo.account.response.ResponseUserDetailVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @package com.hasaker.vblog.service.impl
@@ -38,16 +40,20 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
      * @return
      */
     @Override
-    public OAuthUserVo findUserByUserName(String username) {
+    public ResponseUserOAuthVo findUserByUserName(String username) {
         CommonExceptionEnums.NOT_NULL_ARG.isTrue(StringUtils.isBlank(username));
 
         User user = userMapper.findUserByUserName(username);
         UserExceptionEnums.USER_NOT_EXISTS.isTrue(ObjectUtil.isNull(user));
+        List<String> roles = roleService.getRolesByUserId(user.getId());
 
-        OAuthUserVo oAuthUserVo = Convert.convert(OAuthUserVo.class, user);
-        oAuthUserVo.setRoles(roleService.getRolesByUserId(user.getId()));
+        ResponseUserOAuthVo userOAuthVo = new ResponseUserOAuthVo();
+        userOAuthVo.setUserId(user.getId());
+        userOAuthVo.setUsername(user.getUsername());
+        userOAuthVo.setPassword(user.getPassword());
+        userOAuthVo.setRoles(roles);
 
-        return oAuthUserVo;
+        return userOAuthVo;
     }
 
     /**
