@@ -1,8 +1,8 @@
 package com.hasaker.account.feign;
 
-import com.hasaker.account.vo.request.RequestFriendAddVo;
 import com.hasaker.account.vo.request.RequestFriendDeleteVo;
 import com.hasaker.account.vo.request.RequestFriendRemarkVo;
+import com.hasaker.account.vo.request.RequestFriendRequestVo;
 import com.hasaker.account.vo.request.RequestFriendVisibilityVo;
 import com.hasaker.account.vo.response.ResponseFriendVo;
 import com.hasaker.common.vo.Ajax;
@@ -22,7 +22,7 @@ import java.util.List;
 public interface FriendClient {
 
     @PostMapping("/friend/add")
-    Ajax addFriend(@RequestBody RequestFriendAddVo addFriendVo);
+    Ajax addFriend(@RequestBody RequestFriendRequestVo addFriendVo);
 
     @PostMapping("/friend/delete")
     Ajax deleteFriend(@RequestBody RequestFriendDeleteVo deleteFriendVo);

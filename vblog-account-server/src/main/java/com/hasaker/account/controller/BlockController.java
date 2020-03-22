@@ -23,7 +23,7 @@ public class BlockController {
     @Autowired
     private BlockService blockService;
 
-    @ApiOperation(value = "屏蔽用户")
+    @ApiOperation(value = "Block a user")
     @PostMapping(value = "/block")
     public Ajax blockUser(@RequestBody RequestBlockVo blockVo) {
         blockService.blockUser(blockVo);
@@ -31,7 +31,7 @@ public class BlockController {
         return Ajax.success();
     }
 
-    @ApiOperation(value = "取消屏蔽用户")
+    @ApiOperation(value = "Unblock a user")
     @PostMapping(value = "/unblock")
     public Ajax unblockUser(@RequestBody RequestBlockVo unblockVo) {
         blockService.unblockUser(unblockVo);

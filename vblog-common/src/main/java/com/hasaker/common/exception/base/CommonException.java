@@ -28,4 +28,9 @@ public class CommonException extends RuntimeException {
         this.code = responseEnum.getCode();
         this.message = responseEnum.getMessage();
     }
+
+    public CommonException(String code, String message) {
+        this.code = code;
+        this.message = message;
+    }
 }

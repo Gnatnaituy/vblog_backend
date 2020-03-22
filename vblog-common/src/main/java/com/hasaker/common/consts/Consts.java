@@ -1,7 +1,5 @@
 package com.hasaker.common.consts;
 
-import cn.hutool.core.codec.Base64;
-
 /**
  * @author 余天堂
  * @since 2019/10/31 17:40
@@ -31,17 +29,11 @@ public final class Consts {
     public static final Integer FRIEND = 2;
     public static final Integer OPEN = 3;
 
-    // JWT-account:
-    public static final String ACCOUNT = "account";
-    // JWT-currentTimeMillis:
-    public static final String CURRENT_TIME_MILLIS = "currentTimeMillis";
-
     // Password max & min length
     public static final Integer PASSWORD_MIN_LEN = 8;
     public static final Integer PASSWORD_MAX_LEN = 16;
 
-    // JWT Assign Key
-    public static final String JWT_ASSIGN_KEY = Base64.encode("djshfsdjfhsdjafjsdhfjsdahfjsdfjsdjnbvd" +
-            "jsjfsdmsdjhjsdhfjsdfhjsdbvjvdsbvsdbjfhsdjfhsdjfhsdjfsdjfsdjfhsdjfhsdjfssdhfsdjfgsdhfghdsgfsdhfs" +
-            "sdhfsdjhfjsdfhsdhfjsdfhsdjfhsdhjfjhsdhjhfjsdhjfhjsdhjfhjsdhjfhsdfhjdshjjfhd");
+    // redis key prefixes
+    public static final String REDIS_FRIEND_ADD_REQUEST = "FRIEND:ADD:REQUEST:";
+    public static final String REDIS_USER_LOGIN = "USER:LOGIN:";
 }

@@ -12,7 +12,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum ImageOwnerTypeEnums implements BaseEnum<ImageOwnerTypeEnums> {
+public enum ImageOwnerTypeEnums implements BaseEnum {
 
     POST("IMAGE_OWNER_TYPE_001", "Post's pictures"),
     USER_AVATAR("IMAGE_OWNER_TYPE_002", "User's avatar"),

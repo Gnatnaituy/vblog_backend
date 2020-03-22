@@ -3,6 +3,9 @@ package com.hasaker.account.vo.request;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 /**
  * @package com.hasaker.vo.user.request
@@ -11,12 +14,16 @@ import lombok.Data;
  * @description RequestBlockUserVo
  */
 @Data
-@ApiModel(description = "屏蔽用户Vo")
+@NoArgsConstructor
+@RequiredArgsConstructor
+@ApiModel(description = "Block a user")
 public class RequestBlockVo {
 
-    @ApiModelProperty(value = "用户ID")
+    @NonNull
+    @ApiModelProperty(value = "The user's ID")
     private Long userId;
 
-    @ApiModelProperty(value = "用户ID")
+    @NonNull
+    @ApiModelProperty(value = "The target user's ID")
     private Long blockUserId;
 }

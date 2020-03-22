@@ -1,6 +1,8 @@
 package com.hasaker.account.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.hasaker.account.service.UserService;
+import com.hasaker.account.vo.request.RequestUserSearchVo;
 import com.hasaker.account.vo.request.RequestUserUpdateVo;
 import com.hasaker.account.vo.response.ResponseUserDetailVo;
 import com.hasaker.account.vo.response.ResponseUserOAuthVo;
@@ -22,14 +24,14 @@ public class AccountController {
     @Autowired
     private UserService userService;
 
-    @ApiOperation(value = "登录使用")
+    @ApiOperation(value = "Login")
     @GetMapping(value = "/{username}")
     public Ajax<ResponseUserOAuthVo> findUserByUsername(@PathVariable String username) {
 
         return Ajax.getInstance().successT(userService.findUserByUserName(username));
     }
 
-    @ApiOperation(value = "注册使用")
+    @ApiOperation(value = "Register")
     @PostMapping(value = "/register")
     public Ajax register(@RequestParam("username") String username, @RequestParam("password") String password) {
         userService.createUser(username, password);
@@ -37,7 +39,7 @@ public class AccountController {
         return Ajax.success();
     }
 
-    @ApiOperation(value = "修改密码")
+    @ApiOperation(value = "Change password")
     @PostMapping(value = "/change-password")
     public Ajax changePassword(@RequestParam("username") String username, @RequestParam("password") String password) {
         userService.changePassword(username, password);
@@ -45,18 +47,24 @@ public class AccountController {
         return Ajax.success();
     }
 
-    @ApiOperation(value = "更新用户资料")
+    @ApiOperation(value = "Update user's detail information by username")
     @PostMapping(value = "/update")
-    public Ajax update(RequestUserUpdateVo userUpdateVo) {
+    public Ajax update(@RequestBody RequestUserUpdateVo userUpdateVo) {
         userService.updateUser(userUpdateVo);
 
         return Ajax.success();
     }
 
-    @ApiOperation(value = "用户详情")
+    @ApiOperation(value = "Obtain user's detail information by username")
     @GetMapping(value = "/detail/{username}")
     public Ajax<ResponseUserDetailVo> detail(@PathVariable("username") String username) {
 
         return Ajax.getInstance().successT(userService.userDetail(username));
+    }
+
+    @ApiOperation(value = "Search users")
+    @PostMapping(value = "/list")
+    public Ajax<IPage<ResponseUserDetailVo>> list(@RequestBody RequestUserSearchVo searchVo) {
+        return Ajax.getInstance().successT(userService.list(searchVo));
     }
 }

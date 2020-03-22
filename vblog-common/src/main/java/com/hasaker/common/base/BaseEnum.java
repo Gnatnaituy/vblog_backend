@@ -4,7 +4,7 @@ package com.hasaker.common.base;
  * @since 2019/11/17 20:07
  * @description
  */
-public interface BaseEnum<E extends Enum<?>> {
+public interface BaseEnum {
 
     String getCode();
 

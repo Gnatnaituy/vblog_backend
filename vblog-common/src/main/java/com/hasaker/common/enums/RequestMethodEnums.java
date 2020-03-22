@@ -11,7 +11,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum RequestMethodEnums implements BaseEnum<RequestMethodEnums> {
+public enum RequestMethodEnums implements BaseEnum {
 
     GET("GET", "GET"),
     POST("POST", "POST"),

@@ -11,8 +11,11 @@ import lombok.Data;
  * @description RequestUserCreateVo
  */
 @Data
-@ApiModel(description = "用户修改资料")
+@ApiModel(description = "Update user's information")
 public class RequestUserUpdateVo {
+
+    @ApiModelProperty(value = "The user's ID")
+    private Long userId;
 
     @ApiModelProperty(value = "用户名")
     private String username;

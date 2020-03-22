@@ -3,12 +3,16 @@ package com.hasaker.account.service.impl;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hasaker.account.entity.User;
 import com.hasaker.account.exception.enums.UserExceptionEnums;
 import com.hasaker.account.mapper.UserMapper;
 import com.hasaker.account.service.RoleService;
 import com.hasaker.account.service.UserService;
+import com.hasaker.account.vo.request.RequestUserSearchVo;
 import com.hasaker.account.vo.request.RequestUserUpdateVo;
 import com.hasaker.account.vo.response.ResponseUserDetailVo;
 import com.hasaker.account.vo.response.ResponseUserOAuthVo;
@@ -132,5 +136,39 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
         UserExceptionEnums.USER_NOT_EXISTS.assertNotEmpty(user);
 
         return Convert.convert(ResponseUserDetailVo.class, user);
+    }
+
+    /**
+     * 搜索用户
+     * @param searchVo
+     * @return
+     */
+    @Override
+    public IPage<ResponseUserDetailVo> list(RequestUserSearchVo searchVo) {
+        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(searchVo);
+
+        IPage<User> page = new Page<>();
+        page.setCurrent(searchVo.getCurrent());
+        page.setSize(searchVo.getSize());
+
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        if (ObjectUtils.isNotNull(searchVo.getKeyword())) {
+            queryWrapper.and(o -> o.like(User.USERNAME, searchVo.getKeyword())
+                    .or().like(User.NICKNAME, searchVo.getKeyword())
+                    .or().eq(User.EMAIL, searchVo.getKeyword())
+                    .or().eq(User.PHONE, searchVo.getKeyword()));
+        }
+        if (ObjectUtils.isNotNull(searchVo.getGender())) {
+            queryWrapper.eq(User.GENDER, searchVo.getKeyword());
+        }
+        if (ObjectUtils.isNotNull(searchVo.getMinAge())) {
+            queryWrapper.ge(User.AGE, searchVo.getMinAge());
+        }
+        if (ObjectUtils.isNotNull(searchVo.getMaxAge())) {
+            queryWrapper.le(User.AGE, searchVo.getMaxAge());
+        }
+        IPage<User> userIPage = this.page(page, queryWrapper);
+
+        return userIPage.convert(o -> Convert.convert(ResponseUserDetailVo.class, o));
     }
 }

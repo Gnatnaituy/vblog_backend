@@ -11,7 +11,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum CommonYNEnums implements BaseEnum<CommonYNEnums> {
+public enum CommonYNEnums implements BaseEnum {
 
     YES("1", "Y"),
     NO("0", "N");

@@ -14,7 +14,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum FriendExceptionEnums implements BaseExceptionAssert {
 
-    FRIEND_NOT_EXISTS("FRIEND_EXCEPTION_001", "Friend not exists");
+    FRIEND_NOT_EXISTS("FRIEND_EXCEPTION_001", "Friend not exists"),
+    FRIEND_REQUEST_NOT_EXISTS("FRIEND_EXCEPTION_001", "Friend request not exists");
 
     private String code;
     private String message;

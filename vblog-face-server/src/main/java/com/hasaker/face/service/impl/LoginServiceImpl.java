@@ -59,14 +59,16 @@ public class LoginServiceImpl implements LoginService {
         params.add("client_secret", "5523");
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.parseMediaType("application/x-www-form-urlencoded; charset=UTF-8"));
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(params, headers);
-
         ResponseEntity<String> responseEntity = restOperations
                 .exchange(RequestConsts.URL_OAUTH_TOKEN, HttpMethod.POST, requestEntity, String.class);
+
         JwtAccessToken jwtAccessToken = JSONObject.parseObject(responseEntity.getBody(), JwtAccessToken.class);
         jwtAccessToken.setExpiresTime(System.currentTimeMillis() + jwtAccessToken.getExpiresIn());
+        jwtAccessToken.setNickname(userOAuthVo.getNickname());
+        jwtAccessToken.setAvatar(userOAuthVo.getAvatar());
 
         // 将当期登录用户信息放入redis
         RedisAccessToken redisAccessToken = Convert.convert(RedisAccessToken.class, jwtAccessToken);

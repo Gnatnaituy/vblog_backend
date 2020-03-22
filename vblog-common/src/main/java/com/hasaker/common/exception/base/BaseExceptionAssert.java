@@ -8,7 +8,7 @@ import com.hasaker.common.base.BaseEnum;
  * @create 2019/12/24 14:53
  * @description BaseExceptionAssert
  */
-public interface BaseExceptionAssert extends BaseEnum, IAssert {
+public interface BaseExceptionAssert extends BaseEnum, IAssert{
 
     @Override
     default CommonException newException() {

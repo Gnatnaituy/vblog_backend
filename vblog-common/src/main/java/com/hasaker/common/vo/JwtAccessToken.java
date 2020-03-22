@@ -16,6 +16,7 @@ public class JwtAccessToken {
     private Long userId;
     private String username;
     private String nickname;
+    private String avatar;
 
     private List<String> roles;
 

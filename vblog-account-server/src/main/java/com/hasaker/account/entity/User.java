@@ -56,17 +56,17 @@ public class User extends BaseEntity {
     // 用户状态
     private String status;
 
-    private static final String USERNAME = "username";
-    private static final String PASSWORD = "password";
-    private static final String EMAIL = "email";
-    private static final String PHONE = "phone";
-    private static final String NICKNAME = "nickname";
-    private static final String AVATAR = "avatar";
-    private static final String GENDER = "gender";
-    private static final String AGE = "age";
-    private static final String BIO = "bio";
-    private static final String COUNTRY = "country";
-    private static final String PROVINCE = "province";
-    private static final String CITY = "city";
-    private static final String STATUS = "status";
+    public static final String USERNAME = "username";
+    public static final String PASSWORD = "password";
+    public static final String EMAIL = "email";
+    public static final String PHONE = "phone";
+    public static final String NICKNAME = "nickname";
+    public static final String AVATAR = "avatar";
+    public static final String GENDER = "gender";
+    public static final String AGE = "age";
+    public static final String BIO = "bio";
+    public static final String COUNTRY = "country";
+    public static final String PROVINCE = "province";
+    public static final String CITY = "city";
+    public static final String STATUS = "status";
 }

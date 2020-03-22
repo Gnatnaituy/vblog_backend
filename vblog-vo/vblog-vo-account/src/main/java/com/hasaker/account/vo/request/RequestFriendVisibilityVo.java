@@ -3,6 +3,9 @@ package com.hasaker.account.vo.request;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 /**
  * @package com.hasaker.vo.user.request
@@ -11,15 +14,20 @@ import lombok.Data;
  * @description RequestChangeVisibilityVo
  */
 @Data
-@ApiModel(description = "改变好友可见性Vo")
+@NoArgsConstructor
+@RequiredArgsConstructor
+@ApiModel(description = "Change visibility for a friend")
 public class RequestFriendVisibilityVo {
 
-    @ApiModelProperty(value = "用户ID")
+    @NonNull
+    @ApiModelProperty(value = "The user's ID")
     private Long userId;
 
-    @ApiModelProperty(value = "好友ID")
+    @NonNull
+    @ApiModelProperty(value = "The friend's ID")
     private Long friendId;
 
-    @ApiModelProperty(value = "可见性")
+    @NonNull
+    @ApiModelProperty(value = "The visibility set by user for this friend")
     private String visibility;
 }

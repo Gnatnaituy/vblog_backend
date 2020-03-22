@@ -3,6 +3,7 @@ package com.hasaker.account.feign;
 import com.hasaker.account.vo.request.RequestUserUpdateVo;
 import com.hasaker.account.vo.response.ResponseUserDetailVo;
 import com.hasaker.account.vo.response.ResponseUserOAuthVo;
+import com.hasaker.common.config.FeignExceptionConfig;
 import com.hasaker.common.vo.Ajax;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
  * @create 2020/2/22 15:29
  * @description UserClient
  */
-@FeignClient(name = "VBLOG-ACCOUNT", url = "127.0.0.1:9001")
+@FeignClient(name = "VBLOG-ACCOUNT", url = "127.0.0.1:9001", configuration = FeignExceptionConfig.class)
 @RestController
 public interface AccountClient {
 

@@ -3,6 +3,9 @@ package com.hasaker.account.vo.request;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 /**
  * @package com.hasaker.vo.user.request
@@ -11,15 +14,20 @@ import lombok.Data;
  * @description RequestChangeRemarkVo
  */
 @Data
-@ApiModel(description = "改变好友昵称Vo")
+@NoArgsConstructor
+@RequiredArgsConstructor
+@ApiModel(description = "Change friend's remark")
 public class RequestFriendRemarkVo {
 
-    @ApiModelProperty(value = "用户ID")
+    @NonNull
+    @ApiModelProperty(value = "The user's ID")
     private Long userId;
 
-    @ApiModelProperty(value = "好友ID")
+    @NonNull
+    @ApiModelProperty(value = "The friend's ID")
     private Long friendId;
 
-    @ApiModelProperty(value = "昵称")
+    @NonNull
+    @ApiModelProperty(value = "The remark set by user for friend")
     private String remark;
 }

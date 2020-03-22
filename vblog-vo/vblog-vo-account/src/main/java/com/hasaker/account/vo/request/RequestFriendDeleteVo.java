@@ -3,6 +3,9 @@ package com.hasaker.account.vo.request;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 /**
  * @package com.hasaker.vo.user.request
@@ -11,12 +14,16 @@ import lombok.Data;
  * @description RequestDeleteFriendVo
  */
 @Data
-@ApiModel(description = " 删除好友Vo")
+@NoArgsConstructor
+@RequiredArgsConstructor
+@ApiModel(description = " Delete a friend")
 public class RequestFriendDeleteVo {
 
-    @ApiModelProperty(value = "用户ID")
+    @NonNull
+    @ApiModelProperty(value = "The user's ID")
     private Long userId;
 
-    @ApiModelProperty(value = "好友ID")
+    @NonNull
+    @ApiModelProperty(value = "The friend's ID")
     private Long friendId;
 }

@@ -12,7 +12,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum VisibilityEnums implements BaseEnum<VisibilityEnums> {
+public enum VisibilityEnums implements BaseEnum {
 
     VISIBLE_FOR_BOTH("VISIBILITY_001", "Visible for both side"),
     NOT_VISIBLE_FOR_FRIEND("VISIBILITY_002", "Don't let friend see my posts"),

@@ -19,5 +19,9 @@ public class ResponseUserOAuthVo {
 
     private String password;
 
+    private String nickname;
+
+    private String avatar;
+
     private List<String> roles;
 }

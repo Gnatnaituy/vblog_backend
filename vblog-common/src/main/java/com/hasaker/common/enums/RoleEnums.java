@@ -12,7 +12,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum RoleEnums implements BaseEnum<RoleEnums> {
+public enum RoleEnums implements BaseEnum {
 
     ADMIN("ADMIN", "Administrator"),
     USER("USER", "User"),
