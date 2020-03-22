@@ -45,6 +45,12 @@
         <!-- feign -->
 
         <!-- vo -->
+        <dependency>
+            <groupId>com.hasaker</groupId>
+            <artifactId>vblog-vo-post</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
 
     </dependencies>
 

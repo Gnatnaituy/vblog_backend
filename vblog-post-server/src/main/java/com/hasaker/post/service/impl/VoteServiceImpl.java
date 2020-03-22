@@ -1,9 +1,12 @@
 package com.hasaker.post.service.impl;
 
+import cn.hutool.core.convert.Convert;
 import com.hasaker.common.base.impl.BaseServiceImpl;
+import com.hasaker.common.exception.enums.CommonExceptionEnums;
 import com.hasaker.post.entity.Vote;
 import com.hasaker.post.mapper.VoteMapper;
 import com.hasaker.post.service.VoteService;
+import com.hasaker.post.vo.request.RequestVoteVo;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,4 +17,32 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class VoteServiceImpl extends BaseServiceImpl<VoteMapper, Vote> implements VoteService {
+
+    /**
+     * Vote a post or a comment
+     * @param voteVo
+     */
+    @Override
+    public void vote(RequestVoteVo voteVo) {
+        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(voteVo);
+
+        Vote vote = Convert.convert(Vote.class, voteVo);
+        vote.setIsDownVote(false);
+
+        this.save(vote);
+    }
+
+    /**
+     * Downvote a post or a comment
+     * @param voteVo
+     */
+    @Override
+    public void downVote(RequestVoteVo voteVo) {
+        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(voteVo);
+
+        Vote vote = Convert.convert(Vote.class, voteVo);
+        vote.setIsDownVote(true);
+
+        this.save(vote);
+    }
 }

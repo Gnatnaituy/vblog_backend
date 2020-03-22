@@ -2,6 +2,7 @@ package com.hasaker.post.service;
 
 import com.hasaker.common.base.BaseService;
 import com.hasaker.post.entity.Vote;
+import com.hasaker.post.vo.request.RequestVoteVo;
 
 /**
  * @package com.hasaker.post.service
@@ -10,4 +11,8 @@ import com.hasaker.post.entity.Vote;
  * @description VoteService
  */
 public interface VoteService extends BaseService<Vote> {
+
+    void vote(RequestVoteVo voteVo);
+
+    void downVote(RequestVoteVo voteVo);
 }

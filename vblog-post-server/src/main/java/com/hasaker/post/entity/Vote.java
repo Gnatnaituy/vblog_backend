@@ -1,7 +1,10 @@
 package com.hasaker.post.entity;
 
 import com.hasaker.common.base.BaseEntity;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 /**
  * @author 余天堂
@@ -14,8 +17,9 @@ import lombok.*;
 @RequiredArgsConstructor
 public class Vote extends BaseEntity {
 
-    @NonNull
     private Long postId;
 
     private Long commentId;
+
+    private Boolean isDownVote;
 }
