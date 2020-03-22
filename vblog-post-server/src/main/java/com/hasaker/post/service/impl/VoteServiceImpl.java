@@ -40,7 +40,7 @@ public class VoteServiceImpl extends BaseServiceImpl<VoteMapper, Vote> implement
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void downVote(RequestVoteVo voteVo) {
+    public void downvote(RequestVoteVo voteVo) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(voteVo);
 
         Vote vote = Convert.convert(Vote.class, voteVo);

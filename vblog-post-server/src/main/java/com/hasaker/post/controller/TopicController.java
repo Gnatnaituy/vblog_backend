@@ -25,7 +25,7 @@ public class TopicController {
 
     @ApiOperation(value = "Update topic's description")
     @PostMapping(value = "/update")
-    Ajax update(@RequestBody RequestTopicVo topicVo ) {
+    Ajax update(@RequestBody RequestTopicVo topicVo) {
         topicService.update(topicVo);
         return Ajax.success();
     }

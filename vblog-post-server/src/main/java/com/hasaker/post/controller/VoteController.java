@@ -32,8 +32,8 @@ public class VoteController {
 
     @ApiOperation(value = "Downvote a post or a comment")
     @PostMapping(value = "/downvote")
-    Ajax downVote(@RequestBody RequestVoteVo voteVo) {
-        voteService.downVote(voteVo);
+    Ajax downvote(@RequestBody RequestVoteVo voteVo) {
+        voteService.downvote(voteVo);
         return Ajax.success();
     }
 }

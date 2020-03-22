@@ -14,5 +14,5 @@ public interface VoteService extends BaseService<Vote> {
 
     void vote(RequestVoteVo voteVo);
 
-    void downVote(RequestVoteVo voteVo);
+    void downvote(RequestVoteVo voteVo);
 }
