@@ -23,7 +23,6 @@
     <modules>
         <module>vblog-feign-account</module>
         <module>vblog-feign-post</module>
-        <module>vblog-feign-oauth</module>
     </modules>
 
 </project>
