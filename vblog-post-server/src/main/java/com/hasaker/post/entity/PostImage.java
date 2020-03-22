@@ -14,20 +14,13 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Image extends BaseEntity {
+public class PostImage extends BaseEntity {
 
-    // 拥有者ID
-    private Long ownerId;
+    @NonNull
+    private Long postId;
 
-    // 拥有者类型
-    private Long ownerType;
+    @NonNull
+    private String url;
 
-    // 图片大小
-    private Float size;
-
-    // 是否为默认图片
-    private Boolean isDefault;
-
-    // 顺序
     private Integer order;
 }

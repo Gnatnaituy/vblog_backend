@@ -12,16 +12,18 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@RequiredArgsConstructor
 public class Location extends BaseEntity {
 
-    // 动态ID
+    @NonNull
     private Long postId;
 
-    // 经度
+    @NonNull
     private Double longitude;
 
-    // 维度
+    @NonNull
     private Double latitude;
+
+    @NonNull
+    private String description;
 }

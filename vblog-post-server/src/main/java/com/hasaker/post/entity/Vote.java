@@ -11,10 +11,11 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@RequiredArgsConstructor
 public class Vote extends BaseEntity {
 
-    // 动态ID
+    @NonNull
     private Long postId;
+
+    private Long commentId;
 }

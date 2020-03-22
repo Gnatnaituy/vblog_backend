@@ -4,21 +4,19 @@ import com.hasaker.common.base.BaseEntity;
 import lombok.*;
 
 /**
+ * @package com.hasaker.post.entity
  * @author 余天堂
- * @since 2019/10/31 22:48
- * @description 评论实体类
+ * @create 2020/3/22 18:44
+ * @description DownVote
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
-public class Comment extends BaseEntity {
+public class DownVote extends BaseEntity {
 
     @NonNull
     private Long postId;
 
     private Long commentId;
-
-    @NonNull
-    private String content;
 }
