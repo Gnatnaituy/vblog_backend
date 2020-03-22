@@ -1,0 +1,14 @@
+spring:
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        service-name: vblog-account-server
+        instance-id: account-server-9001
+      config:
+        enabled: true
+        format: yaml
+        prefix: config
+        data-key: configuration
+        default-context: vblog-account-server

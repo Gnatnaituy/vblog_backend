@@ -11,4 +11,6 @@ public final class RequestConsts {
     public static final String AUTHORIZATION = "Authorization";
     public static final String USER_ACCOUNT = "userAccount";
     public static final String STATE = "state";
+
+    public static final String URL_OAUTH_TOKEN = "http://localhost:9003/oauth/token";
 }

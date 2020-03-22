@@ -1,9 +1,10 @@
 package com.hasaker.oauth.service.impl;
 
-import com.hasaker.oauth.entity.WebUser;
+import cn.hutool.core.convert.Convert;
+import com.hasaker.account.feign.AccountClient;
+import com.hasaker.account.vo.response.ResponseUserOAuthVo;
+import com.hasaker.oauth.entity.OAuthUserDetails;
 import com.hasaker.oauth.service.OAuthUserDetailService;
-import com.hasaker.user.feign.UserClient;
-import com.hasaker.vo.user.response.ResponseUserOAuthVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,16 +20,15 @@ import org.springframework.stereotype.Service;
 public class OAuthUserDetailServiceImpl implements OAuthUserDetailService {
 
     @Autowired
-    private UserClient userClient;
+    private AccountClient accountClient;
 
     @Override
-    public WebUser loadUserByUsername(String username) throws UsernameNotFoundException {
-        ResponseUserOAuthVo userOAuthVo = userClient.findUserByUsername(username).getData();
-        WebUser webUser = new WebUser();
-        webUser.setUsername(userOAuthVo.getUsername());
-        webUser.setPassword(userOAuthVo.getPassword());
-        webUser.setAuthorities(AuthorityUtils.commaSeparatedStringToAuthorityList("ADMIN"));
+    public OAuthUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        ResponseUserOAuthVo userOAuthVo = accountClient.findUserByUsername(username).getData();
+        OAuthUserDetails oAuthUserDetails = Convert.convert(OAuthUserDetails.class, userOAuthVo);
+        oAuthUserDetails.setAuthorities(AuthorityUtils.commaSeparatedStringToAuthorityList(
+                String.join(",", userOAuthVo.getRoles())));
 
-        return webUser;
+        return oAuthUserDetails;
     }
 }

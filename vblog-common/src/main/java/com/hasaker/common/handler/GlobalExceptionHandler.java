@@ -1,17 +1,12 @@
 package com.hasaker.common.handler;
 
-import com.hasaker.common.consts.Ajax;
-import com.hasaker.common.consts.MessageConsts;
 import com.hasaker.common.exception.base.CommonException;
-import com.hasaker.common.exception.enums.CommonExceptionEnums;
+import com.hasaker.common.vo.Ajax;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * @package com.hasaker.common.handler
@@ -23,9 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @Autowired
-    private HttpServletRequest request;
-
     /**
      * 捕获请求方法异常
      * @param e
@@ -33,19 +25,21 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler({ HttpRequestMethodNotSupportedException.class })
     public Ajax handleException(HttpRequestMethodNotSupportedException e) {
-        log.error("HttpRequestMethodNotSupportedException:url:{}", request.getRequestURI());
+        log.error(e.getLocalizedMessage(), e);
 
-        return Ajax.failure(MessageConsts.NOT_SUPPORTED_REQUEST_METHOD);
+        return Ajax.failure(e.getMessage());
     }
 
     /**
-     * 捕获自定义异常
+     * 捕获业务异常
      * @param e
      * @return
      */
     @ExceptionHandler(value = CommonException.class)
     @ResponseBody
     public Ajax commonExceptionHandler(CommonException e) {
+        log.error(e.getLocalizedMessage(), e);
+
         Ajax ajax = new Ajax();
         ajax.setCode(e.getCode());
         ajax.setMessage(e.getMessage());
@@ -58,10 +52,10 @@ public class GlobalExceptionHandler {
      * @param e
      * @return
      */
-    @ExceptionHandler(RuntimeException.class)
-    public Ajax notFount(RuntimeException e) {
-        log.error("RuntimeException:url:{}", request.getRequestURI());
-        log.error("RuntimeException:{}", e.getMessage());
+    @ExceptionHandler(value = RuntimeException.class)
+    @ResponseBody
+    public Ajax runtimeExceptionHandler(Exception e) {
+        log.error(e.getLocalizedMessage(), e);
 
         return Ajax.failure(e.getMessage());
     }
@@ -74,10 +68,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
     public Ajax exceptionHandler(Exception e) {
-        Ajax ajax = new Ajax();
-        ajax.setCode(CommonExceptionEnums.INTERNAL_SERVER_ERROR.getCode());
-        ajax.setMessage(e.getMessage());
+        log.error(e.getLocalizedMessage(), e);
 
-        return ajax;
+        return Ajax.failure(e.getMessage());
     }
 }

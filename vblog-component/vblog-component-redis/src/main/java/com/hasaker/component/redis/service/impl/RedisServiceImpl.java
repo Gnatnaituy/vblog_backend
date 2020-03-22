@@ -23,7 +23,12 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public Object get(String key) {
-        return redisOperations.opsForValue().get(key);
+    public <T> void save(String key, T value) {
+        redisOperations.opsForValue().set(key, value);
+    }
+
+    @Override
+    public <T> T get(String key, Class<T> clazz) {
+        return (T) redisOperations.opsForValue().get(key);
     }
 }

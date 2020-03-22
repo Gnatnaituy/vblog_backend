@@ -1,7 +1,7 @@
 package com.hasaker.oauth.authentication.provider;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.hasaker.oauth.entity.WebUser;
+import com.hasaker.oauth.entity.OAuthUserDetails;
 import com.hasaker.oauth.service.OAuthUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -30,40 +30,27 @@ public class WebLoginAuthenticationProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         Object principal = authentication.getPrincipal();
         Object password = authentication.getCredentials();
-        this.verificationUser(principal, password);
 
-        WebUser webUser = OAuthUserDetailService.loadUserByUsername(principal.toString());
-        if (ObjectUtil.isNull(webUser)) {
+        if (ObjectUtil.isEmpty(principal)) {
+            throw new BadCredentialsException("The username cannot be empty");
+        }
+        if (ObjectUtil.isEmpty(password)) {
+            throw new BadCredentialsException("The password cannot be empty");
+        }
+
+        OAuthUserDetails oAuthUserDetails = OAuthUserDetailService.loadUserByUsername(principal.toString());
+        if (ObjectUtil.isNull(oAuthUserDetails)) {
             throw new BadCredentialsException("User not exists!");
         }
-        if (!passwordEncoder.matches(password.toString(), webUser.getPassword())) {
+        if (!passwordEncoder.matches(password.toString(), oAuthUserDetails.getPassword())) {
             throw new BadCredentialsException("Wrong password!");
         }
 
-        return new UsernamePasswordAuthenticationToken(principal, password, webUser.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(oAuthUserDetails, password, oAuthUserDetails.getAuthorities());
     }
 
     @Override
     public boolean supports(Class<?> authentication) {
         return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
-    }
-
-    /**
-     * 检查用户名密码是否为空
-     * spring oauth内部组织了自己的异常封装，认证失败必须抛出AuthenticationException类型的异常,，此处不能使用我们业务异常枚举
-     * http.formLogin().loginPage(OAUTH_LOGIN)
-     * 			.loginProcessingUrl(permitUrlProperties.getLoginProcessUrl())
-     * 			.successHandler(authenticationSuccessHandler)
-     * 		     .failureUrl(OAUTH_LOGIN);
-     * 		     failureUrl方法才能调转到错误页面
-     * @param username
-     * @param password
-     */
-    private void verificationUser(Object username,Object password) {
-        if (ObjectUtil.isEmpty(username)) {
-            throw new BadCredentialsException("the account cannot be empty");
-        } else if (ObjectUtil.isEmpty(password)) {
-            throw new BadCredentialsException("the password cannot be empty");
-        }
     }
 }

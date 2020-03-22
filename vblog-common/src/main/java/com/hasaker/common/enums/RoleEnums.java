@@ -1,6 +1,6 @@
 package com.hasaker.common.enums;
 
-import com.hasaker.common.base.IEnum;
+import com.hasaker.common.base.BaseEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -12,7 +12,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum RoleEnums implements IEnum<RoleEnums> {
+public enum RoleEnums implements BaseEnum {
 
     ADMIN("ADMIN", "Administrator"),
     USER("USER", "User"),

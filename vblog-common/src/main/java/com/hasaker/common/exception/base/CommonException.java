@@ -1,7 +1,8 @@
 package com.hasaker.common.exception.base;
 
-import com.hasaker.common.base.IEnum;
+import com.hasaker.common.base.BaseEnum;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @package com.hasaker.vblog.base
@@ -10,6 +11,7 @@ import lombok.Getter;
  * @description VBlogException
  */
 @Getter
+@Setter
 public class CommonException extends RuntimeException {
 
     /**
@@ -22,8 +24,13 @@ public class CommonException extends RuntimeException {
      */
     private String message;
 
-    public CommonException(IEnum responseEnum) {
+    public CommonException(BaseEnum responseEnum) {
         this.code = responseEnum.getCode();
         this.message = responseEnum.getMessage();
+    }
+
+    public CommonException(String code, String message) {
+        this.code = code;
+        this.message = message;
     }
 }

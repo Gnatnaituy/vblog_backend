@@ -1,6 +1,6 @@
 package com.hasaker.common.enums;
 
-import com.hasaker.common.base.IEnum;
+import com.hasaker.common.base.BaseEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -11,7 +11,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum CommonYNEnums implements IEnum<CommonYNEnums> {
+public enum CommonYNEnums implements BaseEnum {
 
     YES("1", "Y"),
     NO("0", "N");

@@ -21,6 +21,10 @@ import javax.servlet.http.HttpServletRequest;
 @Component
 public class FeignRequestInterceptor implements RequestInterceptor {
 
+    /**
+     * Feign间传递header
+     * @param requestTemplate
+     */
     @Override
     public void apply(RequestTemplate requestTemplate) {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
@@ -28,8 +32,8 @@ public class FeignRequestInterceptor implements RequestInterceptor {
             HttpServletRequest request = attributes.getRequest();
             if (ObjectUtil.isNotNull(request)) {
                 String token = request.getHeader(RequestConsts.AUTHORIZATION);
-                log.info(token);
                 requestTemplate.header(RequestConsts.AUTHORIZATION, token);
+                log.info(token);
             }
         }
     }

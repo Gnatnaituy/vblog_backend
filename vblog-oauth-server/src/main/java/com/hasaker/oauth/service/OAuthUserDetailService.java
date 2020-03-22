@@ -1,6 +1,6 @@
 package com.hasaker.oauth.service;
 
-import com.hasaker.oauth.entity.WebUser;
+import com.hasaker.oauth.entity.OAuthUserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 /**
@@ -11,5 +11,5 @@ import org.springframework.security.core.userdetails.UserDetailsService;
  */
 public interface OAuthUserDetailService extends UserDetailsService {
 
-    WebUser loadUserByUsername(String username);
+    OAuthUserDetails loadUserByUsername(String username);
 }

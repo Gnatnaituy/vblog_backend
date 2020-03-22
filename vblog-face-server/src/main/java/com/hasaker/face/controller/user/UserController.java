@@ -1,8 +1,9 @@
 package com.hasaker.face.controller.user;
 
-import com.hasaker.common.consts.Ajax;
-import com.hasaker.user.feign.UserClient;
-import com.hasaker.vo.user.response.ResponseUserOAuthVo;
+import com.hasaker.account.feign.AccountClient;
+import com.hasaker.account.vo.response.ResponseUserOAuthVo;
+import com.hasaker.common.vo.Ajax;
+import com.hasaker.face.controller.base.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,14 +17,19 @@ import org.springframework.web.bind.annotation.RestController;
  * @description UserController
  */
 @RestController
-@RequestMapping(value = "open/user")
-public class UserController {
+@RequestMapping(value = "/user")
+public class UserController extends BaseController {
 
     @Autowired
-    private UserClient userClient;
+    private AccountClient accountClient;
 
     @GetMapping(value = "/{username}")
     public Ajax<ResponseUserOAuthVo> findUserByUsername(@PathVariable String username) {
-        return userClient.findUserByUsername(username);
+        return accountClient.findUserByUsername(username);
+    }
+
+    @GetMapping(value = "/info")
+    public Ajax<Object> getUserAccessToken() {
+        return Ajax.getInstance().successT(getUserId());
     }
 }

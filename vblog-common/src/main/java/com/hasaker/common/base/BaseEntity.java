@@ -2,10 +2,10 @@ package com.hasaker.common.base;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.Version;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.sql.Date;
 
 /**
  * @author 余天堂
@@ -31,7 +31,7 @@ public class BaseEntity implements Serializable {
      * 创建时间
      */
     @TableField(fill = FieldFill.INSERT)
-    private Date createTime;
+    private Long createTime;
 
     /**
      * 更新人ID
@@ -43,7 +43,7 @@ public class BaseEntity implements Serializable {
      * 更新时间
      */
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Date updateTime;
+    private Long updateTime;
 
     /**
      * 是否被删除(默认值0)
@@ -53,5 +53,6 @@ public class BaseEntity implements Serializable {
     /**
      * 版本(默认值0)
      */
+    @Version
     private Integer version;
 }

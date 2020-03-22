@@ -5,7 +5,7 @@ spring:
       port: 8500
       discovery:
         service-name: vblog-oauth-server
-        instance-id: vblog-oauth-server
+        instance-id: oauth-server-9003
       config:
         enabled: true
         format: yaml

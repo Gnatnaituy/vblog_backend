@@ -1,5 +1,6 @@
 package com.hasaker.common.config;
 
+import com.baomidou.mybatisplus.extension.plugins.OptimisticLockerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,12 +12,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @create 2020/1/2 13:48
  * @description MyBatisPlusConfig
  */
-@EnableTransactionManagement
 @Configuration
+@EnableTransactionManagement
 public class MyBatisPlusConfig {
 
     /**
-     * 配置分页
+     * 配置分页插件
      * @return
      */
     @Bean
@@ -30,11 +31,12 @@ public class MyBatisPlusConfig {
         return paginationInterceptor;
     }
 
-//    /**
-//     * 配置自定义ID生成器
-//     */
-//    @Bean
-//    public IdentifierGenerator identifierGenerator() {
-//        return new SnowFlakeIdGenerator();
-//    }
+    /**
+     * 配置乐观锁插件
+     * @return
+     */
+    @Bean
+    public OptimisticLockerInterceptor optimisticLockerInterceptor() {
+        return new OptimisticLockerInterceptor();
+    }
 }

@@ -1,6 +1,6 @@
 package com.hasaker.common.enums;
 
-import com.hasaker.common.base.IEnum;
+import com.hasaker.common.base.BaseEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -12,7 +12,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum ImageOwnerTypeEnums implements IEnum<ImageOwnerTypeEnums> {
+public enum ImageOwnerTypeEnums implements BaseEnum {
 
     POST("IMAGE_OWNER_TYPE_001", "Post's pictures"),
     USER_AVATAR("IMAGE_OWNER_TYPE_002", "User's avatar"),
