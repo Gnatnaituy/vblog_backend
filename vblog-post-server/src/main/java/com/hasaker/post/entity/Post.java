@@ -20,5 +20,6 @@ public class Post extends BaseEntity {
     @NonNull
     private Integer visibility;
 
-    private Long locationId;
+    public static final String CONTENT = "content";
+    public static final String VISIBILITY = "visibility";
 }

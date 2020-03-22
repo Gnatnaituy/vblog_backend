@@ -20,4 +20,7 @@ public class PostTopic extends BaseEntity {
 
     @NonNull
     private Long topicId;
+
+    public static final String POST_ID = "post_id";
+    public static final String TOPIC_ID = "topic_id";
 }

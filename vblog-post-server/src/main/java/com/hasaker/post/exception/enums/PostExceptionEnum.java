@@ -1,6 +1,6 @@
 package com.hasaker.post.exception.enums;
 
-import com.hasaker.common.base.BaseEnum;
+import com.hasaker.common.exception.base.BaseExceptionAssert;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -12,7 +12,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum PostExceptionEnum implements BaseEnum {
+public enum PostExceptionEnum implements BaseExceptionAssert {
 
     POST_NOT_EXISTS("POST_EXCEPTION_001", "Post not exists"),
     POST_IMAGE_NOT_EXISTS("POST_EXCEPTION_002", "Post image not exists"),

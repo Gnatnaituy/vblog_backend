@@ -12,8 +12,7 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@RequiredArgsConstructor
 public class PostImage extends BaseEntity {
 
     @NonNull
@@ -22,5 +21,10 @@ public class PostImage extends BaseEntity {
     @NonNull
     private String url;
 
+    @NonNull
     private Integer order;
+
+    public static final String POST_ID = "post_id";
+    public static final String URL = "url";
+    public static final String ORDER = "order";
 }

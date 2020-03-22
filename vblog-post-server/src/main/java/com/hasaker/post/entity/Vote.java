@@ -21,5 +21,9 @@ public class Vote extends BaseEntity {
 
     private Long commentId;
 
-    private Boolean isDownVote;
+    private Boolean isDownvote;
+
+    public static final String POST_ID = "post_id";
+    public static final String COMMENT_ID = "comment_id";
+    public static final String IS_DOWNVOTE = "is_downvote";
 }

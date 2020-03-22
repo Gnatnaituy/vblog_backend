@@ -14,11 +14,14 @@ import lombok.*;
 @RequiredArgsConstructor
 public class Comment extends BaseEntity {
 
-    @NonNull
     private Long postId;
 
     private Long commentId;
 
     @NonNull
     private String content;
+
+    public static final String POST_ID = "post_id";
+    public static final String COMMENT_ID = "comment_id";
+    public static final String CONTENT = "content";
 }
