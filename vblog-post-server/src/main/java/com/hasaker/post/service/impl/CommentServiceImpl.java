@@ -11,6 +11,7 @@ import com.hasaker.post.mapper.CommentMapper;
 import com.hasaker.post.service.CommentService;
 import com.hasaker.post.vo.request.RequestCommentVo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class CommentServiceImpl extends BaseServiceImpl<CommentMapper, Comment> 
      * @param commentVo
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void comment(RequestCommentVo commentVo) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(commentVo);
 
@@ -41,6 +43,7 @@ public class CommentServiceImpl extends BaseServiceImpl<CommentMapper, Comment> 
      * @param commentId
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void delete(Long commentId) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(commentId);
 

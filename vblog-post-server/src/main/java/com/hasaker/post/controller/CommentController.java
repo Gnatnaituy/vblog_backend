@@ -21,7 +21,7 @@ public class CommentController {
     private CommentService commentService;
 
     @ApiOperation(value = "Create a comment")
-    @PostMapping(value = "/")
+    @PostMapping(value = "/save")
     Ajax save(@RequestBody RequestCommentVo commentVo) {
         commentService.comment(commentVo);
         return Ajax.success();
@@ -29,7 +29,7 @@ public class CommentController {
 
     @ApiOperation(value = "Delete a comment")
     @DeleteMapping(value = "/{commentId}")
-    Ajax save(@PathVariable Long commentId) {
+    Ajax delete(@PathVariable Long commentId) {
         commentService.delete(commentId);
         return Ajax.success();
     }

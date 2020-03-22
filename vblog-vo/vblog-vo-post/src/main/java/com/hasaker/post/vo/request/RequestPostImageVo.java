@@ -3,6 +3,7 @@ package com.hasaker.post.vo.request;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 /**
@@ -12,6 +13,7 @@ import lombok.NonNull;
  * @description RequestPostImageVo
  */
 @Data
+@NoArgsConstructor
 @ApiModel(description = "Images for post")
 public class RequestPostImageVo {
 
@@ -21,5 +23,5 @@ public class RequestPostImageVo {
 
     @NonNull
     @ApiModelProperty(value = "Image's order")
-    private Integer order;
+    private Integer sort;
 }

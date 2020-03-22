@@ -3,6 +3,7 @@ package com.hasaker.post.vo.request;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
  * @description RequestPostVo
  */
 @Data
+@NoArgsConstructor
 @ApiModel(description = "Create a post")
 public class RequestPostVo {
 

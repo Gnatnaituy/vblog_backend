@@ -8,6 +8,7 @@ import com.hasaker.post.mapper.TopicMapper;
 import com.hasaker.post.service.TopicService;
 import com.hasaker.post.vo.request.RequestTopicVo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @package com.hasaker.post.service.impl
@@ -23,6 +24,7 @@ public class TopicServiceImpl extends BaseServiceImpl<TopicMapper, Topic> implem
      * @param topicVo
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void update(RequestTopicVo topicVo) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(topicVo);
 

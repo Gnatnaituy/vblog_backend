@@ -21,7 +21,7 @@ public class PostController {
     private PostService postService;
 
     @ApiOperation(value = "Create a post")
-    @PostMapping(value = "/")
+    @PostMapping(value = "/save")
     Ajax post(@RequestBody RequestPostVo postVo) {
         postService.post(postVo);
         return Ajax.success();

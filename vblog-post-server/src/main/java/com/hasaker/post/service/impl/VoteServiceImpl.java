@@ -8,6 +8,7 @@ import com.hasaker.post.mapper.VoteMapper;
 import com.hasaker.post.service.VoteService;
 import com.hasaker.post.vo.request.RequestVoteVo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @package com.hasaker.post.service.impl
@@ -23,11 +24,12 @@ public class VoteServiceImpl extends BaseServiceImpl<VoteMapper, Vote> implement
      * @param voteVo
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void vote(RequestVoteVo voteVo) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(voteVo);
 
         Vote vote = Convert.convert(Vote.class, voteVo);
-        vote.setIsDownVote(false);
+        vote.setIsDownvote(false);
 
         this.save(vote);
     }
@@ -37,11 +39,12 @@ public class VoteServiceImpl extends BaseServiceImpl<VoteMapper, Vote> implement
      * @param voteVo
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void downVote(RequestVoteVo voteVo) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(voteVo);
 
         Vote vote = Convert.convert(Vote.class, voteVo);
-        vote.setIsDownVote(true);
+        vote.setIsDownvote(true);
 
         this.save(vote);
     }

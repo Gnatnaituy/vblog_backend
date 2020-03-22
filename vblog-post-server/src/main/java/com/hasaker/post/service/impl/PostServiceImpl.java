@@ -12,6 +12,7 @@ import com.hasaker.post.service.*;
 import com.hasaker.post.vo.request.RequestPostVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,6 +42,7 @@ public class PostServiceImpl extends BaseServiceImpl<PostMapper, Post> implement
      * @param postVo
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void post(RequestPostVo postVo) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(postVo);
 
@@ -54,7 +56,7 @@ public class PostServiceImpl extends BaseServiceImpl<PostMapper, Post> implement
                     .map(o -> Convert.convert(PostImage.class, o))
                     .collect(Collectors.toList());
             images.forEach(o -> o.setPostId(postId));
-            postImageService.saveBatch(images);
+            images.forEach(o -> postImageService.save(o));
         }
 
         // Save topics of this post
@@ -65,11 +67,11 @@ public class PostServiceImpl extends BaseServiceImpl<PostMapper, Post> implement
                         o.setTopicId(topicService.saveId(topic).getId());
                     });
 
-            List<PostTopic> postTopics = postVo.getTopics().stream()
+            List<PostTopic> topics = postVo.getTopics().stream()
                     .map(o -> Convert.convert(PostTopic.class, o))
                     .collect(Collectors.toList());
-            postTopics.forEach(o -> o.setPostId(postId));
-            postTopicService.saveBatch(postTopics);
+            topics.forEach(o -> o.setPostId(postId));
+            topics.forEach(o -> postTopicService.save(o));
         }
     }
 
@@ -79,6 +81,7 @@ public class PostServiceImpl extends BaseServiceImpl<PostMapper, Post> implement
      * @param postId
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void delete(Long postId) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(postId);
 
