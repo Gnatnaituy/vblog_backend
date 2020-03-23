@@ -1,7 +1,10 @@
 package com.hasaker.component.elasticsearch.service.impl;
 
+import cn.hutool.core.lang.Pair;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
 import com.hasaker.component.elasticsearch.service.EsService;
+import org.elasticsearch.action.update.UpdateRequest;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
@@ -10,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class EsServiceImpl implements EsService {
@@ -27,27 +31,32 @@ public class EsServiceImpl implements EsService {
 
     @Override
     public <T> Page<T> page(SearchQuery searchQuery, Class<T> clazz) {
+        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(searchQuery);
 
-       return elasticsearchOperations.queryForPage(searchQuery, clazz);
+        return elasticsearchOperations.queryForPage(searchQuery, clazz);
     }
 
     @Override
-    public <T> void createIndex(Class<T> clazz) {
-        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(clazz);
+    public <T> T getById(String id, Class<T> clazz) {
+        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(id);
 
-        elasticsearchOperations.putMapping(clazz);
-        elasticsearchOperations.createIndex(clazz);
+        GetQuery getQuery = GetQuery.getById(id);
+        return elasticsearchOperations.queryForObject(getQuery, clazz);
     }
 
     @Override
-    public <T> void deleteIndex(Class<T> clazz) {
-        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(clazz);
+    public <T> List<T> getByIds(List<String> ids, Class<T> clazz) {
+        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(ids);
 
-        elasticsearchOperations.deleteIndex(clazz);
+        SearchQuery searchQuery = new NativeSearchQueryBuilder()
+                .withQuery(QueryBuilders.termQuery("id", ids))
+                .build();
+
+        return elasticsearchOperations.queryForList(searchQuery, clazz);
     }
 
     @Override
-    public <T> void indexDocument(T document) {
+    public <T> void index(T document) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(document);
 
         IndexQuery indexQuery = new IndexQueryBuilder().withObject(document).build();
@@ -56,7 +65,7 @@ public class EsServiceImpl implements EsService {
     }
 
     @Override
-    public <T> void bulkIndexDocuments(List<T> documents) {
+    public <T> void index(List<T> documents) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(documents);
 
         List<IndexQuery> indexQueries = new ArrayList<>(documents.size());
@@ -68,15 +77,77 @@ public class EsServiceImpl implements EsService {
     }
 
     @Override
-    public <T> void deleteDocument(String documentId, Class<T> clazz) {
-        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(clazz);
-        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(documentId);
+    public <T> void update(String id, Class<T> clazz, Pair<String, Object> fieldValuePair) {
+        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(id);
+        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(fieldValuePair);
 
-        elasticsearchOperations.delete(clazz, documentId);
+        UpdateRequest updateRequest = new UpdateRequest();
+        updateRequest.doc(fieldValuePair.getKey(), fieldValuePair.getValue());
+
+        UpdateQuery updateQuery = new UpdateQuery();
+        updateQuery.setId(id);
+        updateQuery.setClazz(clazz);
+        updateQuery.setUpdateRequest(updateRequest);
+
+        elasticsearchOperations.update(updateQuery);
     }
 
     @Override
-    public <T> void deleteDocument(DeleteQuery deleteQuery, Class<T> clazz) {
+    public <T> void update(String id, Class<T> clazz, List<Pair<String, Object>> fieldValuePairs) {
+        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(id);
+        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(fieldValuePairs);
+
+        UpdateRequest updateRequest = new UpdateRequest();
+        fieldValuePairs.forEach(o -> updateRequest.doc(o.getKey(), o.getValue()));
+
+        UpdateQuery updateQuery = new UpdateQuery();
+        updateQuery.setId(id);
+        updateQuery.setClazz(clazz);
+        updateQuery.setUpdateRequest(updateRequest);
+
+        elasticsearchOperations.update(updateQuery);
+    }
+
+    @Override
+    public <T> void update(List<String> ids, Class<T> clazz, Pair<String, Object> fieldValuePair) {
+        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(ids);
+        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(fieldValuePair);
+
+        UpdateRequest updateRequest = new UpdateRequest();
+        updateRequest.doc(fieldValuePair.getKey(), fieldValuePair.getValue());
+
+        List<UpdateQuery> updateQueries = ids.stream().map(o -> {
+            UpdateQuery updateQuery = new UpdateQuery();
+            updateQuery.setId(o);
+            updateQuery.setClazz(clazz);
+            updateQuery.setUpdateRequest(updateRequest);
+            return updateQuery;
+        }).collect(Collectors.toList());
+
+        elasticsearchOperations.bulkUpdate(updateQueries);
+    }
+
+    @Override
+    public <T> void update(List<String> ids, Class<T> clazz, List<Pair<String, Object>> fieldValuePairs) {
+        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(ids);
+        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(fieldValuePairs);
+
+        UpdateRequest updateRequest = new UpdateRequest();
+        fieldValuePairs.forEach(o -> updateRequest.doc(o.getKey(), o.getValue()));
+
+        List<UpdateQuery> updateQueries = ids.stream().map(o -> {
+            UpdateQuery updateQuery = new UpdateQuery();
+            updateQuery.setId(o);
+            updateQuery.setClazz(clazz);
+            updateQuery.setUpdateRequest(updateRequest);
+            return updateQuery;
+        }).collect(Collectors.toList());
+
+        elasticsearchOperations.bulkUpdate(updateQueries);
+    }
+
+    @Override
+    public <T> void delete(DeleteQuery deleteQuery, Class<T> clazz) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(deleteQuery);
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(clazz);
 
@@ -84,26 +155,21 @@ public class EsServiceImpl implements EsService {
     }
 
     @Override
-    public <T> void bulkDeleteDocument(List<String> documentIds, Class<T> clazz) {
+    public <T> void delete(String documentId, Class<T> clazz) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(clazz);
-        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(documentIds);
+        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(documentId);
 
-        for (String documentId : documentIds) {
-            elasticsearchOperations.delete(clazz, documentId);
-        }
+        elasticsearchOperations.delete(clazz, documentId);
     }
 
     @Override
-    public void updateDocument(UpdateQuery updateQuery) {
-        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(updateQuery);
+    public <T> void delete(List<String> ids, Class<T> clazz) {
+        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(clazz);
+        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(ids);
 
-        elasticsearchOperations.update(updateQuery);
-    }
+        DeleteQuery deleteQuery = new DeleteQuery();
+        deleteQuery.setQuery(QueryBuilders.termQuery("id", ids));
 
-    @Override
-    public void bulkUpdateDocuments(List<UpdateQuery> updateQueries) {
-        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(updateQueries);
-
-        elasticsearchOperations.bulkUpdate(updateQueries);
+        elasticsearchOperations.delete(deleteQuery, clazz);
     }
 }

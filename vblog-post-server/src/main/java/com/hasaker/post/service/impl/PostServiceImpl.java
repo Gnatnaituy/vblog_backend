@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.hasaker.common.base.impl.BaseServiceImpl;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
+import com.hasaker.component.elasticsearch.service.EsService;
+import com.hasaker.post.document.PostDoc;
 import com.hasaker.post.entity.*;
 import com.hasaker.post.exception.enums.PostExceptionEnum;
 import com.hasaker.post.mapper.PostMapper;
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,6 +39,8 @@ public class PostServiceImpl extends BaseServiceImpl<PostMapper, Post> implement
     private CommentService commentService;
     @Autowired
     private VoteService voteService;
+    @Autowired
+    private EsService esService;
 
     /**
      * Create a new post
@@ -49,6 +54,12 @@ public class PostServiceImpl extends BaseServiceImpl<PostMapper, Post> implement
         Post post = Convert.convert(Post.class, postVo);
         post = this.saveId(post);
         final Long postId = post.getId();
+        PostDoc postDoc = Convert.convert(PostDoc.class, post);
+        postDoc.setTopics(new ArrayList<>());
+        postDoc.setImages(new ArrayList<>());
+        postDoc.setVoteUsers(new ArrayList<>());
+        postDoc.setDownvoteUsers(new ArrayList<>());
+        postDoc.setComments(new ArrayList<>());
 
         // Save images of this post
         if (ObjectUtils.isNotNull(postVo.getImages())) {
@@ -56,7 +67,12 @@ public class PostServiceImpl extends BaseServiceImpl<PostMapper, Post> implement
                     .map(o -> Convert.convert(PostImage.class, o))
                     .collect(Collectors.toList());
             images.forEach(o -> o.setPostId(postId));
-            images.forEach(o -> postImageService.save(o));
+            List<String> imageIds = images.stream()
+                    .map(o -> postImageService.saveId(o))
+                    .map(PostImage::getId)
+                    .map(String::valueOf)
+                    .collect(Collectors.toList());
+            postDoc.setImages(imageIds);
         }
 
         // Save topics of this post
@@ -72,7 +88,14 @@ public class PostServiceImpl extends BaseServiceImpl<PostMapper, Post> implement
                     .collect(Collectors.toList());
             topics.forEach(o -> o.setPostId(postId));
             topics.forEach(o -> postTopicService.save(o));
+            postDoc.setTopics(topics.stream()
+                    .map(PostTopic::getTopicId)
+                    .map(String::valueOf)
+                    .collect(Collectors.toList()));
         }
+
+        // Save post document to es
+        esService.index(postDoc);
     }
 
     /**
@@ -108,5 +131,8 @@ public class PostServiceImpl extends BaseServiceImpl<PostMapper, Post> implement
         QueryWrapper<Vote> voteQueryWrapper = new QueryWrapper<>();
         voteQueryWrapper.eq(Vote.POST_ID, postId);
         voteService.remove(voteQueryWrapper);
+
+        // Delete from es
+        esService.delete(String.valueOf(postId), PostDoc.class);
     }
 }
