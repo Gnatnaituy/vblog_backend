@@ -12,13 +12,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class EsServiceImpl<T> implements EsService<T> {
+public class EsServiceImpl implements EsService {
 
     @Autowired
     private ElasticsearchOperations elasticsearchOperations;
 
     @Override
-    public List<T> search(SearchQuery searchQuery, Class<T> clazz) {
+    public <T> List<T> search(SearchQuery searchQuery, Class<T> clazz) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(searchQuery);
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(clazz);
 
@@ -26,27 +26,28 @@ public class EsServiceImpl<T> implements EsService<T> {
     }
 
     @Override
-    public Page<T> page(SearchQuery searchQuery, Class<T> clazz) {
+    public <T> Page<T> page(SearchQuery searchQuery, Class<T> clazz) {
 
-        return elasticsearchOperations.queryForPage(searchQuery, clazz);
+       return elasticsearchOperations.queryForPage(searchQuery, clazz);
     }
 
     @Override
-    public boolean createIndex(Class<T> clazz) {
+    public <T> void createIndex(Class<T> clazz) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(clazz);
 
-        return elasticsearchOperations.putMapping(clazz) && elasticsearchOperations.createIndex(clazz);
+        elasticsearchOperations.putMapping(clazz);
+        elasticsearchOperations.createIndex(clazz);
     }
 
     @Override
-    public boolean deleteIndex(Class<T> clazz) {
+    public <T> void deleteIndex(Class<T> clazz) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(clazz);
 
-        return elasticsearchOperations.deleteIndex(clazz);
+        elasticsearchOperations.deleteIndex(clazz);
     }
 
     @Override
-    public void indexDocument(T document) {
+    public <T> void indexDocument(T document) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(document);
 
         IndexQuery indexQuery = new IndexQueryBuilder().withObject(document).build();
@@ -55,7 +56,7 @@ public class EsServiceImpl<T> implements EsService<T> {
     }
 
     @Override
-    public void bulkIndexDocuments(List<T> documents) {
+    public <T> void bulkIndexDocuments(List<T> documents) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(documents);
 
         List<IndexQuery> indexQueries = new ArrayList<>(documents.size());
@@ -67,15 +68,15 @@ public class EsServiceImpl<T> implements EsService<T> {
     }
 
     @Override
-    public String deleteDocument(Class<T> clazz, String documentId) {
+    public <T> void deleteDocument(String documentId, Class<T> clazz) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(clazz);
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(documentId);
 
-        return elasticsearchOperations.delete(clazz, documentId);
+        elasticsearchOperations.delete(clazz, documentId);
     }
 
     @Override
-    public void deleteDocument(DeleteQuery deleteQuery, Class<T> clazz) {
+    public <T> void deleteDocument(DeleteQuery deleteQuery, Class<T> clazz) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(deleteQuery);
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(clazz);
 
@@ -83,16 +84,13 @@ public class EsServiceImpl<T> implements EsService<T> {
     }
 
     @Override
-    public List<String> bulkDeleteDocument(Class<T> clazz, List<String> documentIds) {
+    public <T> void bulkDeleteDocument(List<String> documentIds, Class<T> clazz) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(clazz);
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(documentIds);
 
-        List<String> deletedDocumentIds = new ArrayList<>(documentIds.size());
         for (String documentId : documentIds) {
-            deletedDocumentIds.add(elasticsearchOperations.delete(clazz, documentId));
+            elasticsearchOperations.delete(clazz, documentId);
         }
-
-        return deletedDocumentIds;
     }
 
     @Override

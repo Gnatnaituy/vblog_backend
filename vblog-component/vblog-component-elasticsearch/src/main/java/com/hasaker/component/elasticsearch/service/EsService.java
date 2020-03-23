@@ -7,25 +7,25 @@ import org.springframework.data.elasticsearch.core.query.UpdateQuery;
 
 import java.util.List;
 
-public interface EsService<T> {
+public interface EsService {
 
-    List<T> search(SearchQuery searchQuery, Class<T> clazz);
+    <T> List<T> search(SearchQuery searchQuery, Class<T> clazz);
 
-    Page<T> page(SearchQuery searchQuery, Class<T> clazz);
+    <T> Page<T> page(SearchQuery searchQuery, Class<T> clazz);
 
-    boolean createIndex(Class<T> clazz);
+    <T> void createIndex(Class<T> clazz);
 
-    boolean deleteIndex(Class<T> clazz);
+    <T> void deleteIndex(Class<T> clazz);
 
-    void indexDocument(T document);
+    <T> void indexDocument(T document);
 
-    void bulkIndexDocuments(List<T> documents);
+    <T> void bulkIndexDocuments(List<T> documents);
 
-    String deleteDocument(Class<T> clazz, String documentId);
+    <T> void deleteDocument(String documentId, Class<T> clazz);
 
-    void deleteDocument(DeleteQuery deleteQuery, Class<T> clazz);
+    <T> void deleteDocument(DeleteQuery deleteQuery, Class<T> clazz);
 
-    List<String> bulkDeleteDocument(Class<T> clazz, List<String> documentIds);
+    <T> void bulkDeleteDocument(List<String> documentIds, Class<T> clazz);
 
     void updateDocument(UpdateQuery updateQuery);
 
