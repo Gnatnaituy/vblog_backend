@@ -1,19 +1,25 @@
 package com.hasaker.account.service.impl;
 
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.lang.Pair;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.hasaker.account.document.FriendDoc;
 import com.hasaker.account.entity.Friend;
 import com.hasaker.account.enums.VisibilityEnums;
 import com.hasaker.account.exception.enums.FriendExceptionEnums;
+import com.hasaker.account.exception.enums.UserExceptionEnums;
 import com.hasaker.account.mapper.FriendMapper;
 import com.hasaker.account.service.FriendService;
+import com.hasaker.account.service.UserService;
 import com.hasaker.account.vo.request.RequestFriendDeleteVo;
 import com.hasaker.account.vo.request.RequestFriendRemarkVo;
 import com.hasaker.account.vo.request.RequestFriendVisibilityVo;
 import com.hasaker.account.vo.response.ResponseFriendVo;
 import com.hasaker.common.base.impl.BaseServiceImpl;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
+import com.hasaker.component.elasticsearch.service.EsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +36,11 @@ import java.util.stream.Collectors;
 @Service
 public class FriendServiceImpl extends BaseServiceImpl<FriendMapper, Friend> implements FriendService {
 
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private EsService esService;
+
     /**
      * Insert a friend record
      * @param userId
@@ -43,13 +54,22 @@ public class FriendServiceImpl extends BaseServiceImpl<FriendMapper, Friend> imp
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(userId);
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(friendId);
 
+        UserExceptionEnums.USER_NOT_EXISTS.assertNotEmpty(userService.getById(userId));
+        UserExceptionEnums.USER_NOT_EXISTS.assertNotEmpty(userService.getById(friendId));
+
         Friend friend = new Friend();
         friend.setUserId(userId);
         friend.setFriendId(friendId);
         friend.setRemark(remark);
         friend.setVisibility(visibility != null ? visibility : VisibilityEnums.VISIBLE_FOR_BOTH.getCode());
+        friend = this.saveId(friend);
 
-        this.save(friend);
+        // index friendDoc
+        FriendDoc friendDoc = Convert.convert(FriendDoc.class, friend);
+        friendDoc.setId(String.valueOf(friend.getId()));
+        friendDoc.setUserId(String.valueOf(userId));
+        friendDoc.setFriendId(String.valueOf(friendId));
+        esService.index(friendDoc);
     }
 
     /**
@@ -63,10 +83,15 @@ public class FriendServiceImpl extends BaseServiceImpl<FriendMapper, Friend> imp
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(deleteVo);
 
         QueryWrapper<Friend> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(Friend.USER_ID, deleteVo.getUserId());
-        queryWrapper.eq(Friend.FRIEND_ID, deleteVo.getFriendId());
-
+        queryWrapper.or(o -> o.eq(Friend.USER_ID, deleteVo.getUserId()).eq(Friend.FRIEND_ID, deleteVo.getFriendId()));
+        queryWrapper.or(o -> o.eq(Friend.FRIEND_ID, deleteVo.getUserId()).eq(Friend.USER_ID, deleteVo.getFriendId()));
+        List<Friend> friends = this.list(queryWrapper);
+        FriendExceptionEnums.FRIEND_NOT_EXISTS.assertNotEmpty(friends.size() != 2);
         this.remove(queryWrapper);
+
+        // delete es friendDoc
+        esService.delete(friends.stream().map(Friend::getId).map(String::valueOf)
+                .collect(Collectors.toList()), FriendDoc.class);
     }
 
     /**
@@ -86,8 +111,11 @@ public class FriendServiceImpl extends BaseServiceImpl<FriendMapper, Friend> imp
         FriendExceptionEnums.FRIEND_NOT_EXISTS.assertNotEmpty(friend);
 
         friend.setVisibility(visibilityVo.getVisibility());
-
         this.updateById(friend);
+
+        // update visibility in es
+        esService.update(String.valueOf(friend.getId()), FriendDoc.class,
+                new Pair<>(FriendDoc.VISIBILITY, friend.getVisibility()));
     }
 
     /**
@@ -107,8 +135,11 @@ public class FriendServiceImpl extends BaseServiceImpl<FriendMapper, Friend> imp
         FriendExceptionEnums.FRIEND_NOT_EXISTS.assertNotEmpty(friend);
 
         friend.setRemark(remarkVo.getRemark());
-
         this.updateById(friend);
+
+        // update remark in es
+        esService.update(String.valueOf(friend.getId()), FriendDoc.class,
+                new Pair<>(FriendDoc.REMARK, friend.getRemark()));
     }
 
     /**

@@ -34,6 +34,11 @@
         </dependency>
 
         <!-- component -->
+        <dependency>
+            <groupId>com.hasaker</groupId>
+            <artifactId>vblog-component-elasticsearch</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <!-- feign -->
 
@@ -42,7 +47,6 @@
             <groupId>com.hasaker</groupId>
             <artifactId>vblog-vo-account</artifactId>
             <version>${project.version}</version>
-            <scope>compile</scope>
         </dependency>
 
     </dependencies>
