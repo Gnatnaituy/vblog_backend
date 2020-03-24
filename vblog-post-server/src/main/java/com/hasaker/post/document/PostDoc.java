@@ -36,18 +36,6 @@ public class PostDoc {
     private Set<String> topics;
 
     @Field(type = FieldType.Keyword)
-    private Set<String> images;
-
-    @Field(type = FieldType.Keyword)
-    private Set<String> comments;
-
-    @Field(type = FieldType.Keyword)
-    private Set<String> votes;
-
-    @Field(type = FieldType.Keyword)
-    private Set<String> downvotes;
-
-    @Field(type = FieldType.Keyword)
     private String createUser;
 
     @Field(type = FieldType.Date)
@@ -57,8 +45,4 @@ public class PostDoc {
     public static final String VISIBILITY = "visibility";
     public static final String LOCATION = "location";
     public static final String TOPICS = "topics";
-    public static final String IMAGES = "images";
-    public static final String COMMENTS = "comments";
-    public static final String VOTES = "votes";
-    public static final String DOWNVOTES = "downvotes";
 }

@@ -1,5 +1,6 @@
 package com.hasaker.account.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -7,6 +8,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.hasaker.account.document.UserDoc;
 import com.hasaker.account.entity.User;
 import com.hasaker.account.exception.enums.UserExceptionEnums;
 import com.hasaker.account.mapper.UserMapper;
@@ -18,10 +20,12 @@ import com.hasaker.account.vo.response.ResponseUserDetailVo;
 import com.hasaker.account.vo.response.ResponseUserOAuthVo;
 import com.hasaker.common.base.impl.BaseServiceImpl;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
+import com.hasaker.component.elasticsearch.service.EsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -35,6 +39,8 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
 
     @Autowired
     private RoleService roleService;
+    @Autowired
+    private EsService esService;
     @Autowired
     private UserMapper userMapper;
 
@@ -80,8 +86,14 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
         user = new User();
         user.setUsername(username);
         user.setPassword(password);
+        user = this.saveId(user);
 
-        this.save(user);
+        // save user to es
+        UserDoc userDoc = new UserDoc();
+        userDoc.setId(String.valueOf(user.getId()));
+        userDoc.setUsername(user.getUsername());
+        userDoc.setBlocks(new HashSet<>());
+        esService.index(userDoc);
     }
 
     /**
@@ -121,6 +133,11 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
         updatedUser.setId(user.getId());
 
         this.updateById(updatedUser);
+
+        // update user's information in es
+        UserDoc userDoc = esService.getById(String.valueOf(updatedUser.getId()), UserDoc.class);
+        BeanUtil.copyProperties(updatedUser, userDoc);
+        esService.index(userDoc);
     }
 
     /**

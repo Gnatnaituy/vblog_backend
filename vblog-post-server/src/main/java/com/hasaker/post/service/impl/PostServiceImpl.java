@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.hasaker.common.base.impl.BaseServiceImpl;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
 import com.hasaker.component.elasticsearch.service.EsService;
+import com.hasaker.post.document.ImageDoc;
 import com.hasaker.post.document.PostDoc;
 import com.hasaker.post.entity.*;
 import com.hasaker.post.exception.enums.PostExceptionEnum;
@@ -18,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -57,10 +57,6 @@ public class PostServiceImpl extends BaseServiceImpl<PostMapper, Post> implement
         final Long postId = post.getId();
         PostDoc postDoc = Convert.convert(PostDoc.class, post);
         postDoc.setTopics(new HashSet<>());
-        postDoc.setImages(new HashSet<>());
-        postDoc.setVotes(new HashSet<>());
-        postDoc.setDownvotes(new HashSet<>());
-        postDoc.setComments(new HashSet<>());
 
         // Save images of this post
         if (ObjectUtils.isNotNull(postVo.getImages())) {
@@ -68,12 +64,18 @@ public class PostServiceImpl extends BaseServiceImpl<PostMapper, Post> implement
                     .map(o -> Convert.convert(PostImage.class, o))
                     .collect(Collectors.toList());
             images.forEach(o -> o.setPostId(postId));
-            Set<String> imageIds = images.stream()
+
+            List<ImageDoc> imageDocs = images.stream()
                     .map(o -> postImageService.saveId(o))
-                    .map(PostImage::getId)
-                    .map(String::valueOf)
-                    .collect(Collectors.toSet());
-            postDoc.setImages(imageIds);
+                    .map(o -> {
+                        ImageDoc imageDoc = new ImageDoc();
+                        imageDoc.setId(String.valueOf(o.getId()));
+                        imageDoc.setPostId(String.valueOf(postId));
+                        imageDoc.setUrl(o.getUrl());
+                        imageDoc.setSort(o.getSort());
+                        return imageDoc;
+                    }).collect(Collectors.toList());
+            esService.index(imageDocs);
         }
 
         // Save topics of this post

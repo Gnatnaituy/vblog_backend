@@ -9,9 +9,17 @@ import java.util.List;
 
 public interface EsService {
 
-    <T> List<T> search(SearchQuery searchQuery, Class<T> clazz);
+    <T> List<T> list(SearchQuery searchQuery, Class<T> clazz);
+
+    <T> List<T> list(String field, Object value, Class<T> clazz);
+
+    <T> List<T> list(List<Pair<String, Object>> fieldValuePairs, Class<T> clazz);
 
     <T> Page<T> page(SearchQuery searchQuery, Class<T> clazz);
+
+    <T> Page<T> page(String field, Object value, Class<T> clazz);
+
+    <T> Page<T> page(List<Pair<String, Object>> fieldValuePairs, Class<T> clazz);
 
     <T> T getById(String id, Class<T> clazz);
 

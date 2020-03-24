@@ -34,9 +34,6 @@ public interface PostClient {
     @PostMapping(value = "/vote/vote")
     Ajax vote(@RequestBody RequestVoteVo voteVo);
 
-    @PostMapping(value = "/vote/downvote")
-    Ajax downvote(@RequestBody RequestVoteVo voteVo);
-
     @PostMapping(value = "/topic/update")
     Ajax saveTopic(@RequestBody RequestTopicVo topicVo);
 }

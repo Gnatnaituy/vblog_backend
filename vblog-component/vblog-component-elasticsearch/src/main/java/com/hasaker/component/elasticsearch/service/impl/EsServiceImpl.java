@@ -4,6 +4,7 @@ import cn.hutool.core.lang.Pair;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
 import com.hasaker.component.elasticsearch.service.EsService;
 import org.elasticsearch.action.update.UpdateRequest;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,7 +23,7 @@ public class EsServiceImpl implements EsService {
     private ElasticsearchOperations elasticsearchOperations;
 
     @Override
-    public <T> List<T> search(SearchQuery searchQuery, Class<T> clazz) {
+    public <T> List<T> list(SearchQuery searchQuery, Class<T> clazz) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(searchQuery);
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(clazz);
 
@@ -30,8 +31,40 @@ public class EsServiceImpl implements EsService {
     }
 
     @Override
+    public <T> List<T> list(String field, Object value, Class<T> clazz) {
+        SearchQuery searchQuery = new NativeSearchQuery(QueryBuilders.termQuery(field, value));
+
+        return elasticsearchOperations.queryForList(searchQuery, clazz);
+    }
+
+    @Override
+    public <T> List<T> list(List<Pair<String, Object>> fieldValuePairs, Class<T> clazz) {
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        fieldValuePairs.forEach(o -> boolQueryBuilder.must(QueryBuilders.termQuery(o.getKey(), o.getValue())));
+        SearchQuery searchQuery = new NativeSearchQuery(boolQueryBuilder);
+
+        return elasticsearchOperations.queryForList(searchQuery, clazz);
+    }
+
+    @Override
     public <T> Page<T> page(SearchQuery searchQuery, Class<T> clazz) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(searchQuery);
+
+        return elasticsearchOperations.queryForPage(searchQuery, clazz);
+    }
+
+    @Override
+    public <T> Page<T> page(String field, Object value, Class<T> clazz) {
+        SearchQuery searchQuery = new NativeSearchQuery(QueryBuilders.termQuery(field, value));
+
+        return elasticsearchOperations.queryForPage(searchQuery, clazz);
+    }
+
+    @Override
+    public <T> Page<T> page(List<Pair<String, Object>> fieldValuePairs, Class<T> clazz) {
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        fieldValuePairs.forEach(o -> boolQueryBuilder.must(QueryBuilders.termQuery(o.getKey(), o.getValue())));
+        SearchQuery searchQuery = new NativeSearchQuery(boolQueryBuilder);
 
         return elasticsearchOperations.queryForPage(searchQuery, clazz);
     }

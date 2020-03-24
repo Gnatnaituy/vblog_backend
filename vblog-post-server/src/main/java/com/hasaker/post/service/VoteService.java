@@ -13,6 +13,4 @@ import com.hasaker.post.vo.request.RequestVoteVo;
 public interface VoteService extends BaseService<Vote> {
 
     void vote(RequestVoteVo voteVo);
-
-    void downvote(RequestVoteVo voteVo);
 }

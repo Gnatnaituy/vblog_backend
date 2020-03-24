@@ -2,8 +2,10 @@ package com.hasaker.common.base;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.Version;
 import lombok.Data;
+import org.springframework.data.annotation.Id;
 
 /**
  * @author 余天堂
@@ -12,6 +14,7 @@ import lombok.Data;
 @Data
 public class BaseEntity {
 
+    @Id
     private Long id;
 
     @TableField(fill = FieldFill.INSERT)
@@ -26,6 +29,7 @@ public class BaseEntity {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Long updateTime;
 
+    @TableLogic
     private Integer isDeleted;
 
     @Version
