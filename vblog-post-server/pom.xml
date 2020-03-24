@@ -31,7 +31,6 @@
             <groupId>com.hasaker</groupId>
             <artifactId>vblog-common</artifactId>
             <version>${project.version}</version>
-            <scope>compile</scope>
         </dependency>
 
         <!-- component -->
@@ -39,12 +38,16 @@
             <groupId>com.hasaker</groupId>
             <artifactId>vblog-component-elasticsearch</artifactId>
             <version>${project.version}</version>
-            <scope>compile</scope>
         </dependency>
 
         <!-- feign -->
 
         <!-- vo -->
+        <dependency>
+            <groupId>com.hasaker</groupId>
+            <artifactId>vblog-vo-post</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
     </dependencies>
 

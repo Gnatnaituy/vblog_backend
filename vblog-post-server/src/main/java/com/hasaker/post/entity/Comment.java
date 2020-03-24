@@ -11,19 +11,17 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@RequiredArgsConstructor
 public class Comment extends BaseEntity {
 
-    // 评论动态ID
-    private Long targetPostId;
+    private Long postId;
 
-    // 回复对象用户ID
-    private Long targetUserId;
+    private Long commentId;
 
-    // 评论内容
+    @NonNull
     private String content;
 
-    // 可见性
-    private Integer visibility;
+    public static final String POST_ID = "post_id";
+    public static final String COMMENT_ID = "comment_id";
+    public static final String CONTENT = "content";
 }

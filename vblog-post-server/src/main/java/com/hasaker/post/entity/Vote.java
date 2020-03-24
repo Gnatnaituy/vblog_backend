@@ -1,7 +1,9 @@
 package com.hasaker.post.entity;
 
 import com.hasaker.common.base.BaseEntity;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * @author 余天堂
@@ -11,10 +13,15 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class Vote extends BaseEntity {
 
-    // 动态ID
     private Long postId;
+
+    private Long commentId;
+
+    private Boolean isDownvote;
+
+    public static final String POST_ID = "post_id";
+    public static final String COMMENT_ID = "comment_id";
+    public static final String IS_DOWNVOTE = "is_downvote";
 }

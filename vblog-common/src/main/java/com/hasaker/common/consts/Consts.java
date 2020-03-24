@@ -15,6 +15,10 @@ public final class Consts {
     public static final String IS_ENABLED = "is_enabled";
     public static final String IS_DELETED = "is_deleted";
     public static final String VERSION = "version";
+    // ES字段名
+    public static final String POST_ID = "post_id";
+    public static final String COMMENT_ID = "comment_id";
+    public static final String USER_ID = "user_id";
 
     // 布尔类型
     public static final String SUCCESS = "1";

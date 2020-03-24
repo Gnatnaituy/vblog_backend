@@ -11,16 +11,15 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@RequiredArgsConstructor
 public class Post extends BaseEntity {
 
-    // 动态内容
+    @NonNull
     private String content;
 
-    // 动态可见性
-    private Integer visibility;
+    @NonNull
+    private String visibility;
 
-    // 地址ID
-    private Long locationId;
+    public static final String CONTENT = "content";
+    public static final String VISIBILITY = "visibility";
 }

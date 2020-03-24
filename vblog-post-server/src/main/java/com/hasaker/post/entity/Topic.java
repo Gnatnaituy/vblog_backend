@@ -11,13 +11,14 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@RequiredArgsConstructor
 public class Topic extends BaseEntity {
 
-    // 话题名称
+    @NonNull
     private String name;
 
-    // 话题描述
     private String description;
+
+    public static final String NAME = "name";
+    public static final String DESCRIPTION = "description";
 }

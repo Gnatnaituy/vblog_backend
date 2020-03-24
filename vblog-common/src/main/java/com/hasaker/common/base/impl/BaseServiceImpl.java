@@ -3,11 +3,10 @@ package com.hasaker.common.base.impl;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.enums.SqlMethod;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
-import com.hasaker.common.base.BaseService;
 import com.hasaker.common.base.BaseMapper;
+import com.hasaker.common.base.BaseService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,7 @@ import java.util.List;
  */
 @Transactional(readOnly = true)
 @Slf4j
-public class BaseServiceImpl<M extends BaseMapper<T>, T extends Serializable> implements BaseService<T> {
+public class BaseServiceImpl<M extends BaseMapper<T>, T> implements BaseService<T> {
 
     @Autowired
     private M baseMapper;
@@ -57,30 +56,14 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T extends Serializable> im
     }
 
     /**
-     * 批量保存，指定长度
-     *
+     * 批量保存实体
      * @param entities
-     * @param batchSize
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public boolean saveBatch(Collection<T> entities, int batchSize) {
-        if (CollectionUtils.isEmpty(entities) || batchSize <= 0) {
-            log.info("No data in batch list");
-            return false;
-        }
-
-        int i = 0;
-        String sqlStatement = sqlStatement(SqlMethod.INSERT_ONE);
-        try (SqlSession batchSqlSession = sqlSessionBatch()) {
-            for (T entity : entities) {
-                batchSqlSession.insert(sqlStatement, entity);
-                if (i >= 1 && i % batchSize == 0) {
-                    batchSqlSession.flushStatements();
-                }
-                i++;
-            }
-            batchSqlSession.flushStatements();
+    public boolean save(Collection<T> entities) {
+        for (T entity : entities) {
+            this.save(entity);
         }
 
         return true;
@@ -88,7 +71,6 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T extends Serializable> im
 
     /**
      * 更新
-     *
      * @param entity
      */
     @Transactional(rollbackFor = Exception.class)
@@ -100,7 +82,6 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T extends Serializable> im
 
     /**
      * 根据条件更新
-     *
      * @param entity
      * @param queryWrapper
      */

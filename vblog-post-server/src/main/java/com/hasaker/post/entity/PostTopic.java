@@ -12,13 +12,15 @@ import lombok.*;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@RequiredArgsConstructor
 public class PostTopic extends BaseEntity {
 
-    // 动态ID
+    @NonNull
     private Long postId;
 
-    // 话题ID
+    @NonNull
     private Long topicId;
+
+    public static final String POST_ID = "post_id";
+    public static final String TOPIC_ID = "topic_id";
 }

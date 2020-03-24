@@ -1,33 +1,37 @@
 package com.hasaker.component.elasticsearch.service;
 
+import cn.hutool.core.lang.Pair;
 import org.springframework.data.domain.Page;
 import org.springframework.data.elasticsearch.core.query.DeleteQuery;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
-import org.springframework.data.elasticsearch.core.query.UpdateQuery;
 
 import java.util.List;
 
-public interface EsService<T> {
+public interface EsService {
 
-    List<T> search(SearchQuery searchQuery, Class<T> clazz);
+    <T> List<T> search(SearchQuery searchQuery, Class<T> clazz);
 
-    Page<T> page(SearchQuery searchQuery, Class<T> clazz);
+    <T> Page<T> page(SearchQuery searchQuery, Class<T> clazz);
 
-    boolean createIndex(Class<T> clazz);
+    <T> T getById(String id, Class<T> clazz);
 
-    boolean deleteIndex(Class<T> clazz);
+    <T> List<T> getByIds(List<String> ids, Class<T> clazz);
 
-    void indexDocument(T document);
+    <T> void index(T document);
 
-    void bulkIndexDocuments(List<T> documents);
+    <T> void index(List<T> documents);
 
-    String deleteDocument(Class<T> clazz, String documentId);
+    <T> void update(String id, Class<T> clazz, Pair<String, Object> fieldValuePair);
 
-    void deleteDocument(DeleteQuery deleteQuery, Class<T> clazz);
+    <T> void update(String id, Class<T> clazz, List<Pair<String, Object>> fieldValuePairs);
 
-    List<String> bulkDeleteDocument(Class<T> clazz, List<String> documentIds);
+    <T> void update(List<String> ids, Class<T> clazz, Pair<String, Object> fieldValuePair);
 
-    void updateDocument(UpdateQuery updateQuery);
+    <T> void update(List<String> ids, Class<T> clazz, List<Pair<String, Object>> fieldValuePairs);
 
-    void bulkUpdateDocuments(List<UpdateQuery> updateQueries);
+    <T> void delete(DeleteQuery deleteQuery, Class<T> clazz);
+
+    <T> void delete(String id, Class<T> clazz);
+
+    <T> void delete(List<String> ids, Class<T> clazz);
 }
