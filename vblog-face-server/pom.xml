@@ -52,11 +52,6 @@
             <artifactId>vblog-feign-account</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.hasaker</groupId>
-            <artifactId>vblog-feign-oauth</artifactId>
-            <version>${project.version}</version>
-        </dependency>
 
         <!-- vo -->
         <dependency>

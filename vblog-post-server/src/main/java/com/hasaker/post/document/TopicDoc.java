@@ -11,24 +11,21 @@ import java.util.Date;
 /**
  * @package com.hasaker.post.document
  * @author 余天堂
- * @create 2020/3/23 20:48
- * @description ImageDoc
+ * @create 2020/3/24 18:18
+ * @description TopicDoc
  */
 @Data
-@Document(indexName = "vblog-post-image")
-public class ImageDoc {
+@Document(indexName = "vblog-post-topic")
+public class TopicDoc {
 
     @Id
     private String id;
 
     @Field(type = FieldType.Keyword)
-    private String postId;
+    private String name;
 
-    @Field(type = FieldType.Keyword)
-    private String url;
-
-    @Field(type = FieldType.Integer)
-    private Integer sort;
+    @Field(type = FieldType.Text)
+    private String description;
 
     @Field(type = FieldType.Keyword)
     private String createUser;
@@ -36,6 +33,6 @@ public class ImageDoc {
     @Field(type = FieldType.Date)
     private Date createTime;
 
-    public static final String URL = "url";
-    public static final String SORT = "sort";
+    public static final String NAME = "name";
+    public static final String DESCRIPTION = "description";
 }

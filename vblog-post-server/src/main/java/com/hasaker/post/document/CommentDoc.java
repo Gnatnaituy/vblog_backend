@@ -7,7 +7,7 @@ import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 /**
  * @package com.hasaker.post.document
@@ -22,12 +22,32 @@ public class CommentDoc {
     @Id
     private String id;
 
+    @Field(type = FieldType.Keyword)
+    private String postId;
+
+    @Field(type = FieldType.Keyword)
+    private String commentId;
+
     @Field(type = FieldType.Text)
     private String content;
+
+    @Field(type = FieldType.Auto)
+    private Set<String> replies;
+
+    @Field(type = FieldType.Auto)
+    private Set<String> votes;
+
+    @Field(type = FieldType.Auto)
+    private Set<String> downvotes;
+
+    @Field(type = FieldType.Keyword)
+    private String createUser;
 
     @Field(type = FieldType.Date)
     private Date createTime;
 
-    @Field(type = FieldType.Long)
-    private List<String> replies;
+    public static final String CONTENT = "content";
+    public static final String REPLIES = "replies";
+    public static final String VOTES = "votes";
+    public static final String DOWNVOTES = "downvotes";
 }

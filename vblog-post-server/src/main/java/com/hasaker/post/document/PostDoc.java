@@ -9,7 +9,7 @@ import org.springframework.data.elasticsearch.annotations.GeoPointField;
 import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 /**
  * @author 余天堂
@@ -32,24 +32,33 @@ public class PostDoc {
     @GeoPointField
     private GeoPoint location;
 
-    @Field(type = FieldType.Long)
-    private Long createUser;
+    @Field(type = FieldType.Keyword)
+    private Set<String> topics;
+
+    @Field(type = FieldType.Keyword)
+    private Set<String> images;
+
+    @Field(type = FieldType.Keyword)
+    private Set<String> comments;
+
+    @Field(type = FieldType.Keyword)
+    private Set<String> votes;
+
+    @Field(type = FieldType.Keyword)
+    private Set<String> downvotes;
+
+    @Field(type = FieldType.Keyword)
+    private String createUser;
 
     @Field(type = FieldType.Date)
     private Date createTime;
 
-    @Field(type = FieldType.Long)
-    private List<String> topics;
-
-    @Field(type = FieldType.Long)
-    private List<String> images;
-
-    @Field(type = FieldType.Long)
-    private List<String> comments;
-
-    @Field(type = FieldType.Long)
-    private List<String> voteUsers;
-
-    @Field(type = FieldType.Long)
-    private List<String> downvoteUsers;
+    public static final String CONTENT = "content";
+    public static final String VISIBILITY = "visibility";
+    public static final String LOCATION = "location";
+    public static final String TOPICS = "topics";
+    public static final String IMAGES = "images";
+    public static final String COMMENTS = "comments";
+    public static final String VOTES = "votes";
+    public static final String DOWNVOTES = "downvotes";
 }

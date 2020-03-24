@@ -16,8 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -55,11 +56,11 @@ public class PostServiceImpl extends BaseServiceImpl<PostMapper, Post> implement
         post = this.saveId(post);
         final Long postId = post.getId();
         PostDoc postDoc = Convert.convert(PostDoc.class, post);
-        postDoc.setTopics(new ArrayList<>());
-        postDoc.setImages(new ArrayList<>());
-        postDoc.setVoteUsers(new ArrayList<>());
-        postDoc.setDownvoteUsers(new ArrayList<>());
-        postDoc.setComments(new ArrayList<>());
+        postDoc.setTopics(new HashSet<>());
+        postDoc.setImages(new HashSet<>());
+        postDoc.setVotes(new HashSet<>());
+        postDoc.setDownvotes(new HashSet<>());
+        postDoc.setComments(new HashSet<>());
 
         // Save images of this post
         if (ObjectUtils.isNotNull(postVo.getImages())) {
@@ -67,11 +68,11 @@ public class PostServiceImpl extends BaseServiceImpl<PostMapper, Post> implement
                     .map(o -> Convert.convert(PostImage.class, o))
                     .collect(Collectors.toList());
             images.forEach(o -> o.setPostId(postId));
-            List<String> imageIds = images.stream()
+            Set<String> imageIds = images.stream()
                     .map(o -> postImageService.saveId(o))
                     .map(PostImage::getId)
                     .map(String::valueOf)
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toSet());
             postDoc.setImages(imageIds);
         }
 
@@ -91,7 +92,7 @@ public class PostServiceImpl extends BaseServiceImpl<PostMapper, Post> implement
             postDoc.setTopics(topics.stream()
                     .map(PostTopic::getTopicId)
                     .map(String::valueOf)
-                    .collect(Collectors.toList()));
+                    .collect(Collectors.toSet()));
         }
 
         // Save post document to es

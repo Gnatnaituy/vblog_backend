@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -33,6 +33,8 @@ public class CommentServiceImpl extends BaseServiceImpl<CommentMapper, Comment> 
     @Autowired
     private EsService esService;
 
+    private static final String COMMENT_DELETED = "This comment had been deleted";
+
     /**
      * Write a comment
      * @param commentVo
@@ -46,16 +48,17 @@ public class CommentServiceImpl extends BaseServiceImpl<CommentMapper, Comment> 
         comment = this.saveId(comment);
 
         CommentDoc commentDoc = Convert.convert(CommentDoc.class, comment);
-        commentDoc.setReplies(new ArrayList<>());
+        commentDoc.setReplies(new HashSet<>());
         esService.index(commentDoc);
-        if (ObjectUtils.isNotNull(comment.getPostId())) {
-            PostDoc postDoc = esService.getById(String.valueOf(comment.getPostId()), PostDoc.class);
-            postDoc.getComments().add(String.valueOf(commentDoc.getId()));
-            esService.update(postDoc.getId(), PostDoc.class, new Pair<>("comments", postDoc.getComments()));
-        } else {
+
+        if (ObjectUtils.isNotNull(comment.getCommentId())) {
             CommentDoc parent = esService.getById(String.valueOf(comment.getCommentId()), CommentDoc.class);
             parent.getReplies().add(commentDoc.getId());
             esService.update(parent.getId(), CommentDoc.class, new Pair<>("replies", parent.getReplies()));
+        } else {
+            PostDoc postDoc = esService.getById(String.valueOf(comment.getPostId()), PostDoc.class);
+            postDoc.getComments().add(commentDoc.getId());
+            esService.update(postDoc.getId(), PostDoc.class, new Pair<>("comments", postDoc.getComments()));
         }
     }
 
@@ -73,21 +76,45 @@ public class CommentServiceImpl extends BaseServiceImpl<CommentMapper, Comment> 
 
         QueryWrapper<Comment> commentQueryWrapper = new QueryWrapper<>();
         commentQueryWrapper.eq(Comment.COMMENT_ID, commentId);
-        List<Comment> comments = this.list(commentQueryWrapper);
+        List<Comment> replies = this.list(commentQueryWrapper);
 
-        if (ObjectUtils.isNotNull(comments)) {
+        if (ObjectUtils.isNotNull(replies)) {
+            // replace the comment
             Comment replaceComment = new Comment();
             replaceComment.setPostId(comment.getPostId());
             replaceComment.setCommentId(comment.getCommentId());
-            replaceComment.setContent("This comment had been deleted");
+            replaceComment.setContent(COMMENT_DELETED);
             replaceComment = this.saveId(replaceComment);
 
+            // update the reply's commentId belong to this comment
             Comment updateComment = new Comment();
             updateComment.setCommentId(replaceComment.getId());
             this.update(updateComment, commentQueryWrapper);
 
-            esService.update(String.valueOf(comment.getCommentId()), CommentDoc.class,
-                    new Pair<>("content", "This comment had been deleted"));
+            // update comments in es
+            CommentDoc commentDoc = esService.getById(String.valueOf(comment.getId()), CommentDoc.class);
+            CommentDoc replaceCommentDoc = new CommentDoc();
+            replaceCommentDoc.setId(String.valueOf(replaceComment.getId()));
+            replaceCommentDoc.setPostId(String.valueOf(replaceComment.getPostId()));
+            replaceCommentDoc.setCommentId(String.valueOf(replaceComment.getCommentId()));
+            replaceCommentDoc.setContent(COMMENT_DELETED);
+            replaceCommentDoc.setReplies(commentDoc.getReplies());
+            replaceCommentDoc.setVotes(commentDoc.getVotes());
+            replaceCommentDoc.setDownvotes(commentDoc.getDownvotes());
+            esService.index(replaceCommentDoc);
+            // update parent comment's replies or post's comments
+            if (ObjectUtils.isNotNull(commentDoc.getCommentId())) {
+                CommentDoc parentCommentDoc = esService.getById(commentDoc.getCommentId(), CommentDoc.class);
+                parentCommentDoc.getReplies().remove(commentDoc.getId());
+                parentCommentDoc.getReplies().add(replaceCommentDoc.getId());
+                esService.update(parentCommentDoc.getId(), CommentDoc.class,
+                        new Pair<>(CommentDoc.REPLIES, parentCommentDoc.getReplies()));
+            } else {
+                PostDoc postDoc = esService.getById(commentDoc.getPostId(), PostDoc.class);
+                postDoc.getComments().remove(commentDoc.getId());
+                postDoc.getComments().add(replaceCommentDoc.getId());
+                esService.update(postDoc.getId(), PostDoc.class, new Pair<>(PostDoc.COMMENTS, postDoc.getComments()));
+            }
         }
 
         this.removeById(commentId);
