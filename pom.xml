@@ -29,13 +29,13 @@
     <modules>
         <module>vblog-common</module>
         <module>vblog-component</module>
+        <module>vblog-document</module>
         <module>vblog-face-server</module>
         <module>vblog-oauth-server</module>
         <module>vblog-account-server</module>
         <module>vblog-post-server</module>
         <module>vblog-feign</module>
         <module>vblog-vo</module>
-        <module>vblog-document</module>
     </modules>
 
     <dependencyManagement>
