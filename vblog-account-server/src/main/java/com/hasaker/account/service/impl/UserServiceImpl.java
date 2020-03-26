@@ -10,9 +10,11 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hasaker.account.document.UserDoc;
 import com.hasaker.account.entity.User;
+import com.hasaker.account.entity.UserRole;
 import com.hasaker.account.exception.enums.UserExceptionEnums;
 import com.hasaker.account.mapper.UserMapper;
 import com.hasaker.account.service.RoleService;
+import com.hasaker.account.service.UserRoleService;
 import com.hasaker.account.service.UserService;
 import com.hasaker.account.vo.request.RequestUserSearchVo;
 import com.hasaker.account.vo.request.RequestUserUpdateVo;
@@ -40,9 +42,9 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
     @Autowired
     private RoleService roleService;
     @Autowired
-    private EsService esService;
+    private UserRoleService userRoleService;
     @Autowired
-    private UserMapper userMapper;
+    private EsService esService;
 
     /**
      * 获取用户登录信息
@@ -53,7 +55,9 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
     public ResponseUserOAuthVo findUserByUserName(String username) {
         CommonExceptionEnums.NOT_NULL_ARG.isTrue(StringUtils.isBlank(username));
 
-        User user = userMapper.findUserByUserName(username);
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(User.USERNAME, username);
+        User user = this.getOne(queryWrapper);
         UserExceptionEnums.USER_NOT_EXISTS.isTrue(ObjectUtil.isNull(user));
         List<String> roles = roleService.getRolesByUserId(user.getId());
 
@@ -61,6 +65,8 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
         userOAuthVo.setUserId(user.getId());
         userOAuthVo.setUsername(user.getUsername());
         userOAuthVo.setPassword(user.getPassword());
+        userOAuthVo.setNickname(user.getNickname());
+        userOAuthVo.setAvatar(user.getAvatar());
         userOAuthVo.setRoles(roles);
 
         return userOAuthVo;
@@ -83,10 +89,17 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
         User user = this.getOne(userQueryWrapper);
         UserExceptionEnums.USERNAME_ALREADY_EXISTS.assertEmpty(user);
 
+        // create a user
         user = new User();
         user.setUsername(username);
         user.setPassword(password);
         user = this.saveId(user);
+
+        // assign default role to user
+        UserRole userRole = new UserRole();
+        userRole.setUserId(user.getId());
+        userRole.setRoleId(roleService.getRoleIdByRoleName("ROLE_USER"));
+        userRoleService.save(userRole);
 
         // save user to es
         UserDoc userDoc = new UserDoc();
@@ -108,11 +121,12 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(username);
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(password);
 
-        User user = userMapper.findUserByUserName(username);
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(User.USERNAME, username);
+        User user = this.getOne(queryWrapper);
         UserExceptionEnums.USER_NOT_EXISTS.assertNotEmpty(user);
 
         user.setPassword(password);
-
         this.updateById(user);
     }
 
@@ -124,19 +138,17 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateUser(RequestUserUpdateVo userUpdateVo) {
-        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(userUpdateVo.getUsername());
+        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(userUpdateVo.getUserId());
 
-        User user = userMapper.findUserByUserName(userUpdateVo.getUsername());
+        User user = this.getById(userUpdateVo.getUserId());
         UserExceptionEnums.USER_NOT_EXISTS.assertNotEmpty(user);
 
-        User updatedUser = Convert.convert(User.class, userUpdateVo);
-        updatedUser.setId(user.getId());
-
-        this.updateById(updatedUser);
+        BeanUtil.copyProperties(userUpdateVo, user);
+        this.updateById(user);
 
         // update user's information in es
-        UserDoc userDoc = esService.getById(String.valueOf(updatedUser.getId()), UserDoc.class);
-        BeanUtil.copyProperties(updatedUser, userDoc);
+        UserDoc userDoc = esService.getById(String.valueOf(user.getId()), UserDoc.class);
+        BeanUtil.copyProperties(user, userDoc);
         esService.index(userDoc);
     }
 
@@ -149,7 +161,9 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
     public ResponseUserDetailVo userDetail(String username) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(username);
 
-        User user = userMapper.findUserByUserName(username);
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(User.USERNAME, username);
+        User user = this.getOne(queryWrapper);
         UserExceptionEnums.USER_NOT_EXISTS.assertNotEmpty(user);
 
         return Convert.convert(ResponseUserDetailVo.class, user);

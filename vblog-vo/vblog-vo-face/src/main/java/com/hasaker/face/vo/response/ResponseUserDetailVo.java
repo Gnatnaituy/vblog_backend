@@ -1,23 +1,28 @@
-package com.hasaker.account.vo.request;
+package com.hasaker.face.vo.response;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
- * @package com.hasaker.vo.user.request
+ * @package com.hasaker.face.vo.response
  * @author 余天堂
- * @create 2020/3/2 08:50
- * @description RequestUserCreateVo
+ * @create 2020/3/26 16:16
+ * @description ResponseUserDetailVo
  */
 @Data
 @NoArgsConstructor
-@ApiModel(description = "Update user's information")
-public class RequestUserUpdateVo {
+@ApiModel(description = "用户详情")
+public class ResponseUserDetailVo {
 
-    @ApiModelProperty(value = "The user's ID", hidden = true)
-    private Long userId;
+    @ApiModelProperty(value = "用户ID")
+    private String id;
+
+    @ApiModelProperty(value = "用户名")
+    private String username;
 
     @ApiModelProperty(value = "邮箱")
     private String email;
@@ -27,9 +32,6 @@ public class RequestUserUpdateVo {
 
     @ApiModelProperty(value = "昵称")
     private String nickname;
-
-    @ApiModelProperty(value = "真实姓名")
-    private String realname;
 
     @ApiModelProperty(value = "头像")
     private String avatar;
@@ -51,4 +53,7 @@ public class RequestUserUpdateVo {
 
     @ApiModelProperty(value = "市")
     private String city;
+
+    @ApiModelProperty(value = "屏蔽用户")
+    private List<ResponseUserInfoVo> blocks;
 }

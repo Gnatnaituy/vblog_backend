@@ -1,15 +1,14 @@
-package com.hasaker.face.service.impl;
+package com.hasaker.face.service.user.impl;
 
-import cn.hutool.core.convert.Convert;
 import com.alibaba.fastjson.JSONObject;
 import com.hasaker.account.feign.AccountClient;
 import com.hasaker.account.vo.response.ResponseUserOAuthVo;
 import com.hasaker.common.consts.RequestConsts;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
-import com.hasaker.common.vo.JwtAccessToken;
 import com.hasaker.common.vo.RedisAccessToken;
 import com.hasaker.component.redis.service.RedisService;
-import com.hasaker.face.service.LoginService;
+import com.hasaker.face.exception.enums.UserExceptionEnums;
+import com.hasaker.face.service.user.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,13 +19,13 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestOperations;
 
 /**
- * @package com.hasaker.face.service.impl
+ * @package com.hasaker.face.service.post.impl
  * @author 余天堂
  * @create 2020/3/4 11:22
  * @description LoginServiceImpl
  */
 @Service
-public class LoginServiceImpl implements LoginService {
+public class AuthServiceImpl implements AuthService {
 
     @Autowired
     private AccountClient accountClient;
@@ -38,13 +37,13 @@ public class LoginServiceImpl implements LoginService {
     private RedisService redisService;
 
     /**
-     * 登录
+     * Login
      * @param username
      * @param password
      * @return
      */
     @Override
-    public JwtAccessToken login(String username, String password) {
+    public RedisAccessToken login(String username, String password) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(username);
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(password);
 
@@ -65,20 +64,20 @@ public class LoginServiceImpl implements LoginService {
         ResponseEntity<String> responseEntity = restOperations
                 .exchange(RequestConsts.URL_OAUTH_TOKEN, HttpMethod.POST, requestEntity, String.class);
 
-        JwtAccessToken jwtAccessToken = JSONObject.parseObject(responseEntity.getBody(), JwtAccessToken.class);
-        jwtAccessToken.setExpiresTime(System.currentTimeMillis() + jwtAccessToken.getExpiresIn());
-        jwtAccessToken.setNickname(userOAuthVo.getNickname());
-        jwtAccessToken.setAvatar(userOAuthVo.getAvatar());
+        RedisAccessToken redisAccessToken = JSONObject.parseObject(responseEntity.getBody(), RedisAccessToken.class);
+        redisAccessToken.setExpiresTime(System.currentTimeMillis() + redisAccessToken.getExpiresIn());
+        redisAccessToken.setNickname(userOAuthVo.getNickname());
+        redisAccessToken.setAvatar(userOAuthVo.getAvatar());
+        redisAccessToken.setRoles(userOAuthVo.getRoles());
 
-        // 将当期登录用户信息放入redis
-        RedisAccessToken redisAccessToken = Convert.convert(RedisAccessToken.class, jwtAccessToken);
-        redisService.save(username, redisAccessToken);
+        // Save the current user's information to redis
+        redisService.save(username, redisAccessToken, redisAccessToken.getExpiresIn());
 
-        return jwtAccessToken;
+        return redisAccessToken;
     }
 
     /**
-     * 注册
+     * Register
      * @param username
      * @param password
      */
@@ -90,5 +89,23 @@ public class LoginServiceImpl implements LoginService {
 
         password = passwordEncoder.encode(password);
         accountClient.register(username, password);
+    }
+
+    /**
+     * Change password
+     * @param username
+     * @param password
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void changePassword(String username, String oldPassword, String password) {
+        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(username);
+        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(oldPassword);
+        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(password);
+
+        ResponseUserOAuthVo userOAuthVo = accountClient.findUserByUsername(username).getData();
+        UserExceptionEnums.INCORRECT_OLD_PASSWORD.isFalse(passwordEncoder.matches(oldPassword, userOAuthVo.getPassword()));
+
+        accountClient.changePassword(username, passwordEncoder.encode(password));
     }
 }

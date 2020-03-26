@@ -1,5 +1,7 @@
 package com.hasaker.component.redis.service;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * @package com.hasaker.component.redis.service
  * @author 余天堂
@@ -8,9 +10,11 @@ package com.hasaker.component.redis.service;
  */
 public interface RedisService {
 
-    boolean hasKey(String key);
+    <T> void save(String key, T value, Long timeoutSecond);
 
-    <T> void save(String key, T value);
+    <T> void save(String key, T value, Long timeout, TimeUnit timeUnit);
+
+    boolean hasKey(String key);
 
     <T> T get(String key, Class<T> clazz);
 }

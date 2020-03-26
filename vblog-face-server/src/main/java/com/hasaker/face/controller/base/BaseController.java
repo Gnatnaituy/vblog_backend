@@ -28,7 +28,18 @@ public class BaseController {
      * 获取当前用户的ID
      * @return
      */
-    public Long getUserId() {
+    public String getUserIdString() {
+        String token = request.getHeader(RequestConsts.AUTHORIZATION).split(" ")[1];
+        OAuth2AccessToken accessToken = tokenStore.readAccessToken(token);
+
+        return accessToken.getAdditionalInformation().get("userId").toString();
+    }
+
+    /**
+     * 获取当前用户的ID
+     * @return
+     */
+    public Long getUserIdLong() {
         String token = request.getHeader(RequestConsts.AUTHORIZATION).split(" ")[1];
         OAuth2AccessToken accessToken = tokenStore.readAccessToken(token);
 

@@ -1,7 +1,6 @@
 package com.hasaker.account.feign;
 
 import com.hasaker.account.vo.request.RequestUserUpdateVo;
-import com.hasaker.account.vo.response.ResponseUserDetailVo;
 import com.hasaker.account.vo.response.ResponseUserOAuthVo;
 import com.hasaker.common.config.FeignExceptionConfig;
 import com.hasaker.common.vo.Ajax;
@@ -29,7 +28,4 @@ public interface AccountClient {
 
     @PostMapping("/account/update")
     Ajax update(RequestUserUpdateVo userUpdateVo);
-
-    @GetMapping("/account/detail/{username}")
-    Ajax<ResponseUserDetailVo> detail(@PathVariable("username") String username);
 }

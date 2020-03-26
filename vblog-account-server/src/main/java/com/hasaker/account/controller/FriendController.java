@@ -60,24 +60,24 @@ public class FriendController {
 
     @ApiOperation(value = "Delete a friend")
     @PostMapping(value = "/delete")
-    public Ajax deleteFriend(@RequestBody RequestFriendDeleteVo deleteFriendVo) {
-        friendService.delete(deleteFriendVo);
+    public Ajax deleteFriend(@RequestBody RequestFriendDeleteVo deleteVo) {
+        friendService.delete(deleteVo);
 
         return Ajax.success();
     }
 
     @ApiOperation(value = "Change friend's remark")
     @PostMapping(value = "/remark")
-    public Ajax changeRemark(@RequestBody RequestFriendRemarkVo changeRemarkVo) {
-        friendService.changeRemark(changeRemarkVo);
+    public Ajax changeRemark(@RequestBody RequestFriendRemarkVo remarkVo) {
+        friendService.changeRemark(remarkVo);
 
         return Ajax.success();
     }
 
     @ApiOperation(value = "Change friend's visibility")
     @PostMapping(value = "/visibility")
-    public Ajax changeVisibility(@RequestBody RequestFriendVisibilityVo changeVisibilityVo) {
-        friendService.changeVisibility(changeVisibilityVo);
+    public Ajax changeVisibility(@RequestBody RequestFriendVisibilityVo visibilityVo) {
+        friendService.changeVisibility(visibilityVo);
 
         return Ajax.success();
     }

@@ -57,6 +57,11 @@
             <artifactId>vblog-feign-account</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.hasaker</groupId>
+            <artifactId>vblog-feign-post</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <!-- document -->
         <dependency>
@@ -74,6 +79,16 @@
         <dependency>
             <groupId>com.hasaker</groupId>
             <artifactId>vblog-vo-account</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.hasaker</groupId>
+            <artifactId>vblog-vo-fost</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.hasaker</groupId>
+            <artifactId>vblog-vo-face</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

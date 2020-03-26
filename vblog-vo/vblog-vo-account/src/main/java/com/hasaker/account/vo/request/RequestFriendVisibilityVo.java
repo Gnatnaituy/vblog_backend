@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class RequestFriendVisibilityVo {
 
     @NonNull
-    @ApiModelProperty(value = "The user's ID")
+    @ApiModelProperty(value = "The user's ID", hidden = true)
     private Long userId;
 
     @NonNull

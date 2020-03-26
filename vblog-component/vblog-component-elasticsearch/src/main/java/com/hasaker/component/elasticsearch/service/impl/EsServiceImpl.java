@@ -13,6 +13,7 @@ import org.springframework.data.elasticsearch.core.query.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,7 +39,7 @@ public class EsServiceImpl implements EsService {
     }
 
     @Override
-    public <T> List<T> list(List<Pair<String, Object>> fieldValuePairs, Class<T> clazz) {
+    public <T> List<T> list(Collection<Pair<String, Object>> fieldValuePairs, Class<T> clazz) {
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
         fieldValuePairs.forEach(o -> boolQueryBuilder.must(QueryBuilders.termQuery(o.getKey(), o.getValue())));
         SearchQuery searchQuery = new NativeSearchQuery(boolQueryBuilder);
@@ -61,7 +62,7 @@ public class EsServiceImpl implements EsService {
     }
 
     @Override
-    public <T> Page<T> page(List<Pair<String, Object>> fieldValuePairs, Class<T> clazz) {
+    public <T> Page<T> page(Collection<Pair<String, Object>> fieldValuePairs, Class<T> clazz) {
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
         fieldValuePairs.forEach(o -> boolQueryBuilder.must(QueryBuilders.termQuery(o.getKey(), o.getValue())));
         SearchQuery searchQuery = new NativeSearchQuery(boolQueryBuilder);
@@ -78,7 +79,7 @@ public class EsServiceImpl implements EsService {
     }
 
     @Override
-    public <T> List<T> getByIds(List<String> ids, Class<T> clazz) {
+    public <T> List<T> getByIds(Collection<String> ids, Class<T> clazz) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(ids);
 
         SearchQuery searchQuery = new NativeSearchQueryBuilder()
@@ -98,7 +99,7 @@ public class EsServiceImpl implements EsService {
     }
 
     @Override
-    public <T> void index(List<T> documents) {
+    public <T> void index(Collection<T> documents) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(documents);
 
         List<IndexQuery> indexQueries = new ArrayList<>(documents.size());
@@ -126,7 +127,7 @@ public class EsServiceImpl implements EsService {
     }
 
     @Override
-    public <T> void update(String id, Class<T> clazz, List<Pair<String, Object>> fieldValuePairs) {
+    public <T> void update(String id, Class<T> clazz, Collection<Pair<String, Object>> fieldValuePairs) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(id);
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(fieldValuePairs);
 
@@ -142,7 +143,7 @@ public class EsServiceImpl implements EsService {
     }
 
     @Override
-    public <T> void update(List<String> ids, Class<T> clazz, Pair<String, Object> fieldValuePair) {
+    public <T> void update(Collection<String> ids, Class<T> clazz, Pair<String, Object> fieldValuePair) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(ids);
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(fieldValuePair);
 
@@ -161,7 +162,7 @@ public class EsServiceImpl implements EsService {
     }
 
     @Override
-    public <T> void update(List<String> ids, Class<T> clazz, List<Pair<String, Object>> fieldValuePairs) {
+    public <T> void update(Collection<String> ids, Class<T> clazz, Collection<Pair<String, Object>> fieldValuePairs) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(ids);
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(fieldValuePairs);
 
@@ -196,7 +197,7 @@ public class EsServiceImpl implements EsService {
     }
 
     @Override
-    public <T> void delete(List<String> ids, Class<T> clazz) {
+    public <T> void delete(Collection<String> ids, Class<T> clazz) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(clazz);
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(ids);
 

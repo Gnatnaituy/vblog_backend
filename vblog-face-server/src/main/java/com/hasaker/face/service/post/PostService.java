@@ -1,4 +1,4 @@
-package com.hasaker.face.service;
+package com.hasaker.face.service.post;
 
 /**
  * @package com.hasaker.face.service
