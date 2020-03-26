@@ -1,4 +1,4 @@
-package com.hasaker.post.document;
+package com.hasaker.account.document;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -11,21 +11,24 @@ import java.util.Date;
 /**
  * @package com.hasaker.post.document
  * @author 余天堂
- * @create 2020/3/24 18:18
- * @description TopicDoc
+ * @create 2020/3/23 20:51
+ * @description CommentDoc
  */
 @Data
-@Document(indexName = "vblog-post-topic")
-public class TopicDoc {
+@Document(indexName = "vblog-post-comment")
+public class CommentDoc {
 
     @Id
     private String id;
 
     @Field(type = FieldType.Keyword)
-    private String name;
+    private String postId;
+
+    @Field(type = FieldType.Keyword)
+    private String commentId;
 
     @Field(type = FieldType.Text)
-    private String description;
+    private String content;
 
     @Field(type = FieldType.Keyword)
     private String createUser;
@@ -33,6 +36,5 @@ public class TopicDoc {
     @Field(type = FieldType.Date)
     private Date createTime;
 
-    public static final String NAME = "name";
-    public static final String DESCRIPTION = "description";
+    public static final String CONTENT = "content";
 }

@@ -35,6 +35,7 @@
         <module>vblog-post-server</module>
         <module>vblog-feign</module>
         <module>vblog-vo</module>
+        <module>vblog-document</module>
     </modules>
 
     <dependencyManagement>

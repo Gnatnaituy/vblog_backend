@@ -1,10 +1,10 @@
 package com.hasaker.post.service.impl;
 
 import cn.hutool.core.convert.Convert;
+import com.hasaker.account.document.VoteDoc;
 import com.hasaker.common.base.impl.BaseServiceImpl;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
 import com.hasaker.component.elasticsearch.service.EsService;
-import com.hasaker.post.document.VoteDoc;
 import com.hasaker.post.entity.Vote;
 import com.hasaker.post.mapper.VoteMapper;
 import com.hasaker.post.service.VoteService;

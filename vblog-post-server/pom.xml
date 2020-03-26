@@ -42,6 +42,13 @@
 
         <!-- feign -->
 
+        <!-- document -->
+        <dependency>
+            <groupId>com.hasaker</groupId>
+            <artifactId>vblog-document-post</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- vo -->
         <dependency>
             <groupId>com.hasaker</groupId>

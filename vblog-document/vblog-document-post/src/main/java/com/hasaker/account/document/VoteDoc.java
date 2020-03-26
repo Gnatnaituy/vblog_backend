@@ -1,4 +1,4 @@
-package com.hasaker.post.document;
+package com.hasaker.account.document;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -11,12 +11,12 @@ import java.util.Date;
 /**
  * @package com.hasaker.post.document
  * @author 余天堂
- * @create 2020/3/23 20:48
- * @description ImageDoc
+ * @create 2020/3/24 18:21
+ * @description VoteDoc
  */
 @Data
-@Document(indexName = "vblog-post-image")
-public class ImageDoc {
+@Document(indexName = "vblog-post-vote")
+public class VoteDoc {
 
     @Id
     private String id;
@@ -25,10 +25,10 @@ public class ImageDoc {
     private String postId;
 
     @Field(type = FieldType.Keyword)
-    private String url;
+    private String commentId;
 
-    @Field(type = FieldType.Integer)
-    private Integer sort;
+    @Field(type = FieldType.Boolean)
+    private Boolean isDownvote;
 
     @Field(type = FieldType.Keyword)
     private String createUser;
@@ -36,6 +36,5 @@ public class ImageDoc {
     @Field(type = FieldType.Date)
     private Date createTime;
 
-    public static final String URL = "url";
-    public static final String SORT = "sort";
+    public static final String IS_DOWNVOTE = "isDownvote";
 }

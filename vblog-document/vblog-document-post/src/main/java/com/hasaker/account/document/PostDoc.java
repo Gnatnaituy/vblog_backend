@@ -1,4 +1,4 @@
-package com.hasaker.post.document;
+package com.hasaker.account.document;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
