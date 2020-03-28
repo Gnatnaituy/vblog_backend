@@ -27,14 +27,14 @@ public class BlockController extends BaseController {
     @ApiOperation(value = "Block a user")
     @PostMapping(value = "/block")
     public Ajax blockUser(@RequestBody RequestBlockVo blockVo) {
-        blockVo.setUserId(getUserIdLong());
+        blockVo.setUserId(getUserId());
         return blockClient.block(blockVo);
     }
 
     @ApiOperation(value = "Unblock a user")
     @PostMapping(value = "/unblock")
     public Ajax unblockUser(@RequestBody RequestBlockVo unblockVo) {
-        unblockVo.setUserId(getUserIdLong());
+        unblockVo.setUserId(getUserId());
         return blockClient.unblock(unblockVo);
     }
 }

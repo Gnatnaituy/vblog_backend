@@ -21,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+
 /**
  * @package com.hasaker.account.service.impl
  * @author 余天堂
@@ -49,28 +51,25 @@ public class FriendRequestServiceImpl extends BaseServiceImpl<FriendRequestMappe
     public void send(RequestFriendRequestVo requestVo) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(requestVo);
 
+        // Check if both sender and receiver exists
         User sender = userService.getById(requestVo.getSenderId());
         UserExceptionEnums.USER_NOT_EXISTS.assertNotEmpty(sender);
         User receiver = userService.getById(requestVo.getReceiverID());
         UserExceptionEnums.USER_NOT_EXISTS.assertNotEmpty(receiver);
 
         // Generate a receiver request history
-        FriendRequest friendRequest = new FriendRequest();
+        FriendRequest friendRequest = Convert.convert(FriendRequest.class, requestVo);
         friendRequest.setSenderId(sender.getId());
-        friendRequest.setSenderRemark(requestVo.getSenderRemark());
-        friendRequest.setSenderVisibility(requestVo.getSenderVisibility());
         friendRequest.setReceiverId(receiver.getId());
         friendRequest.setRequestStatus(FriendRequestStatusEnum.NOT_READ.getCode());
         friendRequest = this.saveId(friendRequest);
 
-        // save friend request to elasticsearch
+        // Save friend request to elasticsearch
         FriendRequestDoc friendRequestDoc = Convert.convert(FriendRequestDoc.class, friendRequest);
-        friendRequestDoc.setId(String.valueOf(friendRequest.getId()));
-        friendRequestDoc.setSenderId(String.valueOf(friendRequest.getSenderId()));
-        friendRequestDoc.setReceiverId(String.valueOf(friendRequest.getReceiverId()));
+        friendRequestDoc.setSenderId(friendRequest.getSenderId());
+        friendRequestDoc.setReceiverId(friendRequest.getReceiverId());
+        friendRequestDoc.setSendTime(friendRequest.getCreateTime());
         esService.index(friendRequestDoc);
-
-        // Save friend request to redis
     }
 
     /**
@@ -83,6 +82,7 @@ public class FriendRequestServiceImpl extends BaseServiceImpl<FriendRequestMappe
     public void accept(RequestFriendRequestAcceptVo acceptVo) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(acceptVo);
 
+        // Change friend request's status
         FriendRequest friendRequest = this.getById(acceptVo.getFriendRequestId());
         FriendExceptionEnums.FRIEND_REQUEST_NOT_EXISTS.assertNotEmpty(friendRequest);
         friendRequest.setRequestStatus(FriendRequestStatusEnum.ACCEPTED.getCode());
@@ -93,9 +93,10 @@ public class FriendRequestServiceImpl extends BaseServiceImpl<FriendRequestMappe
         User receiver = userService.getById(friendRequest.getReceiverId());
         UserExceptionEnums.USER_NOT_EXISTS.assertNotEmpty(receiver);
 
-        // update friend request status in elasticsearch
-        esService.update(String.valueOf(friendRequest.getId()), FriendRequestDoc.class,
-                new Pair<>(FriendRequestDoc.REQUEST_STATUS, FriendRequestStatusEnum.ACCEPTED.getCode()));
+        // Update friend request status in elasticsearch
+        esService.update(friendRequest.getId(), FriendRequestDoc.class, Arrays.asList(
+                        new Pair<>(FriendRequestDoc.REQUEST_STATUS, FriendRequestStatusEnum.ACCEPTED.getCode()),
+                        new Pair<>(FriendRequestDoc.ACCEPT_TIME, friendRequest.getUpdateTime())));
 
         // Add friend for receiver
         friendService.add(receiver.getId(), sender.getId(), acceptVo.getAccepterRemark(), acceptVo.getAccepterVisibility());
@@ -112,13 +113,15 @@ public class FriendRequestServiceImpl extends BaseServiceImpl<FriendRequestMappe
     public void deny(Long friendRequestId) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(friendRequestId);
 
+        // Change friend request's status
         FriendRequest friendRequest = this.getById(friendRequestId);
         friendRequest.setRequestStatus(FriendRequestStatusEnum.DENIED.getCode());
         this.updateById(friendRequest);
 
         // update friend request status in elasticsearch
-        esService.update(String.valueOf(friendRequest.getId()), FriendRequestDoc.class,
-                new Pair<>(FriendRequestDoc.REQUEST_STATUS, FriendRequestStatusEnum.DENIED.getCode()));
+        esService.update(friendRequest.getId(), FriendRequestDoc.class, Arrays.asList(
+                new Pair<>(FriendRequestDoc.REQUEST_STATUS, FriendRequestStatusEnum.DENIED.getCode()),
+                new Pair<>(FriendRequestDoc.DENY_TIME, friendRequest.getUpdateTime())));
     }
 
     /**
@@ -130,13 +133,14 @@ public class FriendRequestServiceImpl extends BaseServiceImpl<FriendRequestMappe
     public void ignore(Long friendRequestId) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(friendRequestId);
 
+        // Change friend request's status
         FriendRequest friendRequest = this.getById(friendRequestId);
         friendRequest.setRequestStatus(FriendRequestStatusEnum.IGNORED.getCode());
-
         this.updateById(friendRequest);
 
         // update friend request status in elasticsearch
-        esService.update(String.valueOf(friendRequest.getId()), FriendRequestDoc.class,
-                new Pair<>(FriendRequestDoc.REQUEST_STATUS, FriendRequestStatusEnum.IGNORED.getCode()));
+        esService.update(friendRequest.getId(), FriendRequestDoc.class, Arrays.asList(
+                new Pair<>(FriendRequestDoc.REQUEST_STATUS, FriendRequestStatusEnum.IGNORED.getCode()),
+                new Pair<>(FriendRequestDoc.IGNORE_TIME, friendRequest.getUpdateTime())));
     }
 }

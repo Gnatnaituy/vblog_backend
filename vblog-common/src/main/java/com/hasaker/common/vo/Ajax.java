@@ -17,7 +17,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel(value = "AjaxResult")
+@ApiModel(value = "Ajax")
 public class Ajax<T> implements Serializable {
 
     @ApiModelProperty(value = "code")

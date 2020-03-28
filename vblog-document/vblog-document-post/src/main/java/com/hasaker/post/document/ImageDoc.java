@@ -1,12 +1,10 @@
-package com.hasaker.account.document;
+package com.hasaker.post.document;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
-
-import java.util.Date;
 
 /**
  * @package com.hasaker.post.document
@@ -19,10 +17,11 @@ import java.util.Date;
 public class ImageDoc {
 
     @Id
-    private String id;
+    @Field(type = FieldType.Long)
+    private Long id;
 
-    @Field(type = FieldType.Keyword)
-    private String postId;
+    @Field(type = FieldType.Long)
+    private Long postId;
 
     @Field(type = FieldType.Keyword)
     private String url;
@@ -30,12 +29,14 @@ public class ImageDoc {
     @Field(type = FieldType.Integer)
     private Integer sort;
 
-    @Field(type = FieldType.Keyword)
-    private String createUser;
+    @Field(type = FieldType.Long)
+    private Long uploader;
 
     @Field(type = FieldType.Date)
-    private Date createTime;
+    private Long uploadTime;
 
     public static final String URL = "url";
     public static final String SORT = "sort";
+    public static final String UPLOADER = "uploader";
+    public static final String UPLOAD_TIME = "uploadTime";
 }

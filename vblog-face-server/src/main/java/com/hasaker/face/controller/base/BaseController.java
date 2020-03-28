@@ -28,22 +28,15 @@ public class BaseController {
      * 获取当前用户的ID
      * @return
      */
-    public String getUserIdString() {
-        String token = request.getHeader(RequestConsts.AUTHORIZATION).split(" ")[1];
-        OAuth2AccessToken accessToken = tokenStore.readAccessToken(token);
+    public Long getUserId() {
+        String token = getToken();
 
-        return accessToken.getAdditionalInformation().get("userId").toString();
-    }
+        if (token != null) {
+            OAuth2AccessToken accessToken = tokenStore.readAccessToken(token);
+            return Long.valueOf(accessToken.getAdditionalInformation().get("userId").toString());
+        }
 
-    /**
-     * 获取当前用户的ID
-     * @return
-     */
-    public Long getUserIdLong() {
-        String token = request.getHeader(RequestConsts.AUTHORIZATION).split(" ")[1];
-        OAuth2AccessToken accessToken = tokenStore.readAccessToken(token);
-
-        return Long.valueOf(accessToken.getAdditionalInformation().get("userId").toString());
+        return null;
     }
 
     /**
@@ -51,10 +44,14 @@ public class BaseController {
      * @return
      */
     public String getUsername() {
-        String token = request.getHeader(RequestConsts.AUTHORIZATION).split(" ")[1];
-        OAuth2AccessToken accessToken = tokenStore.readAccessToken(token);
+        String token = getToken();
 
-        return accessToken.getAdditionalInformation().get("user_name").toString();
+        if (token != null) {
+            OAuth2AccessToken accessToken = tokenStore.readAccessToken(token);
+            return accessToken.getAdditionalInformation().get("username").toString();
+        }
+
+        return null;
     }
 
     /**
@@ -65,5 +62,19 @@ public class BaseController {
         String username = getUsername();
 
         return redisService.get(username, RedisAccessToken.class);
+    }
+
+    /**
+     * Obtain token from header
+     * @return
+     */
+    private String getToken() {
+        String bearerToken = request.getHeader(RequestConsts.AUTHORIZATION);
+
+        if (bearerToken != null && !bearerToken.isEmpty()) {
+            return bearerToken.split(" ")[1];
+        }
+
+        return null;
     }
 }

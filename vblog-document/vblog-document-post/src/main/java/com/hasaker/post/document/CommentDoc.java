@@ -1,12 +1,10 @@
-package com.hasaker.account.document;
+package com.hasaker.post.document;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
-
-import java.util.Date;
 
 /**
  * @package com.hasaker.post.document
@@ -19,22 +17,25 @@ import java.util.Date;
 public class CommentDoc {
 
     @Id
-    private String id;
+    @Field(type = FieldType.Long)
+    private Long id;
 
-    @Field(type = FieldType.Keyword)
-    private String postId;
+    @Field(type = FieldType.Long)
+    private Long postId;
 
-    @Field(type = FieldType.Keyword)
-    private String commentId;
+    @Field(type = FieldType.Long)
+    private Long commentId;
 
     @Field(type = FieldType.Text)
     private String content;
 
-    @Field(type = FieldType.Keyword)
-    private String createUser;
+    @Field(type = FieldType.Long)
+    private Long commenter;
 
     @Field(type = FieldType.Date)
-    private Date createTime;
+    private Long commentTime;
 
     public static final String CONTENT = "content";
+    public static final String COMMENTER = "commenter";
+    public static final String COMMENT_TIME = "commentTime";
 }

@@ -27,7 +27,7 @@ public class AccountController extends BaseController {
     @ApiOperation(value = "Update user's detail information by username")
     @PostMapping(value = "/update")
     public Ajax update(@RequestBody RequestUserUpdateVo userUpdateVo) {
-        userUpdateVo.setUserId(getUserIdLong());
+        userUpdateVo.setUserId(getUserId());
         return accountClient.update(userUpdateVo);
     }
 }

@@ -1,4 +1,4 @@
-package com.hasaker.account.document;
+package com.hasaker.post.document;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -8,7 +8,6 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.data.elasticsearch.annotations.GeoPointField;
 import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 
-import java.util.Date;
 import java.util.Set;
 
 /**
@@ -21,7 +20,8 @@ import java.util.Set;
 public class PostDoc {
 
     @Id
-    private String id;
+    @Field(type = FieldType.Long)
+    private Long id;
 
     @Field(type = FieldType.Text)
     private String content;
@@ -32,17 +32,19 @@ public class PostDoc {
     @GeoPointField
     private GeoPoint location;
 
-    @Field(type = FieldType.Keyword)
-    private Set<String> topics;
+    @Field(type = FieldType.Long)
+    private Set<Long> topics;
 
-    @Field(type = FieldType.Keyword)
-    private String createUser;
+    @Field(type = FieldType.Long)
+    private Long poster;
 
     @Field(type = FieldType.Date)
-    private Date createTime;
+    private Long postTime;
 
     public static final String CONTENT = "content";
     public static final String VISIBILITY = "visibility";
     public static final String LOCATION = "location";
     public static final String TOPICS = "topics";
+    public static final String POSTER = "poster";
+    public static final String POST_TIME = "postTime";
 }

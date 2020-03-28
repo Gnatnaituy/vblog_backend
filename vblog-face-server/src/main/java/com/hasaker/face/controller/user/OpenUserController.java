@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping(value = "/open/user")
-public class OpenController {
+public class OpenUserController {
 
     @Autowired
     private UserService userService;
@@ -28,7 +28,7 @@ public class OpenController {
     }
 
     @GetMapping("/detail/{userId}")
-    public Ajax<ResponseUserDetailVo> detail(@PathVariable("userId") String userId) {
+    public Ajax<ResponseUserDetailVo> detail(@PathVariable("userId") Long userId) {
         return Ajax.getInstance().successT(userService.detail(userId));
     }
 }

@@ -19,7 +19,7 @@ import java.util.List;
 public class ResponseUserDetailVo {
 
     @ApiModelProperty(value = "用户ID")
-    private String id;
+    private Long id;
 
     @ApiModelProperty(value = "用户名")
     private String username;

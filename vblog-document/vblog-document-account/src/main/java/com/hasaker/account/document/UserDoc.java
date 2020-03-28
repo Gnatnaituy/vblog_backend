@@ -8,7 +8,6 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.data.elasticsearch.annotations.GeoPointField;
 import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 
-import java.util.Date;
 import java.util.Set;
 
 /**
@@ -21,7 +20,8 @@ import java.util.Set;
 public class UserDoc {
 
     @Id
-    private String id;
+    @Field(type = FieldType.Long)
+    private Long id;
 
     @Field(type = FieldType.Keyword)
     private String username;
@@ -34,9 +34,6 @@ public class UserDoc {
 
     @Field(type = FieldType.Keyword)
     private String nickname;
-
-    @Field(type = FieldType.Keyword)
-    private String realname;
 
     @Field(type = FieldType.Keyword)
     private String gender;
@@ -65,11 +62,11 @@ public class UserDoc {
     @GeoPointField
     private GeoPoint location;
 
-    @Field(type = FieldType.Keyword)
-    private Set<String> blocks;
+    @Field(type = FieldType.Long)
+    private Set<Long> blocks;
 
     @Field(type = FieldType.Date)
-    private Date createTime;
+    private Long registerTime;
 
     public static final String USERNAME = "username";
     public static final String EMAIL = "email";
@@ -84,4 +81,5 @@ public class UserDoc {
     public static final String CITY = "city";
     public static final String LOCATION = "location";
     public static final String BLOCKS = "blocks";
+    public static final String REGISTER_TIME = "registerTime";
 }

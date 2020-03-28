@@ -1,12 +1,10 @@
-package com.hasaker.account.document;
+package com.hasaker.post.document;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
-
-import java.util.Date;
 
 /**
  * @package com.hasaker.post.document
@@ -19,7 +17,8 @@ import java.util.Date;
 public class TopicDoc {
 
     @Id
-    private String id;
+    @Field(type = FieldType.Long)
+    private Long id;
 
     @Field(type = FieldType.Keyword)
     private String name;
@@ -27,11 +26,11 @@ public class TopicDoc {
     @Field(type = FieldType.Text)
     private String description;
 
-    @Field(type = FieldType.Keyword)
-    private String createUser;
+    @Field(type = FieldType.Long)
+    private Long createUser;
 
     @Field(type = FieldType.Date)
-    private Date createTime;
+    private Long createTime;
 
     public static final String NAME = "name";
     public static final String DESCRIPTION = "description";

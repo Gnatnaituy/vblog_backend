@@ -1,10 +1,7 @@
 package com.hasaker.account.entity;
 
 import com.hasaker.common.base.BaseEntity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * @package com.hasaker.user.entity
@@ -18,7 +15,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserRole extends BaseEntity {
 
+    @NonNull
     private Long userId;
 
+    @NonNull
     private Long roleId;
 }

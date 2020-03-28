@@ -1,10 +1,7 @@
 package com.hasaker.account.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.hasaker.account.service.UserService;
-import com.hasaker.account.vo.request.RequestUserSearchVo;
 import com.hasaker.account.vo.request.RequestUserUpdateVo;
-import com.hasaker.account.vo.response.ResponseUserDetailVo;
 import com.hasaker.account.vo.response.ResponseUserOAuthVo;
 import com.hasaker.common.vo.Ajax;
 import io.swagger.annotations.ApiOperation;
@@ -53,18 +50,5 @@ public class AccountController {
         userService.updateUser(userUpdateVo);
 
         return Ajax.success();
-    }
-
-    @ApiOperation(value = "Obtain user's detail information by username")
-    @GetMapping(value = "/detail/{username}")
-    public Ajax<ResponseUserDetailVo> detail(@PathVariable("username") String username) {
-
-        return Ajax.getInstance().successT(userService.userDetail(username));
-    }
-
-    @ApiOperation(value = "Search users")
-    @PostMapping(value = "/list")
-    public Ajax<IPage<ResponseUserDetailVo>> list(@RequestBody RequestUserSearchVo searchVo) {
-        return Ajax.getInstance().successT(userService.list(searchVo));
     }
 }

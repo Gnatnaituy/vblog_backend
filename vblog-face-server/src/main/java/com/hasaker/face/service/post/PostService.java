@@ -1,5 +1,9 @@
 package com.hasaker.face.service.post;
 
+import com.hasaker.common.vo.PageInfo;
+import com.hasaker.face.vo.request.RequestPostSearchVo;
+import com.hasaker.face.vo.response.ResponsePostVo;
+
 /**
  * @package com.hasaker.face.service
  * @author 余天堂
@@ -7,4 +11,6 @@ package com.hasaker.face.service.post;
  * @description PostService
  */
 public interface PostService {
+
+    PageInfo<ResponsePostVo> page(RequestPostSearchVo pageVo);
 }

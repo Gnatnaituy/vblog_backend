@@ -5,6 +5,10 @@ import com.hasaker.face.vo.request.RequestUserSearchVo;
 import com.hasaker.face.vo.response.ResponseUserDetailVo;
 import com.hasaker.face.vo.response.ResponseUserInfoVo;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
 /**
  * @package com.hasaker.face.service
  * @author 余天堂
@@ -15,5 +19,9 @@ public interface UserService {
 
     PageInfo<ResponseUserInfoVo> search(RequestUserSearchVo searchVo);
 
-    ResponseUserDetailVo detail(String userId);
+    ResponseUserDetailVo detail(Long userId);
+
+    Map<Long, ResponseUserInfoVo> mapUserInfo(Collection<Long> userIds);
+
+    List<ResponseUserInfoVo> listUserInfo(Collection<Long> userIds);
 }

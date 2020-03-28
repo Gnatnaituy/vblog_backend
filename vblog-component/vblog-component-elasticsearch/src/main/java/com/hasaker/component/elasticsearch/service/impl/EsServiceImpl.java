@@ -5,6 +5,7 @@ import com.hasaker.common.exception.enums.CommonExceptionEnums;
 import com.hasaker.component.elasticsearch.service.EsService;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,8 +33,16 @@ public class EsServiceImpl implements EsService {
     }
 
     @Override
-    public <T> List<T> list(String field, Object value, Class<T> clazz) {
-        SearchQuery searchQuery = new NativeSearchQuery(QueryBuilders.termQuery(field, value));
+    public <T> List<T> list(QueryBuilder queryBuilder, Class<T> clazz) {
+        SearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(queryBuilder).build();
+
+        return elasticsearchOperations.queryForList(searchQuery, clazz);
+    }
+
+    @Override
+    public <T> List<T> list(Pair<String, Object> fieldValuePair, Class<T> clazz) {
+        SearchQuery searchQuery = new NativeSearchQuery(
+                QueryBuilders.termQuery(fieldValuePair.getKey(), fieldValuePair.getValue()));
 
         return elasticsearchOperations.queryForList(searchQuery, clazz);
     }
@@ -55,8 +64,9 @@ public class EsServiceImpl implements EsService {
     }
 
     @Override
-    public <T> Page<T> page(String field, Object value, Class<T> clazz) {
-        SearchQuery searchQuery = new NativeSearchQuery(QueryBuilders.termQuery(field, value));
+    public <T> Page<T> page(Pair<String, Object> fieldValuePair, Class<T> clazz) {
+        SearchQuery searchQuery = new NativeSearchQuery(
+                QueryBuilders.termQuery(fieldValuePair.getKey(), fieldValuePair.getValue()));
 
         return elasticsearchOperations.queryForPage(searchQuery, clazz);
     }
@@ -71,19 +81,19 @@ public class EsServiceImpl implements EsService {
     }
 
     @Override
-    public <T> T getById(String id, Class<T> clazz) {
+    public <T> T getById(Long id, Class<T> clazz) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(id);
 
-        GetQuery getQuery = GetQuery.getById(id);
+        GetQuery getQuery = GetQuery.getById(String.valueOf(id));
         return elasticsearchOperations.queryForObject(getQuery, clazz);
     }
 
     @Override
-    public <T> List<T> getByIds(Collection<String> ids, Class<T> clazz) {
+    public <T> List<T> getByIds(Collection<Long> ids, Class<T> clazz) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(ids);
 
         SearchQuery searchQuery = new NativeSearchQueryBuilder()
-                .withQuery(QueryBuilders.termQuery("id", ids))
+                .withQuery(QueryBuilders.termsQuery("id", ids))
                 .build();
 
         return elasticsearchOperations.queryForList(searchQuery, clazz);
@@ -111,7 +121,7 @@ public class EsServiceImpl implements EsService {
     }
 
     @Override
-    public <T> void update(String id, Class<T> clazz, Pair<String, Object> fieldValuePair) {
+    public <T> void update(Long id, Class<T> clazz, Pair<String, Object> fieldValuePair) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(id);
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(fieldValuePair);
 
@@ -119,7 +129,7 @@ public class EsServiceImpl implements EsService {
         updateRequest.doc(fieldValuePair.getKey(), fieldValuePair.getValue());
 
         UpdateQuery updateQuery = new UpdateQuery();
-        updateQuery.setId(id);
+        updateQuery.setId(String.valueOf(id));
         updateQuery.setClazz(clazz);
         updateQuery.setUpdateRequest(updateRequest);
 
@@ -127,7 +137,7 @@ public class EsServiceImpl implements EsService {
     }
 
     @Override
-    public <T> void update(String id, Class<T> clazz, Collection<Pair<String, Object>> fieldValuePairs) {
+    public <T> void update(Long id, Class<T> clazz, Collection<Pair<String, Object>> fieldValuePairs) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(id);
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(fieldValuePairs);
 
@@ -135,7 +145,7 @@ public class EsServiceImpl implements EsService {
         fieldValuePairs.forEach(o -> updateRequest.doc(o.getKey(), o.getValue()));
 
         UpdateQuery updateQuery = new UpdateQuery();
-        updateQuery.setId(id);
+        updateQuery.setId(String.valueOf(id));
         updateQuery.setClazz(clazz);
         updateQuery.setUpdateRequest(updateRequest);
 
@@ -143,14 +153,14 @@ public class EsServiceImpl implements EsService {
     }
 
     @Override
-    public <T> void update(Collection<String> ids, Class<T> clazz, Pair<String, Object> fieldValuePair) {
+    public <T> void update(Collection<Long> ids, Class<T> clazz, Pair<String, Object> fieldValuePair) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(ids);
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(fieldValuePair);
 
         UpdateRequest updateRequest = new UpdateRequest();
         updateRequest.doc(fieldValuePair.getKey(), fieldValuePair.getValue());
 
-        List<UpdateQuery> updateQueries = ids.stream().map(o -> {
+        List<UpdateQuery> updateQueries = ids.stream().map(String::valueOf).map(o -> {
             UpdateQuery updateQuery = new UpdateQuery();
             updateQuery.setId(o);
             updateQuery.setClazz(clazz);
@@ -162,14 +172,14 @@ public class EsServiceImpl implements EsService {
     }
 
     @Override
-    public <T> void update(Collection<String> ids, Class<T> clazz, Collection<Pair<String, Object>> fieldValuePairs) {
+    public <T> void update(Collection<Long> ids, Class<T> clazz, Collection<Pair<String, Object>> fieldValuePairs) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(ids);
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(fieldValuePairs);
 
         UpdateRequest updateRequest = new UpdateRequest();
         fieldValuePairs.forEach(o -> updateRequest.doc(o.getKey(), o.getValue()));
 
-        List<UpdateQuery> updateQueries = ids.stream().map(o -> {
+        List<UpdateQuery> updateQueries = ids.stream().map(String::valueOf).map(o -> {
             UpdateQuery updateQuery = new UpdateQuery();
             updateQuery.setId(o);
             updateQuery.setClazz(clazz);
@@ -189,15 +199,15 @@ public class EsServiceImpl implements EsService {
     }
 
     @Override
-    public <T> void delete(String documentId, Class<T> clazz) {
+    public <T> void delete(Long id, Class<T> clazz) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(clazz);
-        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(documentId);
+        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(id);
 
-        elasticsearchOperations.delete(clazz, documentId);
+        elasticsearchOperations.delete(clazz, String.valueOf(id));
     }
 
     @Override
-    public <T> void delete(Collection<String> ids, Class<T> clazz) {
+    public <T> void delete(Collection<Long> ids, Class<T> clazz) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(clazz);
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(ids);
 

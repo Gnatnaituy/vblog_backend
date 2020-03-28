@@ -1,10 +1,10 @@
 package com.hasaker.post.service.impl;
 
 import cn.hutool.core.convert.Convert;
-import com.hasaker.account.document.VoteDoc;
 import com.hasaker.common.base.impl.BaseServiceImpl;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
 import com.hasaker.component.elasticsearch.service.EsService;
+import com.hasaker.post.document.VoteDoc;
 import com.hasaker.post.entity.Vote;
 import com.hasaker.post.mapper.VoteMapper;
 import com.hasaker.post.service.VoteService;
@@ -35,14 +35,12 @@ public class VoteServiceImpl extends BaseServiceImpl<VoteMapper, Vote> implement
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(voteVo);
 
         Vote vote = Convert.convert(Vote.class, voteVo);
-        vote.setIsDownvote(false);
         vote = this.saveId(vote);
 
-        VoteDoc voteDoc = new VoteDoc();
-        voteDoc.setId(String.valueOf(vote.getId()));
-        voteDoc.setPostId(String.valueOf(vote.getPostId()));
-        voteDoc.setCommentId(String.valueOf(vote.getCommentId()));
-        voteDoc.setIsDownvote(vote.getIsDownvote());
+        // Save vote to es
+        VoteDoc voteDoc = Convert.convert(VoteDoc.class, vote);
+        voteDoc.setVoter(vote.getCreateUser());
+        voteDoc.setVoteTime(vote.getCreateTime());
         esService.index(voteDoc);
     }
 }

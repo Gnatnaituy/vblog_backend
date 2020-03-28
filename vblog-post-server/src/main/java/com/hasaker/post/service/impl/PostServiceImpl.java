@@ -3,11 +3,12 @@ package com.hasaker.post.service.impl;
 import cn.hutool.core.convert.Convert;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
-import com.hasaker.account.document.ImageDoc;
-import com.hasaker.account.document.PostDoc;
 import com.hasaker.common.base.impl.BaseServiceImpl;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
 import com.hasaker.component.elasticsearch.service.EsService;
+import com.hasaker.post.document.ImageDoc;
+import com.hasaker.post.document.PostDoc;
+import com.hasaker.post.document.TopicDoc;
 import com.hasaker.post.entity.*;
 import com.hasaker.post.exception.enums.PostExceptionEnum;
 import com.hasaker.post.mapper.PostMapper;
@@ -56,45 +57,47 @@ public class PostServiceImpl extends BaseServiceImpl<PostMapper, Post> implement
         post = this.saveId(post);
         final Long postId = post.getId();
         PostDoc postDoc = Convert.convert(PostDoc.class, post);
+        postDoc.setPoster(post.getCreateUser());
+        postDoc.setPostTime(post.getCreateTime());
         postDoc.setTopics(new HashSet<>());
 
         // Save images of this post
         if (ObjectUtils.isNotNull(postVo.getImages())) {
             List<PostImage> images = postVo.getImages().stream()
-                    .map(o -> Convert.convert(PostImage.class, o))
-                    .collect(Collectors.toList());
+                    .map(o -> Convert.convert(PostImage.class, o)).collect(Collectors.toList());
             images.forEach(o -> o.setPostId(postId));
 
-            List<ImageDoc> imageDocs = images.stream()
-                    .map(o -> postImageService.saveId(o))
-                    .map(o -> {
-                        ImageDoc imageDoc = new ImageDoc();
-                        imageDoc.setId(String.valueOf(o.getId()));
-                        imageDoc.setPostId(String.valueOf(postId));
-                        imageDoc.setUrl(o.getUrl());
-                        imageDoc.setSort(o.getSort());
-                        return imageDoc;
-                    }).collect(Collectors.toList());
+            List<ImageDoc> imageDocs = images.stream().map(o -> postImageService.saveId(o)).map(o -> {
+                ImageDoc imageDoc = Convert.convert(ImageDoc.class, o);
+                imageDoc.setUploader(o.getCreateUser());
+                imageDoc.setUploadTime(o.getCreateTime());
+                return imageDoc;
+            }).collect(Collectors.toList());
             esService.index(imageDocs);
         }
 
         // Save topics of this post
         if (ObjectUtils.isNotNull(postVo.getTopics())) {
-            postVo.getTopics().stream().filter(o -> ObjectUtils.isNull(o.getTopicId()))
-                    .forEach(o -> {
+            // Save new topic to es
+            List<TopicDoc> topicDocs = postVo.getTopics().stream()
+                    .filter(o -> ObjectUtils.isNull(o.getTopicId()))
+                    .map(o -> {
                         Topic topic = Convert.convert(Topic.class, o);
-                        o.setTopicId(topicService.saveId(topic).getId());
-                    });
+                        topic = topicService.saveId(topic);
+                        o.setTopicId(topic.getId());
+                        return Convert.convert(TopicDoc.class, topic);
+                    }).collect(Collectors.toList());
+            esService.index(topicDocs);
 
+            // Save post topic relationship to database
             List<PostTopic> topics = postVo.getTopics().stream()
                     .map(o -> Convert.convert(PostTopic.class, o))
                     .collect(Collectors.toList());
             topics.forEach(o -> o.setPostId(postId));
-            topics.forEach(o -> postTopicService.save(o));
-            postDoc.setTopics(topics.stream()
-                    .map(PostTopic::getTopicId)
-                    .map(String::valueOf)
-                    .collect(Collectors.toSet()));
+            postTopicService.save(topics);
+
+            // Fill topic ID to post's topics
+            postDoc.setTopics(topics.stream().map(PostTopic::getTopicId).collect(Collectors.toSet()));
         }
 
         // Save post document to es
@@ -136,6 +139,6 @@ public class PostServiceImpl extends BaseServiceImpl<PostMapper, Post> implement
         voteService.remove(voteQueryWrapper);
 
         // Delete from es
-        esService.delete(String.valueOf(postId), PostDoc.class);
+        esService.delete(postId, PostDoc.class);
     }
 }

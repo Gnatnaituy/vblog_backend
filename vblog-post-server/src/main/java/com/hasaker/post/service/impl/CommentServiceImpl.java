@@ -4,11 +4,11 @@ import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.Pair;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
-import com.hasaker.account.document.CommentDoc;
 import com.hasaker.common.base.impl.BaseServiceImpl;
 import com.hasaker.common.consts.Consts;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
 import com.hasaker.component.elasticsearch.service.EsService;
+import com.hasaker.post.document.CommentDoc;
 import com.hasaker.post.entity.Comment;
 import com.hasaker.post.exception.enums.PostExceptionEnum;
 import com.hasaker.post.mapper.CommentMapper;
@@ -44,14 +44,18 @@ public class CommentServiceImpl extends BaseServiceImpl<CommentMapper, Comment> 
     public void comment(RequestCommentVo commentVo) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(commentVo);
 
+        if (ObjectUtils.isNotNull(commentVo.getCommentId())) {
+            commentVo.setPostId(null);
+        } else {
+            commentVo.setCommentId(null);
+        }
+
         Comment comment = Convert.convert(Comment.class, commentVo);
         comment = this.saveId(comment);
 
         CommentDoc commentDoc = Convert.convert(CommentDoc.class, comment);
-        commentDoc.setPostId(String.valueOf(comment.getPostId()));
-        if (ObjectUtils.isNotNull(comment.getPostId())) {
-            commentDoc.setCommentId(String.valueOf(comment.getCommentId()));
-        }
+        commentDoc.setCommenter(comment.getCreateUser());
+        commentDoc.setCommentTime(comment.getCreateTime());
         esService.index(commentDoc);
     }
 
@@ -85,15 +89,14 @@ public class CommentServiceImpl extends BaseServiceImpl<CommentMapper, Comment> 
             this.update(updateComment, commentQueryWrapper);
 
             // update comments in es
-            CommentDoc commentDoc = esService.getById(String.valueOf(comment.getId()), CommentDoc.class);
-            CommentDoc replaceCommentDoc = new CommentDoc();
-            replaceCommentDoc.setId(String.valueOf(replaceComment.getId()));
-            replaceCommentDoc.setPostId(String.valueOf(replaceComment.getPostId()));
-            replaceCommentDoc.setCommentId(ObjectUtils.isNotNull(commentDoc.getCommentId()) ? commentDoc.getCommentId() : null);
+            CommentDoc commentDoc = esService.getById(comment.getId(), CommentDoc.class);
+            CommentDoc replaceCommentDoc = Convert.convert(CommentDoc.class, replaceComment);
             replaceCommentDoc.setContent(COMMENT_DELETED);
+            replaceCommentDoc.setCommenter(commentDoc.getCommenter());
+            replaceCommentDoc.setCommentTime(commentDoc.getCommentTime());
             esService.index(replaceCommentDoc);
             // update parent comment's commentId that reply to this comment
-            List<CommentDoc> commentDocs = esService.list(Consts.COMMENT_ID, commentDoc.getId(), CommentDoc.class);
+            List<CommentDoc> commentDocs = esService.list(new Pair<>(Consts.COMMENT_ID, commentDoc.getId()), CommentDoc.class);
             if (ObjectUtils.isNotNull(commentDoc)) {
                 esService.update(commentDocs.stream().map(CommentDoc::getId).collect(Collectors.toList()),
                         CommentDoc.class, new Pair<>(Consts.COMMENT_ID, replaceCommentDoc.getId()));

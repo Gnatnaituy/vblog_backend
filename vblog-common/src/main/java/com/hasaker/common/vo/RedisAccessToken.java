@@ -17,7 +17,6 @@ public class RedisAccessToken {
     private String username;
     private String nickname;
     private String avatar;
-
     private List<String> roles;
 
     private String jti;

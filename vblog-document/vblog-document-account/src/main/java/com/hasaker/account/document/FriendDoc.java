@@ -6,8 +6,6 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-import java.util.Date;
-
 /**
  * @package com.hasaker.account.document
  * @author 余天堂
@@ -19,13 +17,14 @@ import java.util.Date;
 public class FriendDoc {
 
     @Id
-    private String id;
+    @Field(type = FieldType.Long)
+    private Long id;
 
-    @Field(type = FieldType.Keyword)
-    private String userId;
+    @Field(type = FieldType.Long)
+    private Long userId;
 
-    @Field(type = FieldType.Keyword)
-    private String friendId;
+    @Field(type = FieldType.Long)
+    private Long friendId;
 
     @Field(type = FieldType.Keyword)
     private String remark;
@@ -34,8 +33,9 @@ public class FriendDoc {
     private String visibility;
 
     @Field(type = FieldType.Date)
-    private Date createTime;
+    private Long addTime;
 
     public static final String REMARK = "remark";
     public static final String VISIBILITY = "visibility";
+    public static final String ADD_TIME = "addTime";
 }

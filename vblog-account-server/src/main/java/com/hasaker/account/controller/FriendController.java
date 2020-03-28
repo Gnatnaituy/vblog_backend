@@ -3,13 +3,10 @@ package com.hasaker.account.controller;
 import com.hasaker.account.service.FriendRequestService;
 import com.hasaker.account.service.FriendService;
 import com.hasaker.account.vo.request.*;
-import com.hasaker.account.vo.response.ResponseFriendVo;
 import com.hasaker.common.vo.Ajax;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * @package com.hasaker.account.controller
@@ -80,11 +77,5 @@ public class FriendController {
         friendService.changeVisibility(visibilityVo);
 
         return Ajax.success();
-    }
-
-    @ApiOperation(value = "List friends")
-    @GetMapping(value = "/{userId}")
-    public Ajax<List<ResponseFriendVo>> listFriend(@PathVariable("userId") Long userId) {
-        return Ajax.getInstance().successT(friendService.listFriends(userId));
     }
 }

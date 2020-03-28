@@ -1,12 +1,10 @@
-package com.hasaker.account.document;
+package com.hasaker.post.document;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
-
-import java.util.Date;
 
 /**
  * @package com.hasaker.post.document
@@ -19,22 +17,21 @@ import java.util.Date;
 public class VoteDoc {
 
     @Id
-    private String id;
+    @Field(type = FieldType.Long)
+    private Long id;
 
-    @Field(type = FieldType.Keyword)
-    private String postId;
+    @Field(type = FieldType.Long)
+    private Long postId;
 
-    @Field(type = FieldType.Keyword)
-    private String commentId;
+    @Field(type = FieldType.Long)
+    private Long commentId;
 
-    @Field(type = FieldType.Boolean)
-    private Boolean isDownvote;
-
-    @Field(type = FieldType.Keyword)
-    private String createUser;
+    @Field(type = FieldType.Long)
+    private Long voter;
 
     @Field(type = FieldType.Date)
-    private Date createTime;
+    private Long voteTime;
 
-    public static final String IS_DOWNVOTE = "isDownvote";
+    public static final String VOTER = "voter";
+    public static final String VOTE_TIME = "voteTime";
 }

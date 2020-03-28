@@ -7,19 +7,18 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 /**
- * @package com.hasaker.face.vo.request
+ * @package com.hasaker.common.vo
  * @author 余天堂
- * @create 2020/3/26 16:29
- * @description RequestFriendListVo
+ * @create 2020/3/28 01:52
+ * @description PageVo
  */
 @Data
 @NoArgsConstructor
-@ApiModel(description = "List friends")
-public class RequestFriendPageVo {
+@ApiModel(description = "Base search vo")
+public class SearchVo {
 
-    @NonNull
-    @ApiModelProperty(value = "userId", hidden = true)
-    private String userId;
+    @ApiModelProperty(value = "Current user ID", hidden = true)
+    private Long userId;
 
     @NonNull
     @ApiModelProperty(value = "page start")

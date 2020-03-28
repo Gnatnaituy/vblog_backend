@@ -2,7 +2,6 @@ package com.hasaker.account.service.impl;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.Pair;
-import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hasaker.account.document.FriendDoc;
 import com.hasaker.account.entity.Friend;
@@ -15,7 +14,6 @@ import com.hasaker.account.service.UserService;
 import com.hasaker.account.vo.request.RequestFriendDeleteVo;
 import com.hasaker.account.vo.request.RequestFriendRemarkVo;
 import com.hasaker.account.vo.request.RequestFriendVisibilityVo;
-import com.hasaker.account.vo.response.ResponseFriendVo;
 import com.hasaker.common.base.impl.BaseServiceImpl;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
 import com.hasaker.component.elasticsearch.service.EsService;
@@ -23,9 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @package com.hasaker.account.service.impl
@@ -54,6 +51,7 @@ public class FriendServiceImpl extends BaseServiceImpl<FriendMapper, Friend> imp
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(userId);
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(friendId);
 
+        // Check if both user and friend exists
         UserExceptionEnums.USER_NOT_EXISTS.assertNotEmpty(userService.getById(userId));
         UserExceptionEnums.USER_NOT_EXISTS.assertNotEmpty(userService.getById(friendId));
 
@@ -64,11 +62,9 @@ public class FriendServiceImpl extends BaseServiceImpl<FriendMapper, Friend> imp
         friend.setVisibility(visibility != null ? visibility : VisibilityEnums.VISIBLE_FOR_BOTH.getCode());
         friend = this.saveId(friend);
 
-        // index friendDoc
+        // index FriendDoc to es
         FriendDoc friendDoc = Convert.convert(FriendDoc.class, friend);
-        friendDoc.setId(String.valueOf(friend.getId()));
-        friendDoc.setUserId(String.valueOf(userId));
-        friendDoc.setFriendId(String.valueOf(friendId));
+        friendDoc.setAddTime(friend.getCreateTime());
         esService.index(friendDoc);
     }
 
@@ -89,9 +85,8 @@ public class FriendServiceImpl extends BaseServiceImpl<FriendMapper, Friend> imp
         FriendExceptionEnums.FRIEND_NOT_EXISTS.assertNotEmpty(friends.size() != 2);
         this.remove(queryWrapper);
 
-        // delete es friendDoc
-        esService.delete(friends.stream().map(Friend::getId).map(String::valueOf)
-                .collect(Collectors.toList()), FriendDoc.class);
+        // Delete FriendDoc fro es
+        esService.delete(Arrays.asList(deleteVo.getUserId(), deleteVo.getFriendId()), FriendDoc.class);
     }
 
     /**
@@ -113,9 +108,8 @@ public class FriendServiceImpl extends BaseServiceImpl<FriendMapper, Friend> imp
         friend.setVisibility(visibilityVo.getVisibility());
         this.updateById(friend);
 
-        // update visibility in es
-        esService.update(String.valueOf(friend.getId()), FriendDoc.class,
-                new Pair<>(FriendDoc.VISIBILITY, friend.getVisibility()));
+        // Update visibility in es
+        esService.update(friend.getId(), FriendDoc.class, new Pair<>(FriendDoc.VISIBILITY, friend.getVisibility()));
     }
 
     /**
@@ -138,29 +132,6 @@ public class FriendServiceImpl extends BaseServiceImpl<FriendMapper, Friend> imp
         this.updateById(friend);
 
         // update remark in es
-        esService.update(String.valueOf(friend.getId()), FriendDoc.class,
-                new Pair<>(FriendDoc.REMARK, friend.getRemark()));
-    }
-
-    /**
-     * 获取好友列表
-     * @param userId
-     * @return
-     */
-    @Override
-    public List<ResponseFriendVo> listFriends(Long userId) {
-        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(userId);
-
-        QueryWrapper<Friend> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(Friend.USER_ID, userId);
-        List<Friend> friends = this.list(queryWrapper);
-
-        if (ObjectUtil.isNotEmpty(friends)) {
-            return friends.stream()
-                    .map(o -> Convert.convert(ResponseFriendVo.class, o))
-                    .collect(Collectors.toList());
-        }
-
-        return new ArrayList<>();
+        esService.update(friend.getId(), FriendDoc.class, new Pair<>(FriendDoc.REMARK, friend.getRemark()));
     }
 }
