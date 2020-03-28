@@ -4,10 +4,7 @@ import com.hasaker.account.entity.Friend;
 import com.hasaker.account.vo.request.RequestFriendDeleteVo;
 import com.hasaker.account.vo.request.RequestFriendRemarkVo;
 import com.hasaker.account.vo.request.RequestFriendVisibilityVo;
-import com.hasaker.account.vo.response.ResponseFriendVo;
 import com.hasaker.common.base.BaseService;
-
-import java.util.List;
 
 /**
  * @package com.hasaker.account.service
@@ -24,6 +21,4 @@ public interface FriendService extends BaseService<Friend> {
     void changeRemark(RequestFriendRemarkVo remarkVo);
 
     void changeVisibility(RequestFriendVisibilityVo visibilityVo);
-
-    List<ResponseFriendVo> listFriends(Long userId);
 }

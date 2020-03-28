@@ -1,8 +1,7 @@
 package com.hasaker.common.handler;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
-import com.hasaker.common.consts.Consts;
+import com.hasaker.common.consts.RequestConsts;
 import com.hasaker.common.vo.RedisAccessToken;
 import com.hasaker.component.redis.service.RedisService;
 import org.apache.ibatis.reflection.MetaObject;
@@ -25,45 +24,47 @@ public class AutoMetaObjectHandler implements MetaObjectHandler {
     @Autowired
     private RedisService redisService;
 
+    private static final String CREATE_USER = "createUser";
+    private static final String CREATE_TIME = "createTime";
+    private static final String UPDATE_USER = "updateUser";
+    private static final String UPDATE_TIME = "updateTime";
+
     /**
-     * 插入记录自动填充字段
+     * Auto fill fields when insert record
      * @param metaObject
      */
     @Override
     public void insertFill(MetaObject metaObject) {
-        RedisAccessToken redisAccessToken = this.getRedisAccessToken(request);
+        RedisAccessToken redisAccessToken = this.getRedisAccessToken();
         if (redisAccessToken != null) {
-            this.setFieldValByName(Consts.CREATE_USER, redisAccessToken.getUserId(), metaObject);
-            this.setFieldValByName(Consts.UPDATE_USER, redisAccessToken.getUserId(), metaObject);
+            this.setFieldValByName(CREATE_USER, redisAccessToken.getUserId(), metaObject);
+            this.setFieldValByName(UPDATE_USER, redisAccessToken.getUserId(), metaObject);
         }
-        this.setFieldValByName(Consts.CREATE_TIME, System.currentTimeMillis(), metaObject);
-        this.setFieldValByName(Consts.UPDATE_TIME, System.currentTimeMillis(), metaObject);
+        this.setFieldValByName(CREATE_TIME, System.currentTimeMillis(), metaObject);
+        this.setFieldValByName(UPDATE_TIME, System.currentTimeMillis(), metaObject);
     }
 
     /**
-     * 更新记录自动填充字段
+     * Auto fill fields when update record
      * @param metaObject
      */
     @Override
     public void updateFill(MetaObject metaObject) {
-        RedisAccessToken redisAccessToken = this.getRedisAccessToken(request);
+        RedisAccessToken redisAccessToken = this.getRedisAccessToken();
         if (redisAccessToken != null) {
-            this.setFieldValByName(Consts.UPDATE_USER, redisAccessToken.getUserId(), metaObject);
+            this.setFieldValByName(UPDATE_USER, redisAccessToken.getUserId(), metaObject);
         }
-        this.setFieldValByName(Consts.UPDATE_TIME, System.currentTimeMillis(), metaObject);
+        this.setFieldValByName(UPDATE_TIME, System.currentTimeMillis(), metaObject);
     }
 
     /**
-     * 根据request中用户名获取RedisAccessToken
-     * @param request
+     * Obtain RedisAccessToken by username in request's JWT Token
      * @return
      */
-    private RedisAccessToken getRedisAccessToken(HttpServletRequest request) {
-        if (ObjectUtils.isNotNull(request.getUserPrincipal())) {
-            String username = request.getUserPrincipal().getName();
-            if (ObjectUtils.isNotNull(username)) {
-                return redisService.get(username, RedisAccessToken.class);
-            }
+    private RedisAccessToken getRedisAccessToken() {
+        String userAccount = request.getHeader(RequestConsts.USER_ACCOUNT);
+        if (userAccount != null) {
+            return redisService.get(userAccount, RedisAccessToken.class);
         }
 
         return null;

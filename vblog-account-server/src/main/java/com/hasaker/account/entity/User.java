@@ -1,10 +1,7 @@
 package com.hasaker.account.entity;
 
 import com.hasaker.common.base.BaseEntity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * @author 余天堂
@@ -15,9 +12,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@RequiredArgsConstructor
 public class User extends BaseEntity {
 
     // 用户账号/用户名
+    @NonNull
     private String username;
 
     // 邮箱
@@ -27,6 +26,7 @@ public class User extends BaseEntity {
     private String phone;
 
     // 密码
+    @NonNull
     private String password;
 
     // 昵称

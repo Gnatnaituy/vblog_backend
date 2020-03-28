@@ -1,12 +1,16 @@
 package com.hasaker.post.service.impl;
 
+import cn.hutool.core.lang.Pair;
 import com.hasaker.common.base.impl.BaseServiceImpl;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
+import com.hasaker.component.elasticsearch.service.EsService;
+import com.hasaker.post.document.TopicDoc;
 import com.hasaker.post.entity.Topic;
 import com.hasaker.post.exception.enums.PostExceptionEnum;
 import com.hasaker.post.mapper.TopicMapper;
 import com.hasaker.post.service.TopicService;
 import com.hasaker.post.vo.request.RequestTopicVo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 public class TopicServiceImpl extends BaseServiceImpl<TopicMapper, Topic> implements TopicService {
+
+    @Autowired
+    private EsService esService;
 
     /**
      * Update topic's description
@@ -32,7 +39,8 @@ public class TopicServiceImpl extends BaseServiceImpl<TopicMapper, Topic> implem
         PostExceptionEnum.TOPIC_NOT_EXISTS.assertNotEmpty(topic);
 
         topic.setDescription(topicVo.getDescription());
-
         this.updateById(topic);
+
+        esService.update(topic.getId(), TopicDoc.class, new Pair<>(TopicDoc.DESCRIPTION, topic.getDescription()));
     }
 }

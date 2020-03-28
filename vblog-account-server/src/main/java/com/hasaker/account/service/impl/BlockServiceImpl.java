@@ -53,8 +53,8 @@ public class BlockServiceImpl extends BaseServiceImpl<BlockMapper, Block> implem
         this.save(block);
 
         // update user's blocks in es
-        UserDoc userDoc = esService.getById(String.valueOf(block.getUserId()), UserDoc.class);
-        userDoc.getBlocks().add(String.valueOf(block.getBlockUserId()));
+        UserDoc userDoc = esService.getById(block.getUserId(), UserDoc.class);
+        userDoc.getBlocks().add(block.getBlockUserId());
         esService.update(userDoc.getId(), UserDoc.class, new Pair<>(UserDoc.BLOCKS, userDoc.getBlocks()));
     }
 
@@ -77,8 +77,8 @@ public class BlockServiceImpl extends BaseServiceImpl<BlockMapper, Block> implem
         this.removeById(block.getId());
 
         // update user's blocks in es
-        UserDoc userDoc = esService.getById(String.valueOf(block.getUserId()), UserDoc.class);
-        userDoc.getBlocks().remove(String.valueOf(block.getBlockUserId()));
+        UserDoc userDoc = esService.getById(block.getUserId(), UserDoc.class);
+        userDoc.getBlocks().remove(block.getBlockUserId());
         esService.update(userDoc.getId(), UserDoc.class, new Pair<>(UserDoc.BLOCKS, userDoc.getBlocks()));
     }
 }

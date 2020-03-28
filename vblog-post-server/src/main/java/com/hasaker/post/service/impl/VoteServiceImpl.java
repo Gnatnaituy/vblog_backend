@@ -35,14 +35,12 @@ public class VoteServiceImpl extends BaseServiceImpl<VoteMapper, Vote> implement
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(voteVo);
 
         Vote vote = Convert.convert(Vote.class, voteVo);
-        vote.setIsDownvote(false);
         vote = this.saveId(vote);
 
-        VoteDoc voteDoc = new VoteDoc();
-        voteDoc.setId(String.valueOf(vote.getId()));
-        voteDoc.setPostId(String.valueOf(vote.getPostId()));
-        voteDoc.setCommentId(String.valueOf(vote.getCommentId()));
-        voteDoc.setIsDownvote(vote.getIsDownvote());
+        // Save vote to es
+        VoteDoc voteDoc = Convert.convert(VoteDoc.class, vote);
+        voteDoc.setVoter(vote.getCreateUser());
+        voteDoc.setVoteTime(vote.getCreateTime());
         esService.index(voteDoc);
     }
 }

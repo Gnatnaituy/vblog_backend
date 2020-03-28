@@ -32,6 +32,7 @@
     <modules>
         <module>vblog-vo-account</module>
         <module>vblog-vo-post</module>
+        <module>vblog-vo-face</module>
     </modules>
 
 </project>

@@ -3,6 +3,7 @@ package com.hasaker.account.vo.request;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @package com.hasaker.vo.user.request
@@ -11,14 +12,12 @@ import lombok.Data;
  * @description RequestUserCreateVo
  */
 @Data
+@NoArgsConstructor
 @ApiModel(description = "Update user's information")
 public class RequestUserUpdateVo {
 
-    @ApiModelProperty(value = "The user's ID")
+    @ApiModelProperty(value = "The user's ID", hidden = true)
     private Long userId;
-
-    @ApiModelProperty(value = "用户名")
-    private String username;
 
     @ApiModelProperty(value = "邮箱")
     private String email;
@@ -28,6 +27,9 @@ public class RequestUserUpdateVo {
 
     @ApiModelProperty(value = "昵称")
     private String nickname;
+
+    @ApiModelProperty(value = "真实姓名")
+    private String realname;
 
     @ApiModelProperty(value = "头像")
     private String avatar;

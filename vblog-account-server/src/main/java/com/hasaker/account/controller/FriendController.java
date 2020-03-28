@@ -3,13 +3,10 @@ package com.hasaker.account.controller;
 import com.hasaker.account.service.FriendRequestService;
 import com.hasaker.account.service.FriendService;
 import com.hasaker.account.vo.request.*;
-import com.hasaker.account.vo.response.ResponseFriendVo;
 import com.hasaker.common.vo.Ajax;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * @package com.hasaker.account.controller
@@ -60,31 +57,25 @@ public class FriendController {
 
     @ApiOperation(value = "Delete a friend")
     @PostMapping(value = "/delete")
-    public Ajax deleteFriend(@RequestBody RequestFriendDeleteVo deleteFriendVo) {
-        friendService.delete(deleteFriendVo);
+    public Ajax deleteFriend(@RequestBody RequestFriendDeleteVo deleteVo) {
+        friendService.delete(deleteVo);
 
         return Ajax.success();
     }
 
     @ApiOperation(value = "Change friend's remark")
     @PostMapping(value = "/remark")
-    public Ajax changeRemark(@RequestBody RequestFriendRemarkVo changeRemarkVo) {
-        friendService.changeRemark(changeRemarkVo);
+    public Ajax changeRemark(@RequestBody RequestFriendRemarkVo remarkVo) {
+        friendService.changeRemark(remarkVo);
 
         return Ajax.success();
     }
 
     @ApiOperation(value = "Change friend's visibility")
     @PostMapping(value = "/visibility")
-    public Ajax changeVisibility(@RequestBody RequestFriendVisibilityVo changeVisibilityVo) {
-        friendService.changeVisibility(changeVisibilityVo);
+    public Ajax changeVisibility(@RequestBody RequestFriendVisibilityVo visibilityVo) {
+        friendService.changeVisibility(visibilityVo);
 
         return Ajax.success();
-    }
-
-    @ApiOperation(value = "List friends")
-    @GetMapping(value = "/{userId}")
-    public Ajax<List<ResponseFriendVo>> listFriend(@PathVariable("userId") Long userId) {
-        return Ajax.getInstance().successT(friendService.listFriends(userId));
     }
 }

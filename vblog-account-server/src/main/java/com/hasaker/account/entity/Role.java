@@ -19,4 +19,6 @@ import lombok.NoArgsConstructor;
 public class Role extends BaseEntity {
 
     private String name;
+
+    public static final String NAME = "name";
 }

@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * @package com.hasaker.component.redis.service.impl
  * @author 余天堂
@@ -18,13 +20,18 @@ public class RedisServiceImpl implements RedisService {
     private RedisOperations<String, Object> redisOperations;
 
     @Override
-    public boolean hasKey(String key) {
-        return redisOperations.hasKey(key);
+    public <T> void save(String key, T value, Long timeoutSecond) {
+        redisOperations.opsForValue().set(key, value, timeoutSecond, TimeUnit.SECONDS);
     }
 
     @Override
-    public <T> void save(String key, T value) {
-        redisOperations.opsForValue().set(key, value);
+    public <T> void save(String key, T value, Long timeout, TimeUnit timeUnit) {
+        redisOperations.opsForValue().set(key, value, timeout, TimeUnit.SECONDS);
+    }
+
+    @Override
+    public boolean hasKey(String key) {
+        return redisOperations.hasKey(key);
     }
 
     @Override

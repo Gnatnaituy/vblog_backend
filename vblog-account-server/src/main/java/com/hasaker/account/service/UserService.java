@@ -1,10 +1,7 @@
 package com.hasaker.account.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.hasaker.account.entity.User;
-import com.hasaker.account.vo.request.RequestUserSearchVo;
 import com.hasaker.account.vo.request.RequestUserUpdateVo;
-import com.hasaker.account.vo.response.ResponseUserDetailVo;
 import com.hasaker.account.vo.response.ResponseUserOAuthVo;
 import com.hasaker.common.base.BaseService;
 
@@ -23,8 +20,4 @@ public interface UserService extends BaseService<User> {
     void changePassword(String username, String password);
 
     void updateUser(RequestUserUpdateVo userUpdateVo);
-
-    ResponseUserDetailVo userDetail(String username);
-
-    IPage<ResponseUserDetailVo> list(RequestUserSearchVo searchVo);
 }

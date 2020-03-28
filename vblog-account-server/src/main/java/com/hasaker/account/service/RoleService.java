@@ -14,4 +14,10 @@ import java.util.List;
 public interface RoleService extends BaseService<Role> {
 
     List<String> getRolesByUserId(Long userId);
+
+    void create(String roleName);
+
+    void delete(String roleName);
+
+    Long getRoleIdByRoleName(String roleName);
 }
