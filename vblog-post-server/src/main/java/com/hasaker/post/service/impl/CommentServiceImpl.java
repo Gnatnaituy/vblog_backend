@@ -101,8 +101,9 @@ public class CommentServiceImpl extends BaseServiceImpl<CommentMapper, Comment> 
     }
 
     /**
-     * Index all comments to es for test use
+     * Index all comments to es for dev use
      */
+    @Override
     public void indexAllComments() {
         QueryWrapper<Comment> commentQueryWrapper = new QueryWrapper<>();
         List<Comment> comments = this.list(commentQueryWrapper);

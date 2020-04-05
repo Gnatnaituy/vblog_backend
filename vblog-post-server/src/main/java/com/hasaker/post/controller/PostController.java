@@ -33,4 +33,11 @@ public class PostController {
         postService.delete(postId);
         return Ajax.success();
     }
+
+    @ApiOperation(value = "Index all posts to es")
+    @GetMapping(value = "/index-all")
+    Ajax indexAllPosts() {
+        postService.indexAllPosts();
+        return Ajax.success();
+    }
 }

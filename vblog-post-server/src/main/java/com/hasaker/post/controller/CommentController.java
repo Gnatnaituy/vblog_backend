@@ -33,4 +33,11 @@ public class CommentController {
         commentService.delete(commentId);
         return Ajax.success();
     }
+
+    @ApiOperation(value = "Index all comments to es")
+    @GetMapping(value = "/index-all")
+    Ajax indexAllComments() {
+        commentService.indexAllComments();
+        return Ajax.success();
+    }
 }

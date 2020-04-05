@@ -7,7 +7,6 @@ import com.hasaker.common.consts.RequestConsts;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
 import com.hasaker.common.vo.PageInfo;
 import com.hasaker.component.elasticsearch.service.EsService;
-import com.hasaker.component.redis.service.RedisService;
 import com.hasaker.face.service.post.CommentService;
 import com.hasaker.face.service.post.PostService;
 import com.hasaker.face.service.user.UserService;
@@ -20,6 +19,7 @@ import com.hasaker.post.document.ImageDoc;
 import com.hasaker.post.document.PostDoc;
 import com.hasaker.post.document.TopicDoc;
 import com.hasaker.post.document.VoteDoc;
+import com.hasaker.post.feign.PostClient;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -51,9 +51,9 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private CommentService commentService;
     @Autowired
-    private EsService esService;
+    private PostClient postClient;
     @Autowired
-    private RedisService redisService;
+    private EsService esService;
     @Autowired
     private TokenStore tokenStore;
     @Autowired
@@ -102,7 +102,9 @@ public class PostServiceImpl implements PostService {
             List<ResponsePostVo> postVos = postDocPage.getContent().stream().map(o -> {
                 ResponsePostVo postVo = Convert.convert(ResponsePostVo.class, o);
                 postVo.setPoster(posterMap.get(o.getPoster()));
-                postVo.setTopics(o.getTopics().stream().map(topicMap::get).collect(Collectors.toList()));
+                postVo.setTopics(topicMap.containsKey(o.getId())
+                        ? o.getTopics().stream().map(topicMap::get).collect(Collectors.toList())
+                        : Collections.emptyList());
                 return postVo;
             }).collect(Collectors.toList());
 
@@ -116,6 +118,17 @@ public class PostServiceImpl implements PostService {
         }
 
         return pageInfo;
+    }
+
+    /**
+     * Index all posts, comments, votes, topics to ES
+     */
+    @Override
+    public void indexAll() {
+        postClient.indexAllPosts();
+        postClient.indexAllComments();
+        postClient.indexAllVotes();
+        postClient.indexAllTopics();
     }
 
 
@@ -132,8 +145,14 @@ public class PostServiceImpl implements PostService {
             Map<Long, List<ResponsePostImageVo>> imageMap = imageDocs.stream()
                     .collect(Collectors.groupingBy(ImageDoc::getPostId, Collectors.mapping(
                             o -> Convert.convert(ResponsePostImageVo.class, o), Collectors.toList())));
-            postVos.forEach(o -> o.setImages(imageMap.get(o.getId())));
-            postVos.forEach(o -> o.getImages().sort((o1, o2) -> o1.getSort() - o2.getSort()));
+            postVos.forEach(o -> {
+                if (ObjectUtils.isNotNull(imageMap.get(o.getId()))) {
+                    o.setImages(imageMap.get(o.getId()));
+                    o.getImages().sort(Comparator.comparingInt(ResponsePostImageVo::getSort));
+                } else {
+                    o.setImages(Collections.emptyList());
+                }
+            });
         } else {
             postVos.forEach(o -> o.setImages(Collections.emptyList()));
         }
@@ -163,6 +182,7 @@ public class PostServiceImpl implements PostService {
                     o.setVoters(voteMap.get(o.getId()).stream().map(x -> userMap.get(x.getVoter())).collect(Collectors.toList()));
                     o.setVoteByMe(votedPostIds.contains(o.getId()));
                 } else {
+                    o.setVoteByMe(false);
                     o.setVoters(Collections.emptyList());
                 }
             });

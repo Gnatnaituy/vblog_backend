@@ -3,6 +3,7 @@ package com.hasaker.post.service.impl;
 import cn.hutool.core.convert.Convert;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
+import com.hasaker.common.base.BaseEntity;
 import com.hasaker.common.base.impl.BaseServiceImpl;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
 import com.hasaker.component.elasticsearch.service.EsService;
@@ -18,8 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -59,7 +61,7 @@ public class PostServiceImpl extends BaseServiceImpl<PostMapper, Post> implement
         PostDoc postDoc = Convert.convert(PostDoc.class, post);
         postDoc.setPoster(post.getCreateUser());
         postDoc.setPostTime(post.getCreateTime());
-        postDoc.setTopics(new HashSet<>());
+        postDoc.setTopics(Collections.emptyList());
 
         // Save images of this post
         if (ObjectUtils.isNotNull(postVo.getImages())) {
@@ -97,7 +99,7 @@ public class PostServiceImpl extends BaseServiceImpl<PostMapper, Post> implement
             postTopicService.save(topics);
 
             // Fill topic ID to post's topics
-            postDoc.setTopics(topics.stream().map(PostTopic::getTopicId).collect(Collectors.toSet()));
+            postDoc.setTopics(topics.stream().map(PostTopic::getTopicId).distinct().collect(Collectors.toList()));
         }
 
         // Save post document to es
@@ -140,5 +142,30 @@ public class PostServiceImpl extends BaseServiceImpl<PostMapper, Post> implement
 
         // Delete from es
         esService.delete(postId, PostDoc.class);
+    }
+
+    /**
+     * Index all posts to es for dev use
+     */
+    @Override
+    public void indexAllPosts() {
+        QueryWrapper<Post> queryWrapper = new QueryWrapper<>();
+        List<Post> posts = this.list(queryWrapper);
+
+        QueryWrapper<PostTopic> postTopicQueryWrapper = new QueryWrapper<>();
+        List<PostTopic> topics = postTopicService.list(postTopicQueryWrapper);
+        Map<Long, List<Long>> topicMap = topics.stream().collect(Collectors.groupingBy(PostTopic::getPostId,
+                Collectors.mapping(BaseEntity::getId, Collectors.toList())));
+
+        List<PostDoc> postDocs = posts.stream().map(o -> {
+            PostDoc postDoc = Convert.convert(PostDoc.class, o);
+            postDoc.setPoster(o.getCreateUser());
+            postDoc.setPostTime(o.getCreateTime());
+            postDoc.setTopics(ObjectUtils.isNotNull(topicMap.get(o.getId())) ? topicMap.get(o.getId()) : Collections.emptyList());
+            return postDoc;
+        }).collect(Collectors.toList());
+
+        esService.deleteIndex(PostDoc.class);
+        esService.index(postDocs);
     }
 }

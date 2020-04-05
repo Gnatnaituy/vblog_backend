@@ -8,7 +8,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.data.elasticsearch.annotations.GeoPointField;
 import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * @author 余天堂
@@ -33,7 +33,7 @@ public class PostDoc {
     private GeoPoint location;
 
     @Field(type = FieldType.Long)
-    private Set<Long> topics;
+    private List<Long> topics;
 
     @Field(type = FieldType.Long)
     private Long poster;

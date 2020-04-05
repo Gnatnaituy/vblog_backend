@@ -13,4 +13,6 @@ import com.hasaker.post.vo.request.RequestTopicVo;
 public interface TopicService extends BaseService<Topic> {
 
     void update(RequestTopicVo topicVo);
+
+    void indexAllTopic();
 }

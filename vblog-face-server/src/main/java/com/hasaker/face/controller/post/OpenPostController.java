@@ -48,4 +48,10 @@ public class OpenPostController extends BaseController {
     Ajax<List<ResponsePostCommentVo>> listComments(@PathVariable("postId") Long postId) {
         return Ajax.getInstance().successT(commentService.listByPostId(postId));
     }
+
+    @GetMapping("/index-all")
+    Ajax indexAll() {
+        postService.indexAll();
+        return Ajax.success();
+    }
 }

@@ -15,4 +15,6 @@ public interface PostService extends BaseService<Post> {
     void post(RequestPostVo postVo);
 
     void delete(Long postId);
+
+    void indexAllPosts();
 }

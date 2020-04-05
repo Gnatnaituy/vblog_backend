@@ -15,4 +15,6 @@ public interface CommentService extends BaseService<Comment> {
     void comment(RequestCommentVo commentVo);
 
     void delete(Long commentId);
+
+    void indexAllComments();
 }

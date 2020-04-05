@@ -13,4 +13,6 @@ import com.hasaker.face.vo.response.ResponsePostVo;
 public interface PostService {
 
     PageInfo<ResponsePostVo> page(RequestPostSearchVo pageVo);
+
+    void indexAll();
 }

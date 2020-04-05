@@ -36,4 +36,16 @@ public interface PostClient {
 
     @PostMapping(value = "/topic/update")
     Ajax saveTopic(@RequestBody RequestTopicVo topicVo);
+
+    @GetMapping(value = "/post/index-all")
+    Ajax indexAllPosts();
+
+    @GetMapping(value = "/comment/index-all")
+    Ajax indexAllComments();
+
+    @GetMapping(value = "/vote/index-all")
+    Ajax indexAllVotes();
+
+    @GetMapping(value = "/topic/index-all")
+    Ajax indexAllTopics();
 }
