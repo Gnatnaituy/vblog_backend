@@ -32,5 +32,5 @@ public class RequestFriendRequestVo {
 
     @NonNull
     @ApiModelProperty(value = "The friend's userId")
-    private Long receiverID;
+    private Long receiverId;
 }

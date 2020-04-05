@@ -39,7 +39,7 @@ public class OpenPostController extends BaseController {
         return Ajax.getInstance().successT(postService.page(searchVo));
     }
 
-    @GetMapping(value = "/votes/{postId}")
+    @GetMapping("/voters/{postId}")
     Ajax<List<ResponseUserInfoVo>> listVoters(@PathVariable("postId") Long postId) {
         return Ajax.getInstance().successT(voteService.list(postId));
     }
@@ -47,10 +47,5 @@ public class OpenPostController extends BaseController {
     @GetMapping("/comments/{postId}")
     Ajax<List<ResponsePostCommentVo>> listComments(@PathVariable("postId") Long postId) {
         return Ajax.getInstance().successT(commentService.listByPostId(postId));
-    }
-
-    @GetMapping("/comments/replies/{commentId}")
-    Ajax<List<ResponsePostCommentVo>> listReplies(@PathVariable("commentId") Long commentId) {
-        return Ajax.getInstance().successT(commentService.listByCommentId(commentId));
     }
 }

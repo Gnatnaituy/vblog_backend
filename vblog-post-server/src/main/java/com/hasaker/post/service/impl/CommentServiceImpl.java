@@ -44,12 +44,6 @@ public class CommentServiceImpl extends BaseServiceImpl<CommentMapper, Comment> 
     public void comment(RequestCommentVo commentVo) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(commentVo);
 
-        if (ObjectUtils.isNotNull(commentVo.getCommentId())) {
-            commentVo.setPostId(null);
-        } else {
-            commentVo.setCommentId(null);
-        }
-
         Comment comment = Convert.convert(Comment.class, commentVo);
         comment = this.saveId(comment);
 
@@ -104,5 +98,23 @@ public class CommentServiceImpl extends BaseServiceImpl<CommentMapper, Comment> 
         }
 
         this.removeById(commentId);
+    }
+
+    /**
+     * Index all comments to es for test use
+     */
+    public void indexAllComments() {
+        QueryWrapper<Comment> commentQueryWrapper = new QueryWrapper<>();
+        List<Comment> comments = this.list(commentQueryWrapper);
+
+        List<CommentDoc> commentDocs = comments.stream().map(o -> {
+            CommentDoc commentDoc = Convert.convert(CommentDoc.class, o);
+            commentDoc.setCommenter(o.getCreateUser());
+            commentDoc.setCommentTime(o.getCreateTime());
+            return commentDoc;
+        }).collect(Collectors.toList());
+
+        esService.deleteIndex(CommentDoc.class);
+        esService.index(commentDocs);
     }
 }

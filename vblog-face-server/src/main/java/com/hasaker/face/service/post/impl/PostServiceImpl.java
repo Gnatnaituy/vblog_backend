@@ -3,9 +3,11 @@ package com.hasaker.face.service.post.impl;
 import cn.hutool.core.convert.Convert;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.hasaker.common.consts.Consts;
+import com.hasaker.common.consts.RequestConsts;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
 import com.hasaker.common.vo.PageInfo;
 import com.hasaker.component.elasticsearch.service.EsService;
+import com.hasaker.component.redis.service.RedisService;
 import com.hasaker.face.service.post.CommentService;
 import com.hasaker.face.service.post.PostService;
 import com.hasaker.face.service.user.UserService;
@@ -27,8 +29,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -47,6 +52,12 @@ public class PostServiceImpl implements PostService {
     private CommentService commentService;
     @Autowired
     private EsService esService;
+    @Autowired
+    private RedisService redisService;
+    @Autowired
+    private TokenStore tokenStore;
+    @Autowired
+    private HttpServletRequest request;
 
     /**
      * Search or list posts
@@ -135,8 +146,14 @@ public class PostServiceImpl implements PostService {
     private void fillVotes(List<ResponsePostVo> postVos) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(postVos);
 
+        Long currentUserId = getUserId();
+
         List<Long> postIds = postVos.stream().map(ResponsePostVo::getId).collect(Collectors.toList());
         List<VoteDoc> voteDocs = esService.list(QueryBuilders.termsQuery(Consts.POST_ID, postIds), VoteDoc.class);
+        // Posts voted by current user in search result
+        List<Long> votedPostIds = voteDocs.stream().filter(o -> o.getVoter().equals(currentUserId))
+                .filter(o -> ObjectUtils.isNotNull(o.getPostId()) && ObjectUtils.isNull(o.getCommentId()))
+                .distinct().map(VoteDoc::getPostId).collect(Collectors.toList());
         if (ObjectUtils.isNotNull(voteDocs)) {
             Set<Long> voters = voteDocs.stream().map(VoteDoc::getVoter).collect(Collectors.toSet());
             Map<Long, ResponseUserInfoVo> userMap = userService.mapUserInfo(voters);
@@ -144,6 +161,7 @@ public class PostServiceImpl implements PostService {
             postVos.forEach(o -> {
                 if (ObjectUtils.isNotNull(voteMap.get(o.getId()))) {
                     o.setVoters(voteMap.get(o.getId()).stream().map(x -> userMap.get(x.getVoter())).collect(Collectors.toList()));
+                    o.setVoteByMe(votedPostIds.contains(o.getId()));
                 } else {
                     o.setVoters(Collections.emptyList());
                 }
@@ -151,5 +169,23 @@ public class PostServiceImpl implements PostService {
         } else {
             postVos.forEach(o -> o.setVoters(Collections.emptyList()));
         }
+    }
+
+    /**
+     * Get current user's ID from tokenStore by JWT Token
+     * @return
+     */
+    private Long getUserId() {
+        String bearerToken = request.getHeader(RequestConsts.AUTHORIZATION);
+        if (ObjectUtils.isNotNull(bearerToken)) {
+            bearerToken = bearerToken.split(" ")[1];
+            OAuth2AccessToken accessToken = tokenStore.readAccessToken(bearerToken);
+            if (ObjectUtils.isNotNull(accessToken)) {
+                return Long.valueOf(accessToken.getAdditionalInformation().get(Consts.USER_ID).toString());
+            }
+        }
+
+        // There will not be a user with id -1
+        return -1L;
     }
 }

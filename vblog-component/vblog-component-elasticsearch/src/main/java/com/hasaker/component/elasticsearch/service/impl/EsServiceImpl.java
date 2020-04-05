@@ -216,4 +216,11 @@ public class EsServiceImpl implements EsService {
 
         elasticsearchOperations.delete(deleteQuery, clazz);
     }
+
+    @Override
+    public <T> void deleteIndex(Class<T> clazz) {
+        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(clazz);
+
+        elasticsearchOperations.deleteIndex(clazz);
+    }
 }
