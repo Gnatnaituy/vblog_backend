@@ -34,6 +34,9 @@ public class RequestUserUpdateVo {
     @ApiModelProperty(value = "头像")
     private String avatar;
 
+    @ApiModelProperty(value = "背景图")
+    private String background;
+
     @ApiModelProperty(value = "性别")
     private String gender;
 

@@ -23,5 +23,9 @@ public class ResponseUserOAuthVo {
 
     private String avatar;
 
+    private String background;
+
+    private String bio;
+
     private List<String> roles;
 }

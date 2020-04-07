@@ -36,6 +36,9 @@ public class ResponseUserDetailVo {
     @ApiModelProperty(value = "头像")
     private String avatar;
 
+    @ApiModelProperty(value = "背景图")
+    private String background;
+
     @ApiModelProperty(value = "性别")
     private String gender;
 
@@ -53,6 +56,9 @@ public class ResponseUserDetailVo {
 
     @ApiModelProperty(value = "市")
     private String city;
+
+    @ApiModelProperty(value = "创建时间")
+    private Long registerTime;
 
     @ApiModelProperty(value = "屏蔽用户")
     private List<ResponseUserInfoVo> blocks;

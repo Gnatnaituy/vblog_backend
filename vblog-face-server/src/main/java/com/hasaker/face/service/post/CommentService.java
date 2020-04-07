@@ -13,4 +13,6 @@ import java.util.List;
 public interface CommentService {
 
     List<ResponsePostCommentVo> listByPostId(Long postId);
+
+    ResponsePostCommentVo getById(Long commentId);
 }

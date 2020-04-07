@@ -8,10 +8,7 @@ import com.hasaker.face.service.user.UserService;
 import com.hasaker.face.vo.response.ResponseUserDetailVo;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @package com.hasaker.face.controller.user
@@ -36,7 +33,7 @@ public class AccountController extends BaseController {
     }
 
     @ApiOperation(value = "Obtain current user's detail information")
-    @PostMapping(value = "/info")
+    @GetMapping(value = "/info")
     public Ajax<ResponseUserDetailVo> info() {
         return Ajax.getInstance().successT(userService.detail(getUserId()));
     }

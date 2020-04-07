@@ -20,22 +20,22 @@ import org.springframework.web.bind.annotation.*;
 public interface PostClient {
 
     @PostMapping(value = "/post/save")
-    Ajax savePost(@RequestBody RequestPostVo postVo);
+    Ajax<Long> savePost(@RequestBody RequestPostVo postVo);
 
     @DeleteMapping(value = "/post/{postId}")
     Ajax deletePost(@PathVariable("postId") Long postId);
 
     @PostMapping(value = "/comment/save")
-    Ajax saveComment(@RequestBody RequestCommentVo commentVo);
+    Ajax<Long> saveComment(@RequestBody RequestCommentVo commentVo);
 
     @DeleteMapping(value = "/comment/{commentId}")
     Ajax deleteComment(@PathVariable("commentId") Long commentId);
 
     @PostMapping(value = "/vote/vote")
-    Ajax vote(@RequestBody RequestVoteVo voteVo);
+    Ajax<Long> vote(@RequestBody RequestVoteVo voteVo);
 
     @PostMapping(value = "/topic/update")
-    Ajax saveTopic(@RequestBody RequestTopicVo topicVo);
+    Ajax<Long> saveTopic(@RequestBody RequestTopicVo topicVo);
 
     @GetMapping(value = "/post/index-all")
     Ajax indexAllPosts();

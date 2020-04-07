@@ -52,7 +52,7 @@ public class PostServiceImpl extends BaseServiceImpl<PostMapper, Post> implement
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void post(RequestPostVo postVo) {
+    public Long post(RequestPostVo postVo) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(postVo);
 
         Post post = Convert.convert(Post.class, postVo);
@@ -104,6 +104,8 @@ public class PostServiceImpl extends BaseServiceImpl<PostMapper, Post> implement
 
         // Save post document to es
         esService.index(postDoc);
+
+        return post.getId();
     }
 
     /**

@@ -182,12 +182,15 @@ public class PostServiceImpl implements PostService {
                     o.setVoters(voteMap.get(o.getId()).stream().map(x -> userMap.get(x.getVoter())).collect(Collectors.toList()));
                     o.setVoteByMe(votedPostIds.contains(o.getId()));
                 } else {
-                    o.setVoteByMe(false);
                     o.setVoters(Collections.emptyList());
+                    o.setVoteByMe(false);
                 }
             });
         } else {
-            postVos.forEach(o -> o.setVoters(Collections.emptyList()));
+            postVos.forEach(o -> {
+                o.setVoters(Collections.emptyList());
+                o.setVoteByMe(false);
+            });
         }
     }
 

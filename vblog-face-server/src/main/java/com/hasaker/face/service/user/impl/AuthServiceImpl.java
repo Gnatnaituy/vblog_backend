@@ -68,6 +68,8 @@ public class AuthServiceImpl implements AuthService {
         redisAccessToken.setExpiresTime(System.currentTimeMillis() + redisAccessToken.getExpiresIn());
         redisAccessToken.setNickname(userOAuthVo.getNickname());
         redisAccessToken.setAvatar(userOAuthVo.getAvatar());
+        redisAccessToken.setBackground(userOAuthVo.getBackground());
+        redisAccessToken.setBio(userOAuthVo.getBio());
         redisAccessToken.setRoles(userOAuthVo.getRoles());
 
         // Save the current user's information to redis

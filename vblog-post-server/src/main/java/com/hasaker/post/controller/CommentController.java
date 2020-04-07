@@ -22,9 +22,8 @@ public class CommentController {
 
     @ApiOperation(value = "Create a comment")
     @PostMapping(value = "/save")
-    Ajax save(@RequestBody RequestCommentVo commentVo) {
-        commentService.comment(commentVo);
-        return Ajax.success();
+    Ajax<Long> save(@RequestBody RequestCommentVo commentVo) {
+        return Ajax.getInstance().successT(commentService.comment(commentVo));
     }
 
     @ApiOperation(value = "Delete a comment")

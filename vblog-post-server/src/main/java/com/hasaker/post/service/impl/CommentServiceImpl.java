@@ -3,7 +3,6 @@ package com.hasaker.post.service.impl;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.Pair;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.hasaker.common.base.impl.BaseServiceImpl;
 import com.hasaker.common.consts.Consts;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
@@ -41,16 +40,19 @@ public class CommentServiceImpl extends BaseServiceImpl<CommentMapper, Comment> 
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void comment(RequestCommentVo commentVo) {
+    public Long comment(RequestCommentVo commentVo) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(commentVo);
 
         Comment comment = Convert.convert(Comment.class, commentVo);
         comment = this.saveId(comment);
 
         CommentDoc commentDoc = Convert.convert(CommentDoc.class, comment);
+        commentDoc.setDeleted(Consts.NO);
         commentDoc.setCommenter(comment.getCreateUser());
         commentDoc.setCommentTime(comment.getCreateTime());
         esService.index(commentDoc);
+
+        return comment.getId();
     }
 
     /**
@@ -64,40 +66,10 @@ public class CommentServiceImpl extends BaseServiceImpl<CommentMapper, Comment> 
 
         Comment comment = this.getById(commentId);
         PostExceptionEnum.COMMENT_NOT_EXISTS.assertNotEmpty(comment);
+        comment.setDeleted(Consts.YES);
+        this.updateById(comment);
 
-        QueryWrapper<Comment> commentQueryWrapper = new QueryWrapper<>();
-        commentQueryWrapper.eq(Comment.COMMENT_ID, commentId);
-        List<Comment> replies = this.list(commentQueryWrapper);
-
-        if (ObjectUtils.isNotNull(replies)) {
-            // replace the comment
-            Comment replaceComment = new Comment();
-            replaceComment.setPostId(comment.getPostId());
-            replaceComment.setCommentId(comment.getCommentId());
-            replaceComment.setContent(COMMENT_DELETED);
-            replaceComment = this.saveId(replaceComment);
-
-            // update the reply's commentId belong to this comment
-            Comment updateComment = new Comment();
-            updateComment.setCommentId(replaceComment.getId());
-            this.update(updateComment, commentQueryWrapper);
-
-            // update comments in es
-            CommentDoc commentDoc = esService.getById(comment.getId(), CommentDoc.class);
-            CommentDoc replaceCommentDoc = Convert.convert(CommentDoc.class, replaceComment);
-            replaceCommentDoc.setContent(COMMENT_DELETED);
-            replaceCommentDoc.setCommenter(commentDoc.getCommenter());
-            replaceCommentDoc.setCommentTime(commentDoc.getCommentTime());
-            esService.index(replaceCommentDoc);
-            // update parent comment's commentId that reply to this comment
-            List<CommentDoc> commentDocs = esService.list(new Pair<>(Consts.COMMENT_ID, commentDoc.getId()), CommentDoc.class);
-            if (ObjectUtils.isNotNull(commentDoc)) {
-                esService.update(commentDocs.stream().map(CommentDoc::getId).collect(Collectors.toList()),
-                        CommentDoc.class, new Pair<>(Consts.COMMENT_ID, replaceCommentDoc.getId()));
-            }
-        }
-
-        this.removeById(commentId);
+        esService.update(commentId, CommentDoc.class, new Pair<>(CommentDoc.DELETED, 1));
     }
 
     /**
