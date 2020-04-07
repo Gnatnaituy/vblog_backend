@@ -5,10 +5,7 @@ import com.hasaker.post.service.VoteService;
 import com.hasaker.post.vo.request.RequestVoteVo;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @package com.hasaker.post.controller
@@ -27,6 +24,13 @@ public class VoteController {
     @PostMapping(value = "/vote")
     Ajax vote(@RequestBody RequestVoteVo voteVo) {
         voteService.vote(voteVo);
+        return Ajax.success();
+    }
+
+    @ApiOperation(value = "Index all topics to es")
+    @GetMapping(value = "/index-all")
+    Ajax indexAllVotes() {
+        voteService.indexAllVotes();
         return Ajax.success();
     }
 }

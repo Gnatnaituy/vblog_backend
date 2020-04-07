@@ -32,6 +32,9 @@ public class User extends BaseEntity {
     // 昵称
     private String nickname;
 
+    // 背景图
+    private String background;
+
     // 头像
     private String avatar;
 

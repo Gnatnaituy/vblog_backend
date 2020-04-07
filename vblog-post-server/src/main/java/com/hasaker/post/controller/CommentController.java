@@ -22,15 +22,21 @@ public class CommentController {
 
     @ApiOperation(value = "Create a comment")
     @PostMapping(value = "/save")
-    Ajax save(@RequestBody RequestCommentVo commentVo) {
-        commentService.comment(commentVo);
-        return Ajax.success();
+    Ajax<Long> save(@RequestBody RequestCommentVo commentVo) {
+        return Ajax.getInstance().successT(commentService.comment(commentVo));
     }
 
     @ApiOperation(value = "Delete a comment")
     @DeleteMapping(value = "/{commentId}")
     Ajax delete(@PathVariable Long commentId) {
         commentService.delete(commentId);
+        return Ajax.success();
+    }
+
+    @ApiOperation(value = "Index all comments to es")
+    @GetMapping(value = "/index-all")
+    Ajax indexAllComments() {
+        commentService.indexAllComments();
         return Ajax.success();
     }
 }

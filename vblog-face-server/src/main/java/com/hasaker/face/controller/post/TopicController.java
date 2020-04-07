@@ -22,7 +22,7 @@ public class TopicController {
     @Autowired
     private PostClient postClient;
 
-    @PostMapping("/topic/vote")
+    @PostMapping("/topic/update")
     Ajax save(@RequestBody RequestTopicVo topicVo) {
         return postClient.saveTopic(topicVo);
     }

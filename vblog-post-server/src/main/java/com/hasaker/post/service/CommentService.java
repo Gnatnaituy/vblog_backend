@@ -12,7 +12,9 @@ import com.hasaker.post.vo.request.RequestCommentVo;
  */
 public interface CommentService extends BaseService<Comment> {
 
-    void comment(RequestCommentVo commentVo);
+    Long comment(RequestCommentVo commentVo);
 
     void delete(Long commentId);
+
+    void indexAllComments();
 }

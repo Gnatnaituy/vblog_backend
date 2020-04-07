@@ -22,15 +22,21 @@ public class PostController {
 
     @ApiOperation(value = "Create a post")
     @PostMapping(value = "/save")
-    Ajax post(@RequestBody RequestPostVo postVo) {
-        postService.post(postVo);
-        return Ajax.success();
+    Ajax<Long> post(@RequestBody RequestPostVo postVo) {
+        return Ajax.getInstance().successT(postService.post(postVo));
     }
 
     @ApiOperation(value = "Delete a post")
     @DeleteMapping(value = "/{postId}")
     Ajax delete(@PathVariable Long postId) {
         postService.delete(postId);
+        return Ajax.success();
+    }
+
+    @ApiOperation(value = "Index all posts to es")
+    @GetMapping(value = "/index-all")
+    Ajax indexAllPosts() {
+        postService.indexAllPosts();
         return Ajax.success();
     }
 }

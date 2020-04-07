@@ -54,7 +54,7 @@ public class FriendRequestServiceImpl extends BaseServiceImpl<FriendRequestMappe
         // Check if both sender and receiver exists
         User sender = userService.getById(requestVo.getSenderId());
         UserExceptionEnums.USER_NOT_EXISTS.assertNotEmpty(sender);
-        User receiver = userService.getById(requestVo.getReceiverID());
+        User receiver = userService.getById(requestVo.getReceiverId());
         UserExceptionEnums.USER_NOT_EXISTS.assertNotEmpty(receiver);
 
         // Generate a receiver request history

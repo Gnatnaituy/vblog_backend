@@ -40,10 +40,12 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Override
     public void configure(final HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+        httpSecurity
+                .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/login", "/register", "/open/**")
+                .antMatchers("/login", "/logout", "/register", "/open/**")
                 .permitAll()
                 .antMatchers(
                         "/v2/api-docs",
@@ -54,7 +56,11 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                         "/swagger-ui.html/**",
                         "/webjars/**")
                 .permitAll()
-                .anyRequest().authenticated();
+                .antMatchers("/favicon.ico")
+                .permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .logout().logoutUrl("/logout").permitAll();
     }
 
     @Override

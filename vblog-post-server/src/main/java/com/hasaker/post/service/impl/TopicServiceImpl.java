@@ -1,6 +1,8 @@
 package com.hasaker.post.service.impl;
 
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.Pair;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hasaker.common.base.impl.BaseServiceImpl;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
 import com.hasaker.component.elasticsearch.service.EsService;
@@ -13,6 +15,9 @@ import com.hasaker.post.vo.request.RequestTopicVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @package com.hasaker.post.service.impl
@@ -42,5 +47,16 @@ public class TopicServiceImpl extends BaseServiceImpl<TopicMapper, Topic> implem
         this.updateById(topic);
 
         esService.update(topic.getId(), TopicDoc.class, new Pair<>(TopicDoc.DESCRIPTION, topic.getDescription()));
+    }
+
+    @Override
+    public void indexAllTopic() {
+        QueryWrapper<Topic> topicQueryWrapper = new QueryWrapper<>();
+        List<Topic> topics = this.list(topicQueryWrapper);
+
+        List<TopicDoc> topicDocs = topics.stream().map(o -> Convert.convert(TopicDoc.class, o)).collect(Collectors.toList());
+
+        esService.deleteIndex(TopicDoc.class);
+        esService.index(topicDocs);
     }
 }

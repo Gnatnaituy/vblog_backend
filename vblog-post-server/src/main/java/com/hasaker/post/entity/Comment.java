@@ -21,6 +21,8 @@ public class Comment extends BaseEntity {
     @NonNull
     private String content;
 
+    private Integer deleted;
+
     public static final String POST_ID = "post_id";
     public static final String COMMENT_ID = "comment_id";
     public static final String CONTENT = "content";

@@ -1,6 +1,8 @@
 package com.hasaker.face.controller.post;
 
 import com.hasaker.common.vo.Ajax;
+import com.hasaker.face.service.post.CommentService;
+import com.hasaker.face.vo.response.ResponsePostCommentVo;
 import com.hasaker.post.feign.PostClient;
 import com.hasaker.post.vo.request.RequestCommentVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +19,18 @@ import org.springframework.web.bind.annotation.*;
 public class CommentController {
 
     @Autowired
+    private CommentService commentService;
+    @Autowired
     private PostClient postClient;
 
     @PostMapping("/comment/save")
-    Ajax save(@RequestBody RequestCommentVo commentVo) {
-        return postClient.saveComment(commentVo);
+    Ajax<ResponsePostCommentVo> save(@RequestBody RequestCommentVo commentVo) {
+        Long commentId = postClient.saveComment(commentVo).getData();
+        return Ajax.getInstance().successT(commentService.getById(commentId));
     }
 
     @DeleteMapping("/comment/{commentId}")
-    Ajax delete(@RequestParam("commentId") Long commentId) {
+    Ajax delete(@PathVariable Long commentId) {
         return postClient.deleteComment(commentId);
     }
 }

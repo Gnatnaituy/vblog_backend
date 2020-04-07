@@ -63,6 +63,8 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
         userOAuthVo.setPassword(user.getPassword());
         userOAuthVo.setNickname(user.getNickname());
         userOAuthVo.setAvatar(user.getAvatar());
+        userOAuthVo.setBackground(user.getBackground());
+        userOAuthVo.setBio(user.getBio());
         userOAuthVo.setRoles(roles);
 
         return userOAuthVo;

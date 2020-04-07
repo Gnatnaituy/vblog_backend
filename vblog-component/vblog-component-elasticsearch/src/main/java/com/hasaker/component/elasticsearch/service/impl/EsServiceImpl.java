@@ -9,6 +9,7 @@ import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.query.*;
 import org.springframework.stereotype.Service;
@@ -29,12 +30,15 @@ public class EsServiceImpl implements EsService {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(searchQuery);
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(clazz);
 
+        searchQuery.setPageable(PageRequest.of(0, 1000));
+
         return elasticsearchOperations.queryForList(searchQuery, clazz);
     }
 
     @Override
     public <T> List<T> list(QueryBuilder queryBuilder, Class<T> clazz) {
         SearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(queryBuilder).build();
+        searchQuery.setPageable(PageRequest.of(0, 1000));
 
         return elasticsearchOperations.queryForList(searchQuery, clazz);
     }
@@ -43,6 +47,7 @@ public class EsServiceImpl implements EsService {
     public <T> List<T> list(Pair<String, Object> fieldValuePair, Class<T> clazz) {
         SearchQuery searchQuery = new NativeSearchQuery(
                 QueryBuilders.termQuery(fieldValuePair.getKey(), fieldValuePair.getValue()));
+        searchQuery.setPageable(PageRequest.of(0, 1000));
 
         return elasticsearchOperations.queryForList(searchQuery, clazz);
     }
@@ -52,6 +57,7 @@ public class EsServiceImpl implements EsService {
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
         fieldValuePairs.forEach(o -> boolQueryBuilder.must(QueryBuilders.termQuery(o.getKey(), o.getValue())));
         SearchQuery searchQuery = new NativeSearchQuery(boolQueryBuilder);
+        searchQuery.setPageable(PageRequest.of(0, 1000));
 
         return elasticsearchOperations.queryForList(searchQuery, clazz);
     }
@@ -215,5 +221,12 @@ public class EsServiceImpl implements EsService {
         deleteQuery.setQuery(QueryBuilders.termQuery("id", ids));
 
         elasticsearchOperations.delete(deleteQuery, clazz);
+    }
+
+    @Override
+    public <T> void deleteIndex(Class<T> clazz) {
+        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(clazz);
+
+        elasticsearchOperations.deleteIndex(clazz);
     }
 }

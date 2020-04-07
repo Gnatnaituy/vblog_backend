@@ -39,4 +39,7 @@ public class ResponsePostVo {
 
     @ApiModelProperty(value = "post time")
     private Long postTime;
+
+    @ApiModelProperty(value = "Is voted by current user")
+    private Boolean voteByMe;
 }

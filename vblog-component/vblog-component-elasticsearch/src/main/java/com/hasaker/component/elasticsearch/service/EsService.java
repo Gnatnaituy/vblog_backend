@@ -46,4 +46,6 @@ public interface EsService {
     <T> void delete(Long id, Class<T> clazz);
 
     <T> void delete(Collection<Long> ids, Class<T> clazz);
+
+    <T> void deleteIndex(Class<T> clazz);
 }

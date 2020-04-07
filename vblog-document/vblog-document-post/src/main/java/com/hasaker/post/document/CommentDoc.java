@@ -29,6 +29,9 @@ public class CommentDoc {
     @Field(type = FieldType.Text)
     private String content;
 
+    @Field(type = FieldType.Integer)
+    private Integer deleted;
+
     @Field(type = FieldType.Long)
     private Long commenter;
 
@@ -36,6 +39,7 @@ public class CommentDoc {
     private Long commentTime;
 
     public static final String CONTENT = "content";
+    public static final String DELETED = "deleted";
     public static final String COMMENTER = "commenter";
     public static final String COMMENT_TIME = "commentTime";
 }

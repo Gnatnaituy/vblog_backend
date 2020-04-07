@@ -12,7 +12,9 @@ import com.hasaker.post.vo.request.RequestPostVo;
  */
 public interface PostService extends BaseService<Post> {
 
-    void post(RequestPostVo postVo);
+    Long post(RequestPostVo postVo);
 
     void delete(Long postId);
+
+    void indexAllPosts();
 }
