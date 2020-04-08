@@ -16,6 +16,7 @@
         <module>vblog-component-elasticsearch</module>
         <module>vblog-component-redis</module>
         <module>vblog-component-kafka</module>
+        <module>vblog-component-oss</module>
     </modules>
 
 </project>
