@@ -65,7 +65,8 @@ public class AuthServiceImpl implements AuthService {
                 .exchange(RequestConsts.URL_OAUTH_TOKEN, HttpMethod.POST, requestEntity, String.class);
 
         RedisAccessToken redisAccessToken = JSONObject.parseObject(responseEntity.getBody(), RedisAccessToken.class);
-        redisAccessToken.setExpiresTime(System.currentTimeMillis() + redisAccessToken.getExpiresIn());
+        assert redisAccessToken != null;
+        redisAccessToken.setExpiresTime(System.currentTimeMillis() + redisAccessToken.getExpiresIn() * 1000);
         redisAccessToken.setNickname(userOAuthVo.getNickname());
         redisAccessToken.setAvatar(userOAuthVo.getAvatar());
         redisAccessToken.setBackground(userOAuthVo.getBackground());
@@ -73,7 +74,7 @@ public class AuthServiceImpl implements AuthService {
         redisAccessToken.setRoles(userOAuthVo.getRoles());
 
         // Save the current user's information to redis
-        redisService.save(username, redisAccessToken, redisAccessToken.getExpiresIn());
+        redisService.save(username, redisAccessToken, redisAccessToken.getExpiresIn() );
 
         return redisAccessToken;
     }

@@ -14,5 +14,7 @@ public interface PostService {
 
     PageInfo<ResponsePostVo> page(RequestPostSearchVo pageVo);
 
+    ResponsePostVo getById(Long postId);
+
     void indexAll();
 }

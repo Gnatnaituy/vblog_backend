@@ -56,7 +56,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                         "/swagger-ui.html/**",
                         "/webjars/**")
                 .permitAll()
-                .antMatchers("/favicon.ico")
+                .antMatchers("/favicon.ico", "/undefined")
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()

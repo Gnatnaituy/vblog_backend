@@ -33,12 +33,10 @@ public class FeignRequestInterceptor implements RequestInterceptor {
             if (ObjectUtil.isNotNull(request)) {
                 String token = request.getHeader(RequestConsts.AUTHORIZATION);
                 requestTemplate.header(RequestConsts.AUTHORIZATION, token);
-                log.info(token);
 
                 if (request.getUserPrincipal() != null) {
                     String userAccount = request.getUserPrincipal().getName();
                     requestTemplate.header(RequestConsts.USER_ACCOUNT, userAccount);
-                    log.info("Current user: " + userAccount);
                 }
             }
         }

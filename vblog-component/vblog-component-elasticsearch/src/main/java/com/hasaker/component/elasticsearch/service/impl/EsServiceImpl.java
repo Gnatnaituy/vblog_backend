@@ -8,6 +8,7 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 public class EsServiceImpl implements EsService {
 
     @Autowired
+    @Qualifier("elasticsearchTemplate")
     private ElasticsearchOperations elasticsearchOperations;
 
     @Override

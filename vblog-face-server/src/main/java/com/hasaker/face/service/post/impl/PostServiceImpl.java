@@ -7,6 +7,8 @@ import com.hasaker.common.consts.RequestConsts;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
 import com.hasaker.common.vo.PageInfo;
 import com.hasaker.component.elasticsearch.service.EsService;
+import com.hasaker.component.qiniu.service.UploadService;
+import com.hasaker.face.exception.enums.PostExceptionEnums;
 import com.hasaker.face.service.post.CommentService;
 import com.hasaker.face.service.post.PostService;
 import com.hasaker.face.service.user.UserService;
@@ -55,6 +57,8 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private EsService esService;
     @Autowired
+    private UploadService uploadService;
+    @Autowired
     private TokenStore tokenStore;
     @Autowired
     private HttpServletRequest request;
@@ -80,7 +84,7 @@ public class PostServiceImpl implements PostService {
         // Configuration page
         searchQuery.setPageable(PageRequest.of(pageVo.getStart(), pageVo.getSize()));
 
-        // If keyword is null, sort by create time of user
+        // Sort by create time of user if keyword is empty
         if (ObjectUtils.isNull(pageVo.getKeyword())) {
             searchQuery.addSort(Sort.by(Sort.Order.desc(PostDoc.POST_TIME)));
         }
@@ -92,9 +96,9 @@ public class PostServiceImpl implements PostService {
             // Obtain topic in this posts
             Set<Long> topicIds = new HashSet<>();
             postDocPage.getContent().forEach(o -> topicIds.addAll(o.getTopics()));
-            List<TopicDoc> topicDocs = esService.getByIds(topicIds, TopicDoc.class);
-            Map<Long, ResponsePostTopicVo> topicMap = topicDocs.stream().collect(
-                    Collectors.toMap(TopicDoc::getId, o -> Convert.convert(ResponsePostTopicVo.class, o)));
+            List<TopicDoc> topicDocs = ObjectUtils.isNull(topicIds) ? null : esService.getByIds(topicIds, TopicDoc.class);
+            Map<Long, ResponsePostTopicVo> topicMap = ObjectUtils.isNull(topicDocs) ? new HashMap<>()
+                    : topicDocs.stream().collect(Collectors.toMap(TopicDoc::getId, o -> Convert.convert(ResponsePostTopicVo.class, o)));
 
             // Obtains users' info in those posts
             Map<Long, ResponseUserInfoVo> posterMap = userService.mapUserInfo(postDocPage.getContent().stream()
@@ -121,6 +125,38 @@ public class PostServiceImpl implements PostService {
     }
 
     /**
+     * Get post by ID
+     * @param postId
+     * @return
+     */
+    @Override
+    public ResponsePostVo getById(Long postId) {
+        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(postId);
+
+        PostDoc postDoc = esService.getById(postId, PostDoc.class);
+        PostExceptionEnums.POST_NOT_EXISTS.assertNotEmpty(postDoc);
+
+        ResponsePostVo postVo = Convert.convert(ResponsePostVo.class, postDoc);
+
+        if (ObjectUtils.isNotNull(postDoc.getTopics())) {
+            List<TopicDoc> topicDocs = esService.getByIds(postDoc.getTopics(), TopicDoc.class);
+            postVo.setTopics(topicDocs.stream().map(o -> Convert.convert(ResponsePostTopicVo.class, o))
+                    .collect(Collectors.toList()));
+        }
+
+        List<ResponseUserInfoVo> poster = userService.listUserInfo(Collections.singleton(postDoc.getPoster()));
+        if (ObjectUtils.isNotNull(poster)) {
+            postVo.setPoster(poster.iterator().next());
+        }
+
+        postVo.setComments(commentService.listByPostId(postVo.getId()));
+        fillImages(Collections.singletonList(postVo));
+        fillVotes(Collections.singletonList(postVo));
+
+        return postVo;
+    }
+
+    /**
      * Index all posts, comments, votes, topics to ES
      */
     @Override
@@ -143,8 +179,11 @@ public class PostServiceImpl implements PostService {
         List<ImageDoc> imageDocs = esService.list(QueryBuilders.termsQuery(Consts.POST_ID, postIds), ImageDoc.class);
         if (ObjectUtils.isNotNull(imageDocs)) {
             Map<Long, List<ResponsePostImageVo>> imageMap = imageDocs.stream()
-                    .collect(Collectors.groupingBy(ImageDoc::getPostId, Collectors.mapping(
-                            o -> Convert.convert(ResponsePostImageVo.class, o), Collectors.toList())));
+                    .collect(Collectors.groupingBy(ImageDoc::getPostId,
+                            Collectors.mapping(o -> {
+                                o.setUrl(uploadService.generateAccessUrl(o.getUrl()).getData());
+                                return Convert.convert(ResponsePostImageVo.class, o);
+                            }, Collectors.toList())));
             postVos.forEach(o -> {
                 if (ObjectUtils.isNotNull(imageMap.get(o.getId()))) {
                     o.setImages(imageMap.get(o.getId()));

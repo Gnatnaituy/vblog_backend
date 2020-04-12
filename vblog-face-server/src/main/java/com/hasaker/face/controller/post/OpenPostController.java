@@ -39,6 +39,11 @@ public class OpenPostController extends BaseController {
         return Ajax.getInstance().successT(postService.page(searchVo));
     }
 
+    @GetMapping("/{postId}")
+    Ajax<ResponsePostVo> get(@PathVariable Long postId) {
+        return Ajax.getInstance().successT(postService.getById(postId));
+    }
+
     @GetMapping("/voters/{postId}")
     Ajax<List<ResponseUserInfoVo>> listVoters(@PathVariable("postId") Long postId) {
         return Ajax.getInstance().successT(voteService.list(postId));
