@@ -2,6 +2,7 @@ package com.hasaker.component.qiniu.service.impl;
 
 import com.hasaker.common.config.SnowFlakeIdGenerator;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
+import com.hasaker.component.qiniu.config.QiniuyunConfig;
 import com.hasaker.component.qiniu.service.UploadService;
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
@@ -12,6 +13,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,8 +29,9 @@ import java.util.Objects;
  * @create 2020/4/8 18:54
  * @description QiniuUploadServiceImpl
  */
-@Service
 @Slf4j
+@Service
+@ConditionalOnBean(value = QiniuyunConfig.class)
 public class QiniuUploadServiceImpl implements UploadService {
 
     @Autowired
@@ -41,11 +44,11 @@ public class QiniuUploadServiceImpl implements UploadService {
     private SnowFlakeIdGenerator snowFlakeIdGenerator;
 
     @Value("${qiniu.bucket}")
-    private String bucket;
+    private String BUCKET;
     @Value("${qiniu.domain}")
-    private String domain;
+    private String DOMAIN;
     @Value("${qiniu.retry-times}")
-    private Integer retryTimes;
+    private Integer RETRY_TIMES;
 
     /**
      * Upload by File type
@@ -62,10 +65,10 @@ public class QiniuUploadServiceImpl implements UploadService {
         String key = snowFlakeIdGenerator.nextUUID(multipartFile) + suffix;
 
         try {
-            Response response = this.uploadManager.put(multipartFile.getBytes(), key, auth.uploadToken(bucket));
+            Response response = this.uploadManager.put(multipartFile.getBytes(), key, auth.uploadToken(BUCKET));
             int retry = 0;
-            while (response.needRetry() && retry < retryTimes) {
-                response = this.uploadManager.put(multipartFile.getBytes(), key, auth.uploadToken(bucket));
+            while (response.needRetry() && retry < RETRY_TIMES) {
+                response = this.uploadManager.put(multipartFile.getBytes(), key, auth.uploadToken(BUCKET));
                 retry++;
             }
 
@@ -90,7 +93,7 @@ public class QiniuUploadServiceImpl implements UploadService {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(key);
 
         String encodedFileName = URLEncoder.encode(key, StandardCharsets.UTF_8);
-        String publicUrl = String.format("http://%s/%s", domain, encodedFileName);
+        String publicUrl = String.format("%s/%s", DOMAIN, encodedFileName);
 
         return auth.privateDownloadUrl(publicUrl, 3600);
     }
@@ -120,10 +123,10 @@ public class QiniuUploadServiceImpl implements UploadService {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(key);
 
         try {
-            Response response = bucketManager.delete(this.bucket, key);
+            Response response = bucketManager.delete(this.BUCKET, key);
             int retry = 0;
             while (response.needRetry() && retry++ < 3) {
-                response = bucketManager.delete(bucket, key);
+                response = bucketManager.delete(BUCKET, key);
             }
             return response.statusCode == 200;
         } catch (QiniuException e) {
