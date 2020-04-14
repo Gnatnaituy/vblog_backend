@@ -60,7 +60,6 @@ public class VoteServiceImpl extends BaseServiceImpl<VoteMapper, Vote> implement
             return voteDoc;
         }).collect(Collectors.toList());
 
-        esService.deleteIndex(VoteDoc.class);
         esService.index(voteDocs);
     }
 }

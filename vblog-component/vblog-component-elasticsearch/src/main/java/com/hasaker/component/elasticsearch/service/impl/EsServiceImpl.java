@@ -226,6 +226,14 @@ public class EsServiceImpl implements EsService {
     }
 
     @Override
+    public <T> void createIndex(Class<T> clazz) {
+        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(clazz);
+
+        elasticsearchOperations.createIndex(clazz);
+        elasticsearchOperations.putMapping(clazz);
+    }
+
+    @Override
     public <T> void deleteIndex(Class<T> clazz) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(clazz);
 

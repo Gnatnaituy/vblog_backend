@@ -26,7 +26,7 @@ public class PostController {
     @PostMapping("/post/save")
     Ajax save(@RequestBody RequestPostVo postVo) {
         if (ObjectUtils.isNotNull(postVo.getImages())) {
-            postVo.getImages().forEach(o -> o.setUrl(uploadService.getkey(o.getUrl())));
+            postVo.getImages().forEach(o -> o.setUrl(uploadService.getKey(o.getUrl())));
         }
 
         return postClient.savePost(postVo);

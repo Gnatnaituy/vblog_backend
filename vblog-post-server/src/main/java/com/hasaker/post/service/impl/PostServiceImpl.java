@@ -167,7 +167,6 @@ public class PostServiceImpl extends BaseServiceImpl<PostMapper, Post> implement
             return postDoc;
         }).collect(Collectors.toList());
 
-        esService.deleteIndex(PostDoc.class);
         esService.index(postDocs);
     }
 }

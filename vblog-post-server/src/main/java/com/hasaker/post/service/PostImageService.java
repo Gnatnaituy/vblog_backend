@@ -10,4 +10,6 @@ import com.hasaker.post.entity.PostImage;
  * @description PostImageService
  */
 public interface PostImageService extends BaseService<PostImage> {
+
+    void indexAllPostImages();
 }

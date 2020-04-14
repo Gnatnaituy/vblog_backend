@@ -17,10 +17,7 @@ import com.hasaker.face.vo.response.ResponsePostImageVo;
 import com.hasaker.face.vo.response.ResponsePostTopicVo;
 import com.hasaker.face.vo.response.ResponsePostVo;
 import com.hasaker.face.vo.response.ResponseUserInfoVo;
-import com.hasaker.post.document.ImageDoc;
-import com.hasaker.post.document.PostDoc;
-import com.hasaker.post.document.TopicDoc;
-import com.hasaker.post.document.VoteDoc;
+import com.hasaker.post.document.*;
 import com.hasaker.post.feign.PostClient;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -161,6 +158,18 @@ public class PostServiceImpl implements PostService {
      */
     @Override
     public void indexAll() {
+        esService.deleteIndex(PostDoc.class);
+        esService.deleteIndex(ImageDoc.class);
+        esService.deleteIndex(CommentDoc.class);
+        esService.deleteIndex(VoteDoc.class);
+        esService.deleteIndex(TopicDoc.class);
+
+        esService.createIndex(PostDoc.class);
+        esService.createIndex(ImageDoc.class);
+        esService.createIndex(CommentDoc.class);
+        esService.createIndex(VoteDoc.class);
+        esService.createIndex(TopicDoc.class);
+
         postClient.indexAllPosts();
         postClient.indexAllComments();
         postClient.indexAllVotes();
@@ -181,7 +190,7 @@ public class PostServiceImpl implements PostService {
             Map<Long, List<ResponsePostImageVo>> imageMap = imageDocs.stream()
                     .collect(Collectors.groupingBy(ImageDoc::getPostId,
                             Collectors.mapping(o -> {
-                                o.setUrl(uploadService.generateAccessUrl(o.getUrl()).getData());
+                                o.setUrl(uploadService.generateAccessUrl(o.getUrl()));
                                 return Convert.convert(ResponsePostImageVo.class, o);
                             }, Collectors.toList())));
             postVos.forEach(o -> {

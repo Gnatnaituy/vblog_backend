@@ -56,7 +56,6 @@ public class TopicServiceImpl extends BaseServiceImpl<TopicMapper, Topic> implem
 
         List<TopicDoc> topicDocs = topics.stream().map(o -> Convert.convert(TopicDoc.class, o)).collect(Collectors.toList());
 
-        esService.deleteIndex(TopicDoc.class);
         esService.index(topicDocs);
     }
 }

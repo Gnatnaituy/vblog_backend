@@ -1,6 +1,5 @@
 package com.hasaker.component.qiniu.service;
 
-import com.hasaker.common.vo.Ajax;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -11,11 +10,11 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public interface UploadService {
 
-    Ajax<String> upload(MultipartFile multipartFile);
+    String upload(MultipartFile multipartFile);
 
-    Ajax<String> generateAccessUrl(String key);
+    String generateAccessUrl(String key);
 
-    Ajax delete(String key);
+    String getKey(String publicUrl);
 
-    String getkey(String publicUrl);
+    boolean delete(String key);
 }

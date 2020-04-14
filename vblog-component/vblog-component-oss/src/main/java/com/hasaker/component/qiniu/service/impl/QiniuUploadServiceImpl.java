@@ -2,7 +2,6 @@ package com.hasaker.component.qiniu.service.impl;
 
 import com.hasaker.common.config.SnowFlakeIdGenerator;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
-import com.hasaker.common.vo.Ajax;
 import com.hasaker.component.qiniu.service.UploadService;
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
@@ -55,7 +54,7 @@ public class QiniuUploadServiceImpl implements UploadService {
      * @throws QiniuException
      */
     @Override
-    public Ajax<String> upload(MultipartFile multipartFile) {
+    public String upload(MultipartFile multipartFile) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(multipartFile);
 
         String originalFilename = multipartFile.getOriginalFilename();
@@ -71,13 +70,11 @@ public class QiniuUploadServiceImpl implements UploadService {
             }
 
             if (response.statusCode == 200) {
-                log.info(response.bodyString());
                 return generateAccessUrl(key);
             } else {
-                return Ajax.failure(response.error);
+                throw CommonExceptionEnums.INTERNAL_SERVER_ERROR.newException();
             }
         } catch (IOException e) {
-            log.error(e.getLocalizedMessage(), e);
             throw CommonExceptionEnums.INTERNAL_SERVER_ERROR.newException();
         }
     }
@@ -89,13 +86,27 @@ public class QiniuUploadServiceImpl implements UploadService {
      */
     @Override
     @SneakyThrows
-    public Ajax<String> generateAccessUrl(String key) {
+    public String generateAccessUrl(String key) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(key);
 
         String encodedFileName = URLEncoder.encode(key, StandardCharsets.UTF_8);
         String publicUrl = String.format("http://%s/%s", domain, encodedFileName);
 
-        return Ajax.getInstance().successT(auth.privateDownloadUrl(publicUrl, 3600));
+        return auth.privateDownloadUrl(publicUrl, 3600);
+    }
+
+    /**
+     * Get key from public accessible url
+     * @param publicUrl
+     * @return
+     */
+    @Override
+    public String getKey(String publicUrl) {
+        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(publicUrl);
+
+        String decodedPublicUrl = URLDecoder.decode(publicUrl, StandardCharsets.UTF_8);
+
+        return decodedPublicUrl.substring(decodedPublicUrl.lastIndexOf("/") + 1).split("\\?")[0];
     }
 
     /**
@@ -105,7 +116,7 @@ public class QiniuUploadServiceImpl implements UploadService {
      * @throws QiniuException
      */
     @Override
-    public Ajax delete(String key) {
+    public boolean delete(String key) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(key);
 
         try {
@@ -114,24 +125,10 @@ public class QiniuUploadServiceImpl implements UploadService {
             while (response.needRetry() && retry++ < 3) {
                 response = bucketManager.delete(bucket, key);
             }
-            return response.statusCode == 200 ? Ajax.success() : Ajax.failure();
+            return response.statusCode == 200;
         } catch (QiniuException e) {
             log.error(e.getLocalizedMessage(), e);
             throw CommonExceptionEnums.INTERNAL_SERVER_ERROR.newException();
         }
-    }
-
-    /**
-     * Get key from public accessible url
-     * @param publicUrl
-     * @return
-     */
-    @Override
-    public String getkey(String publicUrl) {
-        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(publicUrl);
-
-        String decodedPublicUrl = URLDecoder.decode(publicUrl, StandardCharsets.UTF_8);
-
-        return decodedPublicUrl.substring(decodedPublicUrl.lastIndexOf("/") + 1).split("\\?")[0];
     }
 }

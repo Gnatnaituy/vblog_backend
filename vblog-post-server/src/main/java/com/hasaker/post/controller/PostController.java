@@ -1,6 +1,7 @@
 package com.hasaker.post.controller;
 
 import com.hasaker.common.vo.Ajax;
+import com.hasaker.post.service.PostImageService;
 import com.hasaker.post.service.PostService;
 import com.hasaker.post.vo.request.RequestPostVo;
 import io.swagger.annotations.ApiOperation;
@@ -19,6 +20,8 @@ public class PostController {
 
     @Autowired
     private PostService postService;
+    @Autowired
+    private PostImageService postImageService;
 
     @ApiOperation(value = "Create a post")
     @PostMapping(value = "/save")
@@ -37,6 +40,7 @@ public class PostController {
     @GetMapping(value = "/index-all")
     Ajax indexAllPosts() {
         postService.indexAllPosts();
+        postImageService.indexAllPostImages();
         return Ajax.success();
     }
 }

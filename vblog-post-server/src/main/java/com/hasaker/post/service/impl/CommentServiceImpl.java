@@ -3,6 +3,7 @@ package com.hasaker.post.service.impl;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.Pair;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.hasaker.common.base.impl.BaseServiceImpl;
 import com.hasaker.common.consts.Consts;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
@@ -80,14 +81,15 @@ public class CommentServiceImpl extends BaseServiceImpl<CommentMapper, Comment> 
         QueryWrapper<Comment> commentQueryWrapper = new QueryWrapper<>();
         List<Comment> comments = this.list(commentQueryWrapper);
 
-        List<CommentDoc> commentDocs = comments.stream().map(o -> {
-            CommentDoc commentDoc = Convert.convert(CommentDoc.class, o);
-            commentDoc.setCommenter(o.getCreateUser());
-            commentDoc.setCommentTime(o.getCreateTime());
-            return commentDoc;
-        }).collect(Collectors.toList());
+        if (ObjectUtils.isNotNull(comments)) {
+            List<CommentDoc> commentDocs = comments.stream().map(o -> {
+                CommentDoc commentDoc = Convert.convert(CommentDoc.class, o);
+                commentDoc.setCommenter(o.getCreateUser());
+                commentDoc.setCommentTime(o.getCreateTime());
+                return commentDoc;
+            }).collect(Collectors.toList());
 
-        esService.deleteIndex(CommentDoc.class);
-        esService.index(commentDocs);
+            esService.index(commentDocs);
+        }
     }
 }

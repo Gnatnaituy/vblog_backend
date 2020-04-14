@@ -24,6 +24,6 @@ public class UploadController {
 
     @PostMapping("/image")
     Ajax<String> upload(@RequestParam("file") MultipartFile multipartFile) {
-        return uploadService.upload(multipartFile);
+        return Ajax.getInstance().successT(uploadService.upload(multipartFile));
     }
 }
