@@ -19,9 +19,9 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 public class JwtTokenStoreConfig {
 
     @Value("${security.oauth2.private-key}")
-    private String privateKey;
+    private String PRIVATE_KEY;
     @Value("${security.oauth2.public-key}")
-    private String publicKey;
+    private String PUBLIC_KEY;
 
     @Bean
     @Primary
@@ -47,8 +47,8 @@ public class JwtTokenStoreConfig {
     @Primary
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
         JwtAccessTokenConverter accessTokenConverter = new JwtAccessTokenConverter();
-        accessTokenConverter.setSigningKey(privateKey);
-        accessTokenConverter.setVerifierKey(publicKey);
+        accessTokenConverter.setSigningKey(PRIVATE_KEY);
+        accessTokenConverter.setVerifierKey(PUBLIC_KEY);
 
         return accessTokenConverter;
     }

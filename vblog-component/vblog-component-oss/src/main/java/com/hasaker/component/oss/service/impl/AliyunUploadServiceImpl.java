@@ -1,9 +1,9 @@
-package com.hasaker.component.qiniu.service.impl;
+package com.hasaker.component.oss.service.impl;
 
 import com.aliyun.oss.OSS;
 import com.hasaker.common.config.SnowFlakeIdGenerator;
-import com.hasaker.component.qiniu.config.AliyunConfig;
-import com.hasaker.component.qiniu.service.UploadService;
+import com.hasaker.component.oss.config.AliyunConfig;
+import com.hasaker.component.oss.service.UploadService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +61,7 @@ public class AliyunUploadServiceImpl implements UploadService {
     public String getKey(String publicUrl) {
         String decodedPublicUrl = URLDecoder.decode(publicUrl, StandardCharsets.UTF_8);
 
-        return decodedPublicUrl.substring(decodedPublicUrl.lastIndexOf("/") + 1).split("\\?")[0];
+        return decodedPublicUrl.substring(decodedPublicUrl.lastIndexOf("com/") + 1).split("\\?")[0];
     }
 
     @Override

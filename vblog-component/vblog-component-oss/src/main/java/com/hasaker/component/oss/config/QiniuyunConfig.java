@@ -1,4 +1,4 @@
-package com.hasaker.component.qiniu.config;
+package com.hasaker.component.oss.config;
 
 import com.qiniu.storage.BucketManager;
 import com.qiniu.storage.Region;

@@ -1,7 +1,7 @@
 package com.hasaker.face.controller.base;
 
 import com.hasaker.common.vo.Ajax;
-import com.hasaker.component.qiniu.service.UploadService;
+import com.hasaker.component.oss.service.UploadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -2,7 +2,7 @@ package com.hasaker.face.controller.post;
 
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.hasaker.common.vo.Ajax;
-import com.hasaker.component.qiniu.service.UploadService;
+import com.hasaker.component.oss.service.UploadService;
 import com.hasaker.post.feign.PostClient;
 import com.hasaker.post.vo.request.RequestPostVo;
 import org.springframework.beans.factory.annotation.Autowired;

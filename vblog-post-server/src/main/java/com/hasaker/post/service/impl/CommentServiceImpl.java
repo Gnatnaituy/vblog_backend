@@ -33,8 +33,6 @@ public class CommentServiceImpl extends BaseServiceImpl<CommentMapper, Comment> 
     @Autowired
     private EsService esService;
 
-    private static final String COMMENT_DELETED = "This comment had been deleted";
-
     /**
      * Write a comment
      * @param commentVo

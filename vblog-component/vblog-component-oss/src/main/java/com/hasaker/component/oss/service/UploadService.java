@@ -1,4 +1,4 @@
-package com.hasaker.component.qiniu.service;
+package com.hasaker.component.oss.service;
 
 import org.springframework.web.multipart.MultipartFile;
 

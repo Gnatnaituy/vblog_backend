@@ -1,9 +1,9 @@
-package com.hasaker.component.qiniu.service.impl;
+package com.hasaker.component.oss.service.impl;
 
 import com.hasaker.common.config.SnowFlakeIdGenerator;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
-import com.hasaker.component.qiniu.config.QiniuyunConfig;
-import com.hasaker.component.qiniu.service.UploadService;
+import com.hasaker.component.oss.config.QiniuyunConfig;
+import com.hasaker.component.oss.service.UploadService;
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
 import com.qiniu.storage.BucketManager;
@@ -109,7 +109,7 @@ public class QiniuUploadServiceImpl implements UploadService {
 
         String decodedPublicUrl = URLDecoder.decode(publicUrl, StandardCharsets.UTF_8);
 
-        return decodedPublicUrl.substring(decodedPublicUrl.lastIndexOf("/") + 1).split("\\?")[0];
+        return decodedPublicUrl.substring(decodedPublicUrl.lastIndexOf("com/") + 1).split("\\?")[0];
     }
 
     /**

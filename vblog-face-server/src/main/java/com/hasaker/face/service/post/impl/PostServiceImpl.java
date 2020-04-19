@@ -7,7 +7,7 @@ import com.hasaker.common.consts.RequestConsts;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
 import com.hasaker.common.vo.PageInfo;
 import com.hasaker.component.elasticsearch.service.EsService;
-import com.hasaker.component.qiniu.service.UploadService;
+import com.hasaker.component.oss.service.UploadService;
 import com.hasaker.face.exception.enums.PostExceptionEnums;
 import com.hasaker.face.service.post.CommentService;
 import com.hasaker.face.service.post.PostService;

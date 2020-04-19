@@ -1,4 +1,4 @@
-package com.hasaker.component.qiniu.config;
+package com.hasaker.component.oss.config;
 
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
