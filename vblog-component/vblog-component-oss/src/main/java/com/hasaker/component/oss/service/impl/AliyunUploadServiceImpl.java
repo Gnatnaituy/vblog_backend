@@ -61,7 +61,7 @@ public class AliyunUploadServiceImpl implements UploadService {
     public String getKey(String publicUrl) {
         String decodedPublicUrl = URLDecoder.decode(publicUrl, StandardCharsets.UTF_8);
 
-        return decodedPublicUrl.substring(decodedPublicUrl.lastIndexOf("com/") + 1).split("\\?")[0];
+        return decodedPublicUrl.substring(decodedPublicUrl.lastIndexOf("com/") + 4).split("\\?")[0];
     }
 
     @Override

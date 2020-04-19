@@ -9,10 +9,12 @@ import com.hasaker.face.service.post.VoteService;
 import com.hasaker.face.service.user.UserService;
 import com.hasaker.face.vo.response.ResponseUserInfoVo;
 import com.hasaker.post.document.VoteDoc;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
  * @description VoteServiceImpl
  */
 @Service
+@Slf4j
 public class VoteServiceImpl implements VoteService {
 
     @Autowired
@@ -38,6 +41,8 @@ public class VoteServiceImpl implements VoteService {
     @Override
     public List<ResponseUserInfoVo> list(Long postId) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(postId);
+
+        log.info("LIST VOTERS AT {}", new Date().getTime());
 
         List<VoteDoc> voteDocs = esService.list(new Pair<>(Consts.POST_ID, postId), VoteDoc.class);
         if (ObjectUtils.isNotNull(voteDocs)) {

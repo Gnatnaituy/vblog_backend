@@ -23,7 +23,7 @@ public class RequestVoteVo {
     private Long commentId;
 
     @ApiModelProperty(value = "Is cancel vote")
-    private Boolean cancelVote;
+    private Boolean disvote;
 
     @ApiModelProperty(value = "The voter")
     private Long voter;

@@ -19,7 +19,8 @@ public enum PostExceptionEnum implements BaseExceptionAssert {
     POST_TOPIC_NOT_EXISTS("POST_EXCEPTION_003", "Post topic not exists"),
     COMMENT_NOT_EXISTS("POST_EXCEPTION_004", "Comment not exists"),
     TOPIC_NOT_EXISTS("POST_EXCEPTION_005", "Topic not exists"),
-    VOTE_NOT_EXISTS("POST_EXCEPTION_006", "Vote not exists");
+    VOTE_NOT_EXISTS("POST_EXCEPTION_006", "Vote not exists"),
+    VOTE_ALREADY_EXISTS("POST_EXCEPTION_007", "Vote already exists");
 
     private String code;
     private String message;

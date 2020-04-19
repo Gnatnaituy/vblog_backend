@@ -41,25 +41,29 @@ public class VoteServiceImpl extends BaseServiceImpl<VoteMapper, Vote> implement
     public void vote(RequestVoteVo voteVo) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(voteVo);
 
-        if (voteVo.getCancelVote()) {
-            // Remove vote from MySQL
-            QueryWrapper<Vote> voteQueryWrapper = new QueryWrapper<>();
-            voteQueryWrapper.eq(Consts.CREATE_USER, voteVo.getVoter());
-            if (ObjectUtils.isNotNull(voteVo.getPostId())) {
-                voteQueryWrapper.eq(Vote.POST_ID, voteVo.getPostId());
-            }
-            if (ObjectUtils.isNotNull(voteVo.getCommentId())) {
-                voteQueryWrapper.eq(Vote.COMMENT_ID, voteVo.getCommentId());
-            }
-            Vote vote = this.getOne(voteQueryWrapper);
+        QueryWrapper<Vote> voteQueryWrapper = new QueryWrapper<>();
+        voteQueryWrapper.eq(Consts.CREATE_USER, voteVo.getVoter());
+        if (ObjectUtils.isNotNull(voteVo.getPostId())) {
+            voteQueryWrapper.eq(Vote.POST_ID, voteVo.getPostId());
+        }
+        if (ObjectUtils.isNotNull(voteVo.getCommentId())) {
+            voteQueryWrapper.eq(Vote.COMMENT_ID, voteVo.getCommentId());
+        }
+        Vote vote = this.getOne(voteQueryWrapper);
+
+        if (voteVo.getDisvote()) {
             PostExceptionEnum.VOTE_NOT_EXISTS.assertNotEmpty(vote);
+
+            // Remove vote from MySQL
             this.removeById(vote.getId());
 
             // Remove vote from Elasticsearch
             esService.delete(vote.getId(), VoteDoc.class);
         } else {
+            PostExceptionEnum.VOTE_ALREADY_EXISTS.assertEmpty(vote);
+
             // Save vote to MySQL
-            Vote vote = Convert.convert(Vote.class, voteVo);
+            vote = Convert.convert(Vote.class, voteVo);
             vote = this.saveId(vote);
 
             // Save vote to Elasticsearch

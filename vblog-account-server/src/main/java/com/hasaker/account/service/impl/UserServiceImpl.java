@@ -89,6 +89,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
 
         // create a user
         user = new User(username, password);
+        user.setNickname(username);
         user = this.saveId(user);
 
         // assign default role to user
