@@ -28,4 +28,7 @@ public interface AccountClient {
 
     @PostMapping("/account/update")
     Ajax update(RequestUserUpdateVo userUpdateVo);
+
+    @GetMapping(value = "/account/index-all")
+    Ajax indexAllUsers();
 }

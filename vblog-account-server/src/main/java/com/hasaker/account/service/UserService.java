@@ -20,4 +20,6 @@ public interface UserService extends BaseService<User> {
     void changePassword(String username, String password);
 
     void updateUser(RequestUserUpdateVo userUpdateVo);
+
+    void indexAll();
 }

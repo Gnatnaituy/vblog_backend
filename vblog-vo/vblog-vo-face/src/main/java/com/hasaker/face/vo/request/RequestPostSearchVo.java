@@ -22,5 +22,8 @@ public class RequestPostSearchVo extends SearchVo {
     private String keyword;
 
     @ApiModelProperty(value = "filter topic")
-    private String topic;
+    private Long topic;
+
+    @ApiModelProperty(value = "filter by poster")
+    private Long poster;
 }

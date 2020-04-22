@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @package com.hasaker.vblog.service.impl
@@ -144,5 +145,25 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
         UserDoc userDoc = esService.getById(user.getId(), UserDoc.class);
         BeanUtil.copyProperties(user, userDoc);
         esService.index(userDoc);
+    }
+
+    /**
+     * Index all user information to ES
+     */
+    @Override
+    public void indexAll() {
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        List<User> users = this.list(userQueryWrapper);
+
+        if (ObjectUtil.isNotNull(users)) {
+            List<UserDoc> userDocs = users.stream().map(o -> {
+                UserDoc userDoc = Convert.convert(UserDoc.class, o);
+                userDoc.setRegisterTime(o.getCreateTime());
+                return userDoc;
+            }).collect(Collectors.toList());
+            esService.deleteIndex(UserDoc.class);
+            esService.createIndex(UserDoc.class);
+            esService.index(userDocs);
+        }
     }
 }

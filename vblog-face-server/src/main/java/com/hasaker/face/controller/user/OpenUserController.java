@@ -1,5 +1,6 @@
 package com.hasaker.face.controller.user;
 
+import com.hasaker.account.feign.AccountClient;
 import com.hasaker.common.vo.Ajax;
 import com.hasaker.common.vo.PageInfo;
 import com.hasaker.face.service.user.UserService;
@@ -21,6 +22,8 @@ public class OpenUserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private AccountClient accountClient;
 
     @PostMapping("/search")
     public Ajax<PageInfo<ResponseUserInfoVo>> search(@RequestBody RequestUserSearchVo searchVo) {
@@ -30,5 +33,10 @@ public class OpenUserController {
     @GetMapping("/detail/{userId}")
     public Ajax<ResponseUserDetailVo> detail(@PathVariable("userId") Long userId) {
         return Ajax.getInstance().successT(userService.detail(userId));
+    }
+
+    @GetMapping("/index-all")
+    public Ajax indexAll() {
+        return accountClient.indexAllUsers();
     }
 }

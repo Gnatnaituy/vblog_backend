@@ -51,4 +51,12 @@ public class AccountController {
 
         return Ajax.success();
     }
+
+    @ApiOperation(value = "Index all user information to ES")
+    @GetMapping(value = "/index-all")
+    public Ajax indexAll() {
+        userService.indexAll();
+
+        return Ajax.success();
+    }
 }

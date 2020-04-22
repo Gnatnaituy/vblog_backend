@@ -69,13 +69,18 @@ public class PostServiceImpl implements PostService {
     public PageInfo<ResponsePostVo> page(RequestPostSearchVo pageVo) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(pageVo);
 
+        BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
+        if (ObjectUtils.isNotNull(pageVo.getKeyword())) {
+            boolQueryBuilder.should(QueryBuilders.matchQuery(PostDoc.CONTENT, pageVo.getKeyword()));
+        }
+        if (ObjectUtils.isNotNull(pageVo.getPoster())) {
+            boolQueryBuilder.must(QueryBuilders.termQuery(PostDoc.POSTER, pageVo.getPoster()));
+        }
+
         // Search by keyword is keyword is not null else match all
-        String keyword = pageVo.getKeyword();
-        QueryBuilder queryBuilder = ObjectUtils.isNull(keyword)
+        QueryBuilder queryBuilder = ObjectUtils.isNull(pageVo.getKeyword()) && ObjectUtils.isNull(pageVo.getPoster())
                 ? QueryBuilders.matchAllQuery()
-                : new BoolQueryBuilder()
-                .should(QueryBuilders.matchQuery(PostDoc.CONTENT, keyword))
-                .should(QueryBuilders.termQuery(PostDoc.TOPICS, keyword));
+                : boolQueryBuilder;
         SearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(queryBuilder).build();
 
         // Configuration page
