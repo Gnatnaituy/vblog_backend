@@ -37,6 +37,11 @@ public class AliyunUploadServiceImpl implements UploadService {
     @Value("${aliyun.bucket}")
     private String BUCKET;
 
+    /**
+     * Upload a file to Aliyun OSS
+     * @param multipartFile
+     * @return A public accessible temporary url
+     */
     @Override
     @SneakyThrows
     public String upload(MultipartFile multipartFile) {
@@ -50,6 +55,11 @@ public class AliyunUploadServiceImpl implements UploadService {
         return generateAccessUrl(key);
     }
 
+    /**
+     * Generate a public accessible temporary url for a file key
+     * @param key
+     * @return
+     */
     @Override
     public String generateAccessUrl(String key) {
         Date expiration = new Date(System.currentTimeMillis() + 3600 * 1000);
@@ -57,6 +67,11 @@ public class AliyunUploadServiceImpl implements UploadService {
         return ossClient.generatePresignedUrl(BUCKET, key, expiration).toString();
     }
 
+    /**
+     * Get file key from a public url
+     * @param publicUrl
+     * @return
+     */
     @Override
     public String getKey(String publicUrl) {
         String decodedPublicUrl = URLDecoder.decode(publicUrl, StandardCharsets.UTF_8);

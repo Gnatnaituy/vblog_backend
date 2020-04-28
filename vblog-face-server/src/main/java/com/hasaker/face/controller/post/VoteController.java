@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
-
 /**
  * @package com.hasaker.face.controller.post
  * @author 余天堂
@@ -30,8 +28,6 @@ public class VoteController extends BaseController {
     @PostMapping("/vote/vote")
     Ajax vote(@RequestBody RequestVoteVo voteVo) {
         voteVo.setVoter(getUserId());
-
-        log.info("VOTE AT {}", new Date().getTime());
 
         return postClient.vote(voteVo);
     }

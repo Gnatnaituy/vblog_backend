@@ -23,7 +23,7 @@ public class PostDoc {
     @Field(type = FieldType.Long)
     private Long id;
 
-    @Field(type = FieldType.Text)
+    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
     private String content;
 
     @Field(type = FieldType.Keyword)
