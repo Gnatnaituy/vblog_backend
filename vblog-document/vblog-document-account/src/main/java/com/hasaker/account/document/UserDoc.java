@@ -47,7 +47,7 @@ public class UserDoc {
     @Field(type = FieldType.Keyword)
     private String background;
 
-    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
+    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word", fielddata = true)
     private String bio;
 
     @Field(type = FieldType.Keyword)

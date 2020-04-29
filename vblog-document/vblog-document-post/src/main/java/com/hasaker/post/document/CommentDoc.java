@@ -26,7 +26,7 @@ public class CommentDoc {
     @Field(type = FieldType.Long)
     private Long commentId;
 
-    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word")
+    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word", fielddata = true)
     private String content;
 
     @Field(type = FieldType.Integer)
