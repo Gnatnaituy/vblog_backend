@@ -7,17 +7,19 @@ import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.Aggregations;
+import org.elasticsearch.search.aggregations.bucket.terms.ParsedStringTerms;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
 import org.springframework.data.elasticsearch.core.query.*;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -86,6 +88,22 @@ public class EsServiceImpl implements EsService {
         SearchQuery searchQuery = new NativeSearchQuery(boolQueryBuilder);
 
         return elasticsearchOperations.queryForPage(searchQuery, clazz);
+    }
+
+    @Override
+    public <T> Map<String, Long> aggregate(String field, Integer size, Class<T> clazz) {
+        NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
+        queryBuilder.addAggregation(AggregationBuilders.terms("tmpAgg").field(field).size(size));
+
+        AggregatedPage<T> res = (AggregatedPage<T>) elasticsearchOperations.queryForPage(queryBuilder.build(), clazz);
+        Aggregations aggregations = res.getAggregations();
+        ParsedStringTerms stringTerms = aggregations.get("tmpAgg");
+        List<ParsedStringTerms.ParsedBucket> buckets = (List<ParsedStringTerms.ParsedBucket>) stringTerms.getBuckets();
+
+        Map<String, Long> worldCount = new HashMap<>(buckets.size());
+        buckets.forEach(o -> worldCount.put(o.getKey().toString(), o.getDocCount()));
+
+        return worldCount;
     }
 
     @Override

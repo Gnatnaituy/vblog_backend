@@ -8,6 +8,7 @@ import org.springframework.data.elasticsearch.core.query.SearchQuery;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public interface EsService {
 
@@ -24,6 +25,8 @@ public interface EsService {
     <T> Page<T> page(Pair<String, Object> fieldValuePair, Class<T> clazz);
 
     <T> Page<T> page(Collection<Pair<String, Object>> fieldValuePairs, Class<T> clazz);
+
+    <T> Map<String, Long> aggregate(String field, Integer size, Class<T> clazz);
 
     <T> T getById(Long id, Class<T> clazz);
 

@@ -12,11 +12,9 @@ import com.hasaker.face.exception.enums.PostExceptionEnums;
 import com.hasaker.face.service.post.CommentService;
 import com.hasaker.face.service.post.PostService;
 import com.hasaker.face.service.user.UserService;
+import com.hasaker.face.vo.request.RequestAggregationVo;
 import com.hasaker.face.vo.request.RequestPostSearchVo;
-import com.hasaker.face.vo.response.ResponsePostImageVo;
-import com.hasaker.face.vo.response.ResponsePostTopicVo;
-import com.hasaker.face.vo.response.ResponsePostVo;
-import com.hasaker.face.vo.response.ResponseUserInfoVo;
+import com.hasaker.face.vo.response.*;
 import com.hasaker.post.document.*;
 import com.hasaker.post.feign.PostClient;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -156,6 +154,22 @@ public class PostServiceImpl implements PostService {
         fillVotes(Collections.singletonList(postVo));
 
         return postVo;
+    }
+
+    /**
+     * List hot worlds and respective doc count
+     * @param aggregationVo
+     * @return
+     */
+    @Override
+    public List<ResponseBucketVo> getHotWorlds(RequestAggregationVo aggregationVo) {
+
+        Map<String, Long> worldCount = esService.aggregate(aggregationVo.getField(), aggregationVo.getSize(), PostDoc.class);
+
+        return worldCount.entrySet().stream()
+                .map(o -> new ResponseBucketVo(o.getKey(), o.getValue()))
+                .sorted((o1, o2) -> (int) (o2.getDocCount() - o1.getDocCount()))
+                .collect(Collectors.toList());
     }
 
     /**

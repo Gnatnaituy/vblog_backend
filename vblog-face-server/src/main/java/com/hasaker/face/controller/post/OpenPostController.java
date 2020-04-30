@@ -6,7 +6,9 @@ import com.hasaker.face.controller.base.BaseController;
 import com.hasaker.face.service.post.CommentService;
 import com.hasaker.face.service.post.PostService;
 import com.hasaker.face.service.post.VoteService;
+import com.hasaker.face.vo.request.RequestAggregationVo;
 import com.hasaker.face.vo.request.RequestPostSearchVo;
+import com.hasaker.face.vo.response.ResponseBucketVo;
 import com.hasaker.face.vo.response.ResponsePostCommentVo;
 import com.hasaker.face.vo.response.ResponsePostVo;
 import com.hasaker.face.vo.response.ResponseUserInfoVo;
@@ -37,6 +39,11 @@ public class OpenPostController extends BaseController {
         searchVo.setUserId(getUserId());
 
         return Ajax.getInstance().successT(postService.page(searchVo));
+    }
+
+    @PostMapping("/hot-worlds")
+    Ajax<List<ResponseBucketVo>> listHotWorlds(@RequestBody RequestAggregationVo aggregationVo) {
+        return Ajax.getInstance().successT(postService.getHotWorlds(aggregationVo));
     }
 
     @GetMapping("/{postId}")

@@ -34,7 +34,7 @@ public class SwaggerConfig {
         ParameterBuilder parameterBuilder = new ParameterBuilder();
         parameterBuilder.name("Authorization").description("Jwt Token")
                 .modelRef(new ModelRef("string")).parameterType("header")
-                .required(false).defaultValue("Bearer ").build();
+                .required(false).build();
         List<Parameter> parameters = new ArrayList<>(1);
         parameters.add(parameterBuilder.build());
 

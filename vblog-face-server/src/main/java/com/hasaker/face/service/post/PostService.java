@@ -1,8 +1,12 @@
 package com.hasaker.face.service.post;
 
 import com.hasaker.common.vo.PageInfo;
+import com.hasaker.face.vo.request.RequestAggregationVo;
 import com.hasaker.face.vo.request.RequestPostSearchVo;
+import com.hasaker.face.vo.response.ResponseBucketVo;
 import com.hasaker.face.vo.response.ResponsePostVo;
+
+import java.util.List;
 
 /**
  * @package com.hasaker.face.service
@@ -15,6 +19,8 @@ public interface PostService {
     PageInfo<ResponsePostVo> page(RequestPostSearchVo pageVo);
 
     ResponsePostVo getById(Long postId);
+
+    List<ResponseBucketVo> getHotWorlds(RequestAggregationVo aggregationVo);
 
     void indexAll();
 }
