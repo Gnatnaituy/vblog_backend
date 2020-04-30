@@ -106,7 +106,7 @@ public class PostServiceImpl implements PostService {
             List<ResponsePostVo> postVos = postDocPage.getContent().stream().map(o -> {
                 ResponsePostVo postVo = Convert.convert(ResponsePostVo.class, o);
                 postVo.setPoster(posterMap.get(o.getPoster()));
-                postVo.setTopics(topicMap.containsKey(o.getId())
+                postVo.setTopics(ObjectUtils.isNotNull(o.getTopics())
                         ? o.getTopics().stream().map(topicMap::get).collect(Collectors.toList())
                         : Collections.emptyList());
                 return postVo;

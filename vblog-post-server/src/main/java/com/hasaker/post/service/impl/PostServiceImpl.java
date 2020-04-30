@@ -14,11 +14,16 @@ import com.hasaker.post.entity.*;
 import com.hasaker.post.exception.enums.PostExceptionEnum;
 import com.hasaker.post.mapper.PostMapper;
 import com.hasaker.post.service.*;
+import com.hasaker.post.vo.request.RequestPostTopicVo;
 import com.hasaker.post.vo.request.RequestPostVo;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
+import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +60,8 @@ public class PostServiceImpl extends BaseServiceImpl<PostMapper, Post> implement
     public Long post(RequestPostVo postVo) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(postVo);
 
+        filterTopic(postVo);
+
         Post post = Convert.convert(Post.class, postVo);
         post = this.saveId(post);
         final Long postId = post.getId();
@@ -81,7 +88,7 @@ public class PostServiceImpl extends BaseServiceImpl<PostMapper, Post> implement
         // Save topics of this post
         if (ObjectUtils.isNotNull(postVo.getTopics())) {
             // Save new topic to es
-            List<TopicDoc> topicDocs = postVo.getTopics().stream()
+            List<TopicDoc> newTopics = postVo.getTopics().stream()
                     .filter(o -> ObjectUtils.isNull(o.getTopicId()))
                     .map(o -> {
                         Topic topic = Convert.convert(Topic.class, o);
@@ -89,7 +96,9 @@ public class PostServiceImpl extends BaseServiceImpl<PostMapper, Post> implement
                         o.setTopicId(topic.getId());
                         return Convert.convert(TopicDoc.class, topic);
                     }).collect(Collectors.toList());
-            esService.index(topicDocs);
+            if (ObjectUtils.isNotNull(newTopics)) {
+                esService.index(newTopics);
+            }
 
             // Save post topic relationship to database
             List<PostTopic> topics = postVo.getTopics().stream()
@@ -168,5 +177,59 @@ public class PostServiceImpl extends BaseServiceImpl<PostMapper, Post> implement
         }).collect(Collectors.toList());
 
         esService.index(postDocs);
+    }
+
+    /**
+     * Filter topics from post content
+     * @param postVo
+     * @return
+     */
+    private void filterTopic(RequestPostVo postVo) {
+        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(postVo);
+
+        // filter topics from content rounded by '#'
+        List<String> topics = new ArrayList<>();
+        String content = postVo.getContent();
+        StringBuilder replacedContent = new StringBuilder();
+        String topic;
+        if (content.contains("#")) {
+            char[] chars = content.toCharArray();
+            for (int prefix = 0; prefix < chars.length - 1; prefix++) {
+                if (chars[prefix] == '#') {
+                    for (int suffix = prefix + 1; suffix < chars.length; suffix++) {
+                        if (chars[suffix] == '#') {
+                            if (suffix - prefix > 1) {
+                                topic = content.substring(prefix + 1, suffix);
+                                replacedContent.append(content, replacedContent.length() + topics.size() * 2, prefix).append(topic);
+                                topics.add(topic);
+                                prefix = suffix;
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        // set topicId for existed topics
+        if (ObjectUtils.isNotNull(topics)) {
+            SearchQuery searchQuery = new NativeSearchQuery(QueryBuilders.termsQuery(TopicDoc.NAME, topics));
+            List<TopicDoc> existedTopics = esService.list(searchQuery, TopicDoc.class);
+
+            postVo.setTopics(topics.stream().map(o -> {
+                RequestPostTopicVo topicVo = new RequestPostTopicVo();
+                topicVo.setName(o);
+                if (ObjectUtils.isNotNull(existedTopics)) {
+                    for (TopicDoc topicDoc : existedTopics) {
+                        if (topicDoc.getName().equals(o)) {
+                            topicVo.setTopicId(topicDoc.getId());
+                        }
+                    }
+                }
+                return topicVo;
+            }).collect(Collectors.toList()));
+
+            postVo.setContent(replacedContent.toString());
+        }
     }
 }
