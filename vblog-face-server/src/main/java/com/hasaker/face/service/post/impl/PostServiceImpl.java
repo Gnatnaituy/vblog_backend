@@ -2,6 +2,7 @@ package com.hasaker.face.service.post.impl;
 
 import cn.hutool.core.convert.Convert;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
+import com.hasaker.account.document.UserDoc;
 import com.hasaker.common.consts.Consts;
 import com.hasaker.common.consts.RequestConsts;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
@@ -192,6 +193,40 @@ public class PostServiceImpl implements PostService {
             aggVo.setCount(topicCount.get(o.getId()));
             return aggVo;
         }).sorted((o1, o2) -> (int) (o2.getCount() - o1.getCount())).collect(Collectors.toList());
+    }
+
+    /**
+     * List the most active users
+     * Analyzed by post & comment & vote count
+     * @param aggregationVo
+     * @return
+     */
+    @Override
+    public List<ResponseHotUsersAggVo> getHotUsers(RequestAggregationVo aggregationVo) {
+        Map<Long, Long> userPostCount = esService.aggregateLongField(PostDoc.POSTER, 100, PostDoc.class);
+        Map<Long, Long> userCommentCount = esService.aggregateLongField(CommentDoc.COMMENTER, 100, CommentDoc.class);
+        Map<Long, Long> userVoteCount = esService.aggregateLongField(VoteDoc.VOTER, 100, VoteDoc.class);
+
+        Set<Long> userIds = new HashSet<>();
+        userIds.addAll(userPostCount.keySet());
+        userIds.addAll(userCommentCount.keySet());
+        userIds.addAll(userVoteCount.keySet());
+
+        SearchQuery searchQuery = new NativeSearchQuery(QueryBuilders.termsQuery(Consts.ID, userIds));
+        searchQuery.setPageable(PageRequest.of(0, userIds.size()));
+        List<UserDoc> userDocs = esService.list(searchQuery, UserDoc.class);
+
+        return userDocs.stream()
+                .map(o -> {
+                    ResponseHotUsersAggVo aggVo = new ResponseHotUsersAggVo();
+                    aggVo.setUser(Convert.convert(ResponseUserInfoVo.class, o));
+                    aggVo.setCount(userPostCount.getOrDefault(o.getId(), 0L)
+                            + userCommentCount.getOrDefault(o.getId(), 0L)
+                            + userVoteCount.getOrDefault(o.getId(), 0L));
+                    return aggVo;
+                })
+                .sorted((o1, o2) -> (int) (o2.getCount() - o1.getCount()))
+                .limit(aggregationVo.getSize()).collect(Collectors.toList());
     }
 
     /**

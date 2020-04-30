@@ -3,7 +3,6 @@ package com.hasaker.post.service.impl;
 import cn.hutool.core.convert.Convert;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
-import com.hasaker.common.base.BaseEntity;
 import com.hasaker.common.base.impl.BaseServiceImpl;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
 import com.hasaker.component.elasticsearch.service.EsService;
@@ -165,8 +164,9 @@ public class PostServiceImpl extends BaseServiceImpl<PostMapper, Post> implement
 
         QueryWrapper<PostTopic> postTopicQueryWrapper = new QueryWrapper<>();
         List<PostTopic> topics = postTopicService.list(postTopicQueryWrapper);
-        Map<Long, List<Long>> topicMap = topics.stream().collect(Collectors.groupingBy(PostTopic::getPostId,
-                Collectors.mapping(BaseEntity::getId, Collectors.toList())));
+        Map<Long, List<Long>> topicMap = topics.stream()
+                .collect(Collectors.groupingBy(PostTopic::getPostId,
+                        Collectors.mapping(PostTopic::getTopicId, Collectors.toList())));
 
         List<PostDoc> postDocs = posts.stream().map(o -> {
             PostDoc postDoc = Convert.convert(PostDoc.class, o);

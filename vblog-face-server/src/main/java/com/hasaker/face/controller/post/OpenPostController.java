@@ -48,6 +48,11 @@ public class OpenPostController extends BaseController {
         return Ajax.getInstance().successT(postService.getHotTopics(aggregationVo));
     }
 
+    @PostMapping("/hot-users")
+    Ajax<List<ResponseHotUsersAggVo>> listHotUsers(@RequestBody RequestAggregationVo aggregationVo) {
+        return Ajax.getInstance().successT(postService.getHotUsers(aggregationVo));
+    }
+
     @GetMapping("/{postId}")
     Ajax<ResponsePostVo> get(@PathVariable Long postId) {
         return Ajax.getInstance().successT(postService.getById(postId));

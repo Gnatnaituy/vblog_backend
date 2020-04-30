@@ -4,6 +4,7 @@ import com.hasaker.common.vo.PageInfo;
 import com.hasaker.face.vo.request.RequestAggregationVo;
 import com.hasaker.face.vo.request.RequestPostSearchVo;
 import com.hasaker.face.vo.response.ResponseHotTopicsAggVo;
+import com.hasaker.face.vo.response.ResponseHotUsersAggVo;
 import com.hasaker.face.vo.response.ResponseHotWorldsAggVo;
 import com.hasaker.face.vo.response.ResponsePostVo;
 
@@ -24,6 +25,8 @@ public interface PostService {
     List<ResponseHotWorldsAggVo> getHotWorlds(RequestAggregationVo aggregationVo);
 
     List<ResponseHotTopicsAggVo> getHotTopics(RequestAggregationVo aggregationVo);
+
+    List<ResponseHotUsersAggVo> getHotUsers(RequestAggregationVo aggregationVo);
 
     void indexAll();
 }
