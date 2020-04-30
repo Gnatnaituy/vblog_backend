@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -162,14 +163,35 @@ public class PostServiceImpl implements PostService {
      * @return
      */
     @Override
-    public List<ResponseBucketVo> getHotWorlds(RequestAggregationVo aggregationVo) {
+    public List<ResponseHotWorldsAggVo> getHotWorlds(RequestAggregationVo aggregationVo) {
 
-        Map<String, Long> worldCount = esService.aggregate(aggregationVo.getField(), aggregationVo.getSize(), PostDoc.class);
+        Map<String, Long> worldCount = esService.aggregateStringField(aggregationVo.getField(), aggregationVo.getSize(), PostDoc.class);
 
         return worldCount.entrySet().stream()
-                .map(o -> new ResponseBucketVo(o.getKey(), o.getValue()))
-                .sorted((o1, o2) -> (int) (o2.getDocCount() - o1.getDocCount()))
+                .map(o -> new ResponseHotWorldsAggVo(o.getKey(), o.getValue()))
+                .sorted((o1, o2) -> (int) (o2.getCount() - o1.getCount()))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * List hot topics and respective doc count
+     * @param aggregationVo
+     * @return
+     */
+    @Override
+    public List<ResponseHotTopicsAggVo> getHotTopics(RequestAggregationVo aggregationVo) {
+        Map<Long, Long> topicCount = esService.aggregateLongField(aggregationVo.getField(), aggregationVo.getSize(), PostDoc.class);
+
+        SearchQuery searchQuery = new NativeSearchQuery(QueryBuilders.termsQuery(Consts.ID, topicCount.keySet()));
+        searchQuery.setPageable(PageRequest.of(0, aggregationVo.getSize()));
+        List<TopicDoc> topicDocs = esService.list(searchQuery, TopicDoc.class);
+
+        return topicDocs.stream().map(o -> {
+            ResponseHotTopicsAggVo aggVo = new ResponseHotTopicsAggVo();
+            aggVo.setTopic(Convert.convert(ResponsePostTopicVo.class, o));
+            aggVo.setCount(topicCount.get(o.getId()));
+            return aggVo;
+        }).sorted((o1, o2) -> (int) (o2.getCount() - o1.getCount())).collect(Collectors.toList());
     }
 
     /**

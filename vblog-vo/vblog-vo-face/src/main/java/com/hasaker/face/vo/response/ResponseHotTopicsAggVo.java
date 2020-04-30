@@ -7,15 +7,15 @@ import lombok.NoArgsConstructor;
 /**
  * @package com.hasaker.face.vo.response
  * @author 余天堂
- * @create 2020/4/30 01:46
- * @description ResponseBucketVo
+ * @create 2020/4/30 22:21
+ * @description ResponseHotTopicsAggVo
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResponseBucketVo {
+public class ResponseHotTopicsAggVo {
 
-    private String key;
+    private ResponsePostTopicVo topic;
 
-    private Long docCount;
+    private Long count;
 }

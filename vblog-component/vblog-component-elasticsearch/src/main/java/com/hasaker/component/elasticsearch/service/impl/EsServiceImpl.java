@@ -9,6 +9,7 @@ import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.Aggregations;
+import org.elasticsearch.search.aggregations.bucket.terms.ParsedLongTerms;
 import org.elasticsearch.search.aggregations.bucket.terms.ParsedStringTerms;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -91,17 +92,32 @@ public class EsServiceImpl implements EsService {
     }
 
     @Override
-    public <T> Map<String, Long> aggregate(String field, Integer size, Class<T> clazz) {
+    public <T> Map<String, Long> aggregateStringField(String field, Integer size, Class<T> clazz) {
         NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
-        queryBuilder.addAggregation(AggregationBuilders.terms("tmpAgg").field(field).size(size));
+        queryBuilder.addAggregation(AggregationBuilders.terms("stringFieldAgg").field(field).size(size));
 
         AggregatedPage<T> res = (AggregatedPage<T>) elasticsearchOperations.queryForPage(queryBuilder.build(), clazz);
         Aggregations aggregations = res.getAggregations();
-        ParsedStringTerms stringTerms = aggregations.get("tmpAgg");
+        ParsedStringTerms stringTerms = aggregations.get("stringFieldAgg");
         List<ParsedStringTerms.ParsedBucket> buckets = (List<ParsedStringTerms.ParsedBucket>) stringTerms.getBuckets();
 
         Map<String, Long> worldCount = new HashMap<>(buckets.size());
         buckets.forEach(o -> worldCount.put(o.getKey().toString(), o.getDocCount()));
+
+        return worldCount;
+    }
+
+    @Override
+    public <T> Map<Long, Long> aggregateLongField(String field, Integer size, Class<T> clazz) {
+        NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
+        queryBuilder.addAggregation(AggregationBuilders.terms("longFieldAgg").field(field).size(size));
+
+        AggregatedPage<T> res = (AggregatedPage<T>) elasticsearchOperations.queryForPage(queryBuilder.build(), clazz);
+        ParsedLongTerms longTerms = res.getAggregations().get("longFieldAgg");
+        List<ParsedLongTerms.ParsedBucket> buckets = (List<ParsedLongTerms.ParsedBucket>) longTerms.getBuckets();
+
+        Map<Long, Long> worldCount = new HashMap<>(buckets.size());
+        buckets.forEach(o -> worldCount.put(Long.valueOf(o.getKey().toString()), o.getDocCount()));
 
         return worldCount;
     }

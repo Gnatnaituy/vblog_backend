@@ -26,7 +26,9 @@ public interface EsService {
 
     <T> Page<T> page(Collection<Pair<String, Object>> fieldValuePairs, Class<T> clazz);
 
-    <T> Map<String, Long> aggregate(String field, Integer size, Class<T> clazz);
+    <T> Map<String, Long> aggregateStringField(String field, Integer size, Class<T> clazz);
+
+    <T> Map<Long, Long> aggregateLongField(String field, Integer size, Class<T> clazz);
 
     <T> T getById(Long id, Class<T> clazz);
 

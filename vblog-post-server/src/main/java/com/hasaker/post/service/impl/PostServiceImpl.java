@@ -198,6 +198,7 @@ public class PostServiceImpl extends BaseServiceImpl<PostMapper, Post> implement
                 if (chars[prefix] == '#') {
                     for (int suffix = prefix + 1; suffix < chars.length; suffix++) {
                         if (chars[suffix] == '#') {
+                            // ignore continuous situation like '##' and '###'
                             if (suffix - prefix > 1) {
                                 topic = content.substring(prefix + 1, suffix);
                                 replacedContent.append(content, replacedContent.length() + topics.size() * 2, prefix).append(topic);

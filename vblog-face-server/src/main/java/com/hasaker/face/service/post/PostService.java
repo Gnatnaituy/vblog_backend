@@ -3,7 +3,8 @@ package com.hasaker.face.service.post;
 import com.hasaker.common.vo.PageInfo;
 import com.hasaker.face.vo.request.RequestAggregationVo;
 import com.hasaker.face.vo.request.RequestPostSearchVo;
-import com.hasaker.face.vo.response.ResponseBucketVo;
+import com.hasaker.face.vo.response.ResponseHotTopicsAggVo;
+import com.hasaker.face.vo.response.ResponseHotWorldsAggVo;
 import com.hasaker.face.vo.response.ResponsePostVo;
 
 import java.util.List;
@@ -20,7 +21,9 @@ public interface PostService {
 
     ResponsePostVo getById(Long postId);
 
-    List<ResponseBucketVo> getHotWorlds(RequestAggregationVo aggregationVo);
+    List<ResponseHotWorldsAggVo> getHotWorlds(RequestAggregationVo aggregationVo);
+
+    List<ResponseHotTopicsAggVo> getHotTopics(RequestAggregationVo aggregationVo);
 
     void indexAll();
 }

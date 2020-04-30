@@ -8,10 +8,7 @@ import com.hasaker.face.service.post.PostService;
 import com.hasaker.face.service.post.VoteService;
 import com.hasaker.face.vo.request.RequestAggregationVo;
 import com.hasaker.face.vo.request.RequestPostSearchVo;
-import com.hasaker.face.vo.response.ResponseBucketVo;
-import com.hasaker.face.vo.response.ResponsePostCommentVo;
-import com.hasaker.face.vo.response.ResponsePostVo;
-import com.hasaker.face.vo.response.ResponseUserInfoVo;
+import com.hasaker.face.vo.response.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,8 +39,13 @@ public class OpenPostController extends BaseController {
     }
 
     @PostMapping("/hot-worlds")
-    Ajax<List<ResponseBucketVo>> listHotWorlds(@RequestBody RequestAggregationVo aggregationVo) {
+    Ajax<List<ResponseHotWorldsAggVo>> listHotWorlds(@RequestBody RequestAggregationVo aggregationVo) {
         return Ajax.getInstance().successT(postService.getHotWorlds(aggregationVo));
+    }
+
+    @PostMapping("/hot-topics")
+    Ajax<List<ResponseHotTopicsAggVo>> listHotTopics(@RequestBody RequestAggregationVo aggregationVo) {
+        return Ajax.getInstance().successT(postService.getHotTopics(aggregationVo));
     }
 
     @GetMapping("/{postId}")
