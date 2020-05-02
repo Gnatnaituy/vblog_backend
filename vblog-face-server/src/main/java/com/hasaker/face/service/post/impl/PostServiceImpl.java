@@ -19,7 +19,6 @@ import com.hasaker.face.vo.response.*;
 import com.hasaker.post.document.*;
 import com.hasaker.post.feign.PostClient;
 import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -76,12 +75,11 @@ public class PostServiceImpl implements PostService {
         if (ObjectUtils.isNotNull(pageVo.getPoster())) {
             boolQueryBuilder.must(QueryBuilders.termQuery(PostDoc.POSTER, pageVo.getPoster()));
         }
+        if (ObjectUtils.isNotNull(pageVo.getTopic())) {
+            boolQueryBuilder.must(QueryBuilders.termQuery(PostDoc.TOPICS, pageVo.getTopic()));
+        }
 
-        // Search by keyword is keyword is not null else match all
-        QueryBuilder queryBuilder = ObjectUtils.isNull(pageVo.getKeyword()) && ObjectUtils.isNull(pageVo.getPoster())
-                ? QueryBuilders.matchAllQuery()
-                : boolQueryBuilder;
-        SearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(queryBuilder).build();
+        SearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder).build();
 
         // Configuration page
         searchQuery.setPageable(PageRequest.of(pageVo.getStart(), pageVo.getSize()));
