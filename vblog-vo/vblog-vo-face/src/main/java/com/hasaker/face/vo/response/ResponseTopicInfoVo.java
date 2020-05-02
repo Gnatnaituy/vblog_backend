@@ -14,14 +14,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @ApiModel(description = "Topic")
-public class ResponsePostTopicVo {
+public class ResponseTopicInfoVo {
 
     @ApiModelProperty(value = "Topic's ID")
     private Long id;
 
     @ApiModelProperty(value = "Topic's name")
     private String name;
-
-    @ApiModelProperty(value = "Topic's description")
-    private String description;
 }

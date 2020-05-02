@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ResponseHotTopicsAggVo {
 
-    private ResponsePostTopicVo topic;
+    private ResponseTopicInfoVo topic;
 
     private Long count;
 }

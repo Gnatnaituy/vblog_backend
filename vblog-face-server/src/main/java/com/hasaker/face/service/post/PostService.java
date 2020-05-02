@@ -5,7 +5,7 @@ import com.hasaker.face.vo.request.RequestAggregationVo;
 import com.hasaker.face.vo.request.RequestPostSearchVo;
 import com.hasaker.face.vo.response.ResponseHotTopicsAggVo;
 import com.hasaker.face.vo.response.ResponseHotUsersAggVo;
-import com.hasaker.face.vo.response.ResponseHotWorldsAggVo;
+import com.hasaker.face.vo.response.ResponseHotWordsAggVo;
 import com.hasaker.face.vo.response.ResponsePostVo;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public interface PostService {
 
     ResponsePostVo getById(Long postId);
 
-    List<ResponseHotWorldsAggVo> getHotWorlds(RequestAggregationVo aggregationVo);
+    List<ResponseHotWordsAggVo> getHotWords(RequestAggregationVo aggregationVo);
 
     List<ResponseHotTopicsAggVo> getHotTopics(RequestAggregationVo aggregationVo);
 

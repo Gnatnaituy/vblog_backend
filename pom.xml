@@ -17,7 +17,7 @@
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
 
         <spring-boot-dependencies.version>2.2.6.RELEASE</spring-boot-dependencies.version>
-        <spring-cloud-dependencies.version>Hoxton.SR3</spring-cloud-dependencies.version>
+        <spring-cloud-dependencies.version>Hoxton.SR4</spring-cloud-dependencies.version>
 
         <mybatis-plus.version>3.3.1</mybatis-plus.version>
         <springfox-swagger2.version>2.9.2</springfox-swagger2.version>

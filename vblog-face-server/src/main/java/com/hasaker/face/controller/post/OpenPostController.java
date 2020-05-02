@@ -5,6 +5,7 @@ import com.hasaker.common.vo.PageInfo;
 import com.hasaker.face.controller.base.BaseController;
 import com.hasaker.face.service.post.CommentService;
 import com.hasaker.face.service.post.PostService;
+import com.hasaker.face.service.post.TopicService;
 import com.hasaker.face.service.post.VoteService;
 import com.hasaker.face.vo.request.RequestAggregationVo;
 import com.hasaker.face.vo.request.RequestPostSearchVo;
@@ -30,6 +31,8 @@ public class OpenPostController extends BaseController {
     private CommentService commentService;
     @Autowired
     private VoteService voteService;
+    @Autowired
+    private TopicService topicService;
 
     @PostMapping("/list")
     Ajax<PageInfo<ResponsePostVo>> listPost(@RequestBody RequestPostSearchVo searchVo) {
@@ -38,9 +41,9 @@ public class OpenPostController extends BaseController {
         return Ajax.getInstance().successT(postService.page(searchVo));
     }
 
-    @PostMapping("/hot-worlds")
-    Ajax<List<ResponseHotWorldsAggVo>> listHotWorlds(@RequestBody RequestAggregationVo aggregationVo) {
-        return Ajax.getInstance().successT(postService.getHotWorlds(aggregationVo));
+    @PostMapping("/hot-words")
+    Ajax<List<ResponseHotWordsAggVo>> listHotWords(@RequestBody RequestAggregationVo aggregationVo) {
+        return Ajax.getInstance().successT(postService.getHotWords(aggregationVo));
     }
 
     @PostMapping("/hot-topics")
@@ -66,6 +69,11 @@ public class OpenPostController extends BaseController {
     @GetMapping("/comments/{postId}")
     Ajax<List<ResponsePostCommentVo>> listComments(@PathVariable("postId") Long postId) {
         return Ajax.getInstance().successT(commentService.listByPostId(postId));
+    }
+
+    @GetMapping("/topic/{topicId}")
+    Ajax<ResponseTopicDetailVo> topicDetail(@PathVariable("topicId") Long topicId) {
+        return Ajax.getInstance().successT(topicService.detail(topicId));
     }
 
     @GetMapping("/index-all")

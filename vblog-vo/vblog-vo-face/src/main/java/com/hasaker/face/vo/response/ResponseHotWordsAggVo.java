@@ -13,9 +13,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResponseHotWorldsAggVo {
+public class ResponseHotWordsAggVo {
 
-    private String world;
+    private String word;
 
     private Long count;
 }

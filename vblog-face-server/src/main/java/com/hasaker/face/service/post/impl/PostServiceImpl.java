@@ -99,8 +99,8 @@ public class PostServiceImpl implements PostService {
             Set<Long> topicIds = new HashSet<>();
             postDocPage.getContent().forEach(o -> topicIds.addAll(o.getTopics()));
             List<TopicDoc> topicDocs = ObjectUtils.isNull(topicIds) ? null : esService.getByIds(topicIds, TopicDoc.class);
-            Map<Long, ResponsePostTopicVo> topicMap = ObjectUtils.isNull(topicDocs) ? new HashMap<>()
-                    : topicDocs.stream().collect(Collectors.toMap(TopicDoc::getId, o -> Convert.convert(ResponsePostTopicVo.class, o)));
+            Map<Long, ResponseTopicInfoVo> topicMap = ObjectUtils.isNull(topicDocs) ? new HashMap<>()
+                    : topicDocs.stream().collect(Collectors.toMap(TopicDoc::getId, o -> Convert.convert(ResponseTopicInfoVo.class, o)));
 
             // Obtains users' info in those posts
             Map<Long, ResponseUserInfoVo> posterMap = userService.mapUserInfo(postDocPage.getContent().stream()
@@ -142,7 +142,7 @@ public class PostServiceImpl implements PostService {
 
         if (ObjectUtils.isNotNull(postDoc.getTopics())) {
             List<TopicDoc> topicDocs = esService.getByIds(postDoc.getTopics(), TopicDoc.class);
-            postVo.setTopics(topicDocs.stream().map(o -> Convert.convert(ResponsePostTopicVo.class, o))
+            postVo.setTopics(topicDocs.stream().map(o -> Convert.convert(ResponseTopicInfoVo.class, o))
                     .collect(Collectors.toList()));
         }
 
@@ -164,12 +164,12 @@ public class PostServiceImpl implements PostService {
      * @return
      */
     @Override
-    public List<ResponseHotWorldsAggVo> getHotWorlds(RequestAggregationVo aggregationVo) {
+    public List<ResponseHotWordsAggVo> getHotWords(RequestAggregationVo aggregationVo) {
 
-        Map<String, Long> worldCount = esService.aggregateStringField(aggregationVo.getField(), aggregationVo.getSize(), PostDoc.class);
+        Map<String, Long> wordCount = esService.aggregateStringField(aggregationVo.getField(), aggregationVo.getSize(), PostDoc.class);
 
-        return worldCount.entrySet().stream()
-                .map(o -> new ResponseHotWorldsAggVo(o.getKey(), o.getValue()))
+        return wordCount.entrySet().stream()
+                .map(o -> new ResponseHotWordsAggVo(o.getKey(), o.getValue()))
                 .sorted((o1, o2) -> (int) (o2.getCount() - o1.getCount()))
                 .collect(Collectors.toList());
     }
@@ -189,7 +189,7 @@ public class PostServiceImpl implements PostService {
 
         return topicDocs.stream().map(o -> {
             ResponseHotTopicsAggVo aggVo = new ResponseHotTopicsAggVo();
-            aggVo.setTopic(Convert.convert(ResponsePostTopicVo.class, o));
+            aggVo.setTopic(Convert.convert(ResponseTopicInfoVo.class, o));
             aggVo.setCount(topicCount.get(o.getId()));
             return aggVo;
         }).sorted((o1, o2) -> (int) (o2.getCount() - o1.getCount())).collect(Collectors.toList());
@@ -203,9 +203,9 @@ public class PostServiceImpl implements PostService {
      */
     @Override
     public List<ResponseHotUsersAggVo> getHotUsers(RequestAggregationVo aggregationVo) {
-        Map<Long, Long> userPostCount = esService.aggregateLongField(PostDoc.POSTER, 100, PostDoc.class);
-        Map<Long, Long> userCommentCount = esService.aggregateLongField(CommentDoc.COMMENTER, 100, CommentDoc.class);
-        Map<Long, Long> userVoteCount = esService.aggregateLongField(VoteDoc.VOTER, 100, VoteDoc.class);
+        Map<Long, Long> userPostCount = esService.aggregateLongField(PostDoc.POSTER, Integer.MAX_VALUE, PostDoc.class);
+        Map<Long, Long> userCommentCount = esService.aggregateLongField(CommentDoc.COMMENTER, Integer.MAX_VALUE, CommentDoc.class);
+        Map<Long, Long> userVoteCount = esService.aggregateLongField(VoteDoc.VOTER, Integer.MAX_VALUE, VoteDoc.class);
 
         Set<Long> userIds = new HashSet<>();
         userIds.addAll(userPostCount.keySet());
@@ -216,17 +216,16 @@ public class PostServiceImpl implements PostService {
         searchQuery.setPageable(PageRequest.of(0, userIds.size()));
         List<UserDoc> userDocs = esService.list(searchQuery, UserDoc.class);
 
-        return userDocs.stream()
-                .map(o -> {
-                    ResponseHotUsersAggVo aggVo = new ResponseHotUsersAggVo();
-                    aggVo.setUser(Convert.convert(ResponseUserInfoVo.class, o));
-                    aggVo.setCount(userPostCount.getOrDefault(o.getId(), 0L)
-                            + userCommentCount.getOrDefault(o.getId(), 0L)
-                            + userVoteCount.getOrDefault(o.getId(), 0L));
-                    return aggVo;
-                })
-                .sorted((o1, o2) -> (int) (o2.getCount() - o1.getCount()))
-                .limit(aggregationVo.getSize()).collect(Collectors.toList());
+        return userDocs.stream().map(o -> {
+            ResponseHotUsersAggVo aggVo = new ResponseHotUsersAggVo();
+            aggVo.setUser(Convert.convert(ResponseUserInfoVo.class, o));
+            aggVo.setCount(userPostCount.getOrDefault(o.getId(), 0L) * 5
+                    + userCommentCount.getOrDefault(o.getId(), 0L) * 2
+                    + userVoteCount.getOrDefault(o.getId(), 0L));
+            return aggVo;
+        }).sorted((o1, o2) -> (int) (o2.getCount() - o1.getCount()))
+                .limit(aggregationVo.getSize())
+                .collect(Collectors.toList());
     }
 
     /**

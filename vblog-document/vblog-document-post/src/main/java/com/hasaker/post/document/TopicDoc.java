@@ -23,7 +23,7 @@ public class TopicDoc {
     @Field(type = FieldType.Keyword)
     private String name;
 
-    @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_max_word", fielddata = true)
+    @Field(type = FieldType.Text, analyzer = "ik_smart", searchAnalyzer = "ik_smart", fielddata = true)
     private String description;
 
     @Field(type = FieldType.Long)

@@ -26,7 +26,7 @@ public class ResponsePostVo {
     private List<ResponsePostImageVo> images;
 
     @ApiModelProperty(value = "topics of this post")
-    private List<ResponsePostTopicVo> topics;
+    private List<ResponseTopicInfoVo> topics;
 
     @ApiModelProperty(value = "comments of this post")
     private List<ResponsePostCommentVo> comments;
