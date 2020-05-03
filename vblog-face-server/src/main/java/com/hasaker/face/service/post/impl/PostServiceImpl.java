@@ -73,8 +73,11 @@ public class PostServiceImpl implements PostService {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(pageVo);
 
         BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
+        if (ObjectUtils.isNotNull(pageVo.getPostId())) {
+            boolQueryBuilder.must(QueryBuilders.termQuery(Consts.POST_ID, pageVo.getPostId()));
+        }
         if (ObjectUtils.isNotNull(pageVo.getKeyword())) {
-            boolQueryBuilder.should(QueryBuilders.matchQuery(PostDoc.CONTENT, pageVo.getKeyword()));
+            boolQueryBuilder.must(QueryBuilders.matchQuery(PostDoc.CONTENT, pageVo.getKeyword()));
         }
         if (ObjectUtils.isNotNull(pageVo.getPoster())) {
             boolQueryBuilder.must(QueryBuilders.termQuery(PostDoc.POSTER, pageVo.getPoster()));
@@ -242,9 +245,11 @@ public class PostServiceImpl implements PostService {
             case Consts.MESSATE_TYPE_COMMENT:
                 esService.update(readVo.getMessageIds(), CommentMessageDoc.class,
                         new Pair<>(CommentMessageDoc.STATUS, Consts.MESSAGE_STATUS_READ));
+                break;
             case Consts.MESSATE_TYPE_VOTE:
                 esService.update(readVo.getMessageIds(), VoteMessageDoc.class,
                         new Pair<>(VoteMessageDoc.STATUS, Consts.MESSAGE_STATUS_READ));
+                break;
         }
     }
 

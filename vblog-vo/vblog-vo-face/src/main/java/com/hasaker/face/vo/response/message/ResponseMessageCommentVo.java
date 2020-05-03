@@ -16,11 +16,7 @@ public class ResponseMessageCommentVo {
 
     private Long postId;
 
-    private String postSummary;
-
     private Long commentId;
-
-    private String commentSummary;
 
     private ResponseUserInfoVo createUser;
 

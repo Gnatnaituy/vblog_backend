@@ -18,6 +18,9 @@ import lombok.NoArgsConstructor;
 @ApiModel(description = "Search post")
 public class RequestPostSearchVo extends SearchVo {
 
+    @ApiModelProperty(value = "post ID")
+    private Long postId;
+
     @ApiModelProperty(value = "search keyword")
     private String keyword;
 
