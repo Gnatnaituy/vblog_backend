@@ -6,7 +6,7 @@ package com.hasaker.common.consts;
  */
 public final class Consts {
 
-    // 数据库字段名
+    // MySQL common filed
     public static final String ID = "id";
     public static final String CREATE_TIME = "create_time";
     public static final String CREATE_USER = "create_user";
@@ -16,16 +16,14 @@ public final class Consts {
     public static final String IS_DELETED = "is_deleted";
     public static final String VERSION = "version";
 
-    // ES字段名
+    // ES common filed
     public static final String USER_ID = "userId";
     public static final String POST_ID = "postId";
     public static final String COMMENT_ID = "commentId";
 
-    // 布尔类型
+    // Boolean consts
     public static final String SUCCESS = "1";
     public static final String FAILURE = "0";
-    public static final Integer TRUE = 1;
-    public static final Integer FALSE = 0;
     public static final Integer YES = 1;
     public static final Integer NO = 0;
 
@@ -38,6 +36,12 @@ public final class Consts {
     public static final Integer FRIEND_NOT_FRIEND = 2;
     public static final Integer FRIEND_NOT_ME = 3;
     public static final Integer FRIEND_NOT_BOTH = 4;
+
+    // Message type & status
+    public static final String MESSATE_TYPE_VOTE = "VOTE";
+    public static final String MESSATE_TYPE_COMMENT = "COMMENT";
+    public static final Integer MESSAGE_STATUS_UNREAD = 0;
+    public static final Integer MESSAGE_STATUS_READ = 1;
 
     // Password max & min length
     public static final Integer PASSWORD_MIN_LEN = 8;

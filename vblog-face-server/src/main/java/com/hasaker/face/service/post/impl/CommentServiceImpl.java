@@ -1,6 +1,7 @@
 package com.hasaker.face.service.post.impl;
 
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.lang.Pair;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.hasaker.account.document.UserDoc;
 import com.hasaker.common.consts.Consts;
@@ -10,11 +11,14 @@ import com.hasaker.face.service.post.CommentService;
 import com.hasaker.face.service.user.UserService;
 import com.hasaker.face.vo.response.ResponsePostCommentVo;
 import com.hasaker.face.vo.response.ResponseUserInfoVo;
+import com.hasaker.face.vo.response.message.ResponseMessageCommentVo;
 import com.hasaker.post.document.CommentDoc;
+import com.hasaker.post.message.CommentMessageDoc;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -86,5 +90,36 @@ public class CommentServiceImpl implements CommentService {
         }
 
         return commentVo;
+    }
+
+    /**
+     * List unread comment message for current logged user
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<ResponseMessageCommentVo> listMessage(Long userId) {
+        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(userId);
+
+        List<Pair<String, Object>> matchFields = new ArrayList<>();
+        matchFields.add(new Pair<>(CommentMessageDoc.RECEIVER, userId));
+        matchFields.add(new Pair<>(CommentMessageDoc.STATUS, Consts.MESSAGE_STATUS_UNREAD));
+        List<CommentMessageDoc> commentMessageDocs = esService.list(matchFields, CommentMessageDoc.class);
+
+        if (ObjectUtils.isNotNull(commentMessageDocs)) {
+            List<Long> commenterIds = commentMessageDocs.stream().map(CommentMessageDoc::getCreateUser).collect(Collectors.toList());
+            List<UserDoc> commenters = esService.getByIds(commenterIds, UserDoc.class);
+            Map<Long, ResponseUserInfoVo> userMap = commenters.stream()
+                    .map(o -> Convert.convert(ResponseUserInfoVo.class, o))
+                    .collect(Collectors.toMap(ResponseUserInfoVo::getId, o -> o));
+
+            return commentMessageDocs.stream().map(o -> {
+                ResponseMessageCommentVo commentVo = Convert.convert(ResponseMessageCommentVo.class, o);
+                commentVo.setCreateUser(userMap.get(o.getCreateUser()));
+                return commentVo;
+            }).sorted((o1, o2) -> (int) (o2.getCreateTime() - o1.getCreateTime())).collect(Collectors.toList());
+        }
+
+        return Collections.emptyList();
     }
 }

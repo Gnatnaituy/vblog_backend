@@ -66,9 +66,9 @@ public class UserServiceImpl implements UserService {
         // Configuration page
         searchQuery.setPageable(PageRequest.of(searchVo.getStart(), searchVo.getSize()));
 
-        // If keyword is null, sort by create time of user
+        // If keyword is null, sort by register time
         if (ObjectUtils.isNull(searchVo.getKeyword())) {
-            searchQuery.addSort(Sort.by(Sort.Order.desc(Consts.CREATE_TIME)));
+            searchQuery.addSort(Sort.by(Sort.Order.desc(UserDoc.REGISTER_TIME)));
         }
 
         Page<UserDoc> userDocs = esService.page(searchQuery, UserDoc.class);

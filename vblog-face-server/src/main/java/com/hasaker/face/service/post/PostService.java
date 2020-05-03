@@ -2,6 +2,7 @@ package com.hasaker.face.service.post;
 
 import com.hasaker.common.vo.PageInfo;
 import com.hasaker.face.vo.request.RequestAggregationVo;
+import com.hasaker.face.vo.request.RequestMessageReadVo;
 import com.hasaker.face.vo.request.RequestPostSearchVo;
 import com.hasaker.face.vo.response.ResponseHotTopicsAggVo;
 import com.hasaker.face.vo.response.ResponseHotUsersAggVo;
@@ -27,6 +28,8 @@ public interface PostService {
     List<ResponseHotTopicsAggVo> getHotTopics(RequestAggregationVo aggregationVo);
 
     List<ResponseHotUsersAggVo> getHotUsers(RequestAggregationVo aggregationVo);
+
+    void readMessage(RequestMessageReadVo readVo);
 
     void indexAll();
 }

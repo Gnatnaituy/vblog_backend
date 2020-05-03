@@ -19,18 +19,9 @@ public class ResponseUserInfoVo {
     @ApiModelProperty(value = "用户ID")
     private Long id;
 
-    @ApiModelProperty(value = "用户名")
-    private String username;
-
     @ApiModelProperty(value = "昵称")
     private String nickname;
 
     @ApiModelProperty(value = "头像")
     private String avatar;
-
-    @ApiModelProperty(value = "性别")
-    private String gender;
-
-    @ApiModelProperty(value = "签名")
-    private String bio;
 }

@@ -58,7 +58,7 @@ public class EsServiceImpl implements EsService {
     }
 
     @Override
-    public <T> List<T> list(Collection<Pair<String, Object>> fieldValuePairs, Class<T> clazz) {
+    public <T> List<T>  list(Collection<Pair<String, Object>> fieldValuePairs, Class<T> clazz) {
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
         fieldValuePairs.forEach(o -> boolQueryBuilder.must(QueryBuilders.termQuery(o.getKey(), o.getValue())));
         SearchQuery searchQuery = new NativeSearchQuery(boolQueryBuilder);

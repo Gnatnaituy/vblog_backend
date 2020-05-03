@@ -1,6 +1,7 @@
 package com.hasaker.face.service.post.impl;
 
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.lang.Pair;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.hasaker.account.document.UserDoc;
 import com.hasaker.common.consts.Consts;
@@ -14,10 +15,13 @@ import com.hasaker.face.service.post.CommentService;
 import com.hasaker.face.service.post.PostService;
 import com.hasaker.face.service.user.UserService;
 import com.hasaker.face.vo.request.RequestAggregationVo;
+import com.hasaker.face.vo.request.RequestMessageReadVo;
 import com.hasaker.face.vo.request.RequestPostSearchVo;
 import com.hasaker.face.vo.response.*;
 import com.hasaker.post.document.*;
 import com.hasaker.post.feign.PostClient;
+import com.hasaker.post.message.CommentMessageDoc;
+import com.hasaker.post.message.VoteMessageDoc;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -224,6 +228,24 @@ public class PostServiceImpl implements PostService {
         }).sorted((o1, o2) -> (int) (o2.getCount() - o1.getCount()))
                 .limit(aggregationVo.getSize())
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Mark message read
+     * @param readVo
+     */
+    @Override
+    public void readMessage(RequestMessageReadVo readVo) {
+        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(readVo);
+
+        switch (readVo.getMessageType()) {
+            case Consts.MESSATE_TYPE_COMMENT:
+                esService.update(readVo.getMessageIds(), CommentMessageDoc.class,
+                        new Pair<>(CommentMessageDoc.STATUS, Consts.MESSAGE_STATUS_READ));
+            case Consts.MESSATE_TYPE_VOTE:
+                esService.update(readVo.getMessageIds(), VoteMessageDoc.class,
+                        new Pair<>(VoteMessageDoc.STATUS, Consts.MESSAGE_STATUS_READ));
+        }
     }
 
     /**

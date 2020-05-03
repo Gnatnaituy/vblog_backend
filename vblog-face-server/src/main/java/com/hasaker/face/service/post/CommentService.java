@@ -1,6 +1,7 @@
 package com.hasaker.face.service.post;
 
 import com.hasaker.face.vo.response.ResponsePostCommentVo;
+import com.hasaker.face.vo.response.message.ResponseMessageCommentVo;
 
 import java.util.List;
 
@@ -15,4 +16,6 @@ public interface CommentService {
     List<ResponsePostCommentVo> listByPostId(Long postId);
 
     ResponsePostCommentVo getById(Long commentId);
+
+    List<ResponseMessageCommentVo> listMessage(Long userId);
 }

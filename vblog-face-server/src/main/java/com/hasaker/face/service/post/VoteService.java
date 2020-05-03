@@ -1,6 +1,7 @@
 package com.hasaker.face.service.post;
 
 import com.hasaker.face.vo.response.ResponseUserInfoVo;
+import com.hasaker.face.vo.response.message.ResponseMessageVoteVo;
 
 import java.util.List;
 
@@ -13,4 +14,6 @@ import java.util.List;
 public interface VoteService {
 
     List<ResponseUserInfoVo> list(Long postId);
+
+    List<ResponseMessageVoteVo> listMessage(Long userId);
 }
