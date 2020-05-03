@@ -11,6 +11,7 @@ import com.hasaker.post.document.VoteDoc;
 import com.hasaker.post.entity.Vote;
 import com.hasaker.post.exception.enums.PostExceptionEnum;
 import com.hasaker.post.mapper.VoteMapper;
+import com.hasaker.post.message.VoteMessageDoc;
 import com.hasaker.post.service.VoteService;
 import com.hasaker.post.vo.request.RequestVoteVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,12 +66,19 @@ public class VoteServiceImpl extends BaseServiceImpl<VoteMapper, Vote> implement
             // Save vote to MySQL
             vote = Convert.convert(Vote.class, voteVo);
             vote = this.saveId(vote);
+            vote = this.getById(vote.getId());
 
-            // Save vote to Elasticsearch
+            // Save vote to ES
             VoteDoc voteDoc = Convert.convert(VoteDoc.class, vote);
             voteDoc.setVoter(vote.getCreateUser());
             voteDoc.setVoteTime(vote.getCreateTime());
             esService.index(voteDoc);
+
+            // Save vote message to ES
+            VoteMessageDoc voteMessageDoc = Convert.convert(VoteMessageDoc.class, vote);
+            voteMessageDoc.setReceiver(vote.getCreateUser());
+            voteMessageDoc.setStatus(Consts.MESSAGE_STATUS_UNREAD);
+            esService.index(voteMessageDoc);
         }
     }
 

@@ -12,6 +12,7 @@ import com.hasaker.post.document.CommentDoc;
 import com.hasaker.post.entity.Comment;
 import com.hasaker.post.exception.enums.PostExceptionEnum;
 import com.hasaker.post.mapper.CommentMapper;
+import com.hasaker.post.message.CommentMessageDoc;
 import com.hasaker.post.service.CommentService;
 import com.hasaker.post.vo.request.RequestCommentVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,12 +45,20 @@ public class CommentServiceImpl extends BaseServiceImpl<CommentMapper, Comment> 
 
         Comment comment = Convert.convert(Comment.class, commentVo);
         comment = this.saveId(comment);
+        comment = this.getById(comment.getId());
 
+        // Save comment to ES
         CommentDoc commentDoc = Convert.convert(CommentDoc.class, comment);
         commentDoc.setDeleted(Consts.NO);
         commentDoc.setCommenter(comment.getCreateUser());
         commentDoc.setCommentTime(comment.getCreateTime());
         esService.index(commentDoc);
+
+        // Save comment message to ES
+        CommentMessageDoc commentMessageDoc = Convert.convert(CommentMessageDoc.class, comment);
+        commentMessageDoc.setReceiver(comment.getCreateUser());
+        commentMessageDoc.setStatus(Consts.MESSAGE_STATUS_UNREAD);
+        esService.index(commentMessageDoc);
 
         return comment.getId();
     }
