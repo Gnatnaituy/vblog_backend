@@ -29,8 +29,8 @@ public class FriendRequestDoc {
     @Field(type = FieldType.Keyword)
     private String senderRemark;
 
-    @Field(type = FieldType.Keyword)
-    private String senderVisibility;
+    @Field(type = FieldType.Integer)
+    private Integer senderVisibility;
 
     @Field(type = FieldType.Keyword)
     private String requestStatus;

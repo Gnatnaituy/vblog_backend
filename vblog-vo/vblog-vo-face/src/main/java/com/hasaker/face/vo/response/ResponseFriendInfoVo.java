@@ -38,5 +38,5 @@ public class ResponseFriendInfoVo {
     private String remark;
 
     @ApiModelProperty(value = "可见性")
-    private String visibility;
+    private Integer visibility;
 }

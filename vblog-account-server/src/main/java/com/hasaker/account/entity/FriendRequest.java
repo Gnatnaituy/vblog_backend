@@ -20,7 +20,7 @@ public class FriendRequest extends BaseEntity {
 
     private String senderRemark;
 
-    private String senderVisibility;
+    private Integer senderVisibility;
 
     @NonNull
     private Long receiverId;

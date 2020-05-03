@@ -28,5 +28,5 @@ public class RequestFriendRequestAcceptVo {
 
     @NonNull
     @ApiModelProperty(value = "The visibility set by accepter for sender")
-    private String accepterVisibility;
+    private Integer accepterVisibility;
 }

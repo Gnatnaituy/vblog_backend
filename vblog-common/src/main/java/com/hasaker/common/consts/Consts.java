@@ -15,6 +15,7 @@ public final class Consts {
     public static final String IS_ENABLED = "is_enabled";
     public static final String IS_DELETED = "is_deleted";
     public static final String VERSION = "version";
+
     // ES字段名
     public static final String USER_ID = "userId";
     public static final String POST_ID = "postId";
@@ -28,10 +29,15 @@ public final class Consts {
     public static final Integer YES = 1;
     public static final Integer NO = 0;
 
-    // 朋友圈可见性
-    public static final Integer SECRET = 1;
-    public static final Integer FRIEND = 2;
-    public static final Integer OPEN = 3;
+    // Post visibility
+    public static final Integer POST_SECRET = 1;
+    public static final Integer POST_FRIEND = 2;
+    public static final Integer POST_OPEN = 3;
+    // Friend visibility
+    public static final Integer FRIEND_BOTH = 1;
+    public static final Integer FRIEND_NOT_FRIEND = 2;
+    public static final Integer FRIEND_NOT_ME = 3;
+    public static final Integer FRIEND_NOT_BOTH = 4;
 
     // Password max & min length
     public static final Integer PASSWORD_MIN_LEN = 8;

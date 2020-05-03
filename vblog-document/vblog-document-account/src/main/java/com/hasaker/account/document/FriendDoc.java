@@ -29,8 +29,8 @@ public class FriendDoc {
     @Field(type = FieldType.Keyword)
     private String remark;
 
-    @Field(type = FieldType.Keyword)
-    private String visibility;
+    @Field(type = FieldType.Integer)
+    private Integer visibility;
 
     @Field(type = FieldType.Date)
     private Long addTime;

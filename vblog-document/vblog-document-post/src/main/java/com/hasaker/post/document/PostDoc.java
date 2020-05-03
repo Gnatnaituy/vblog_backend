@@ -26,8 +26,8 @@ public class PostDoc {
     @Field(type = FieldType.Text, analyzer = "ik_smart", searchAnalyzer = "ik_smart", fielddata = true)
     private String content;
 
-    @Field(type = FieldType.Keyword)
-    private String visibility;
+    @Field(type = FieldType.Integer)
+    private Integer visibility;
 
     @GeoPointField
     private GeoPoint location;

@@ -28,7 +28,7 @@ public class RequestFriendRequestVo {
 
     @NonNull
     @ApiModelProperty(value = "The visibility set by sender for friend")
-    private String senderVisibility;
+    private Integer senderVisibility;
 
     @NonNull
     @ApiModelProperty(value = "The friend's userId")

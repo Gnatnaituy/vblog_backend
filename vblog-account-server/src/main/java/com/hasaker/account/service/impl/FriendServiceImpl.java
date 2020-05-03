@@ -5,7 +5,6 @@ import cn.hutool.core.lang.Pair;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hasaker.account.document.FriendDoc;
 import com.hasaker.account.entity.Friend;
-import com.hasaker.account.enums.VisibilityEnums;
 import com.hasaker.account.exception.enums.FriendExceptionEnums;
 import com.hasaker.account.exception.enums.UserExceptionEnums;
 import com.hasaker.account.mapper.FriendMapper;
@@ -15,6 +14,7 @@ import com.hasaker.account.vo.request.RequestFriendDeleteVo;
 import com.hasaker.account.vo.request.RequestFriendRemarkVo;
 import com.hasaker.account.vo.request.RequestFriendVisibilityVo;
 import com.hasaker.common.base.impl.BaseServiceImpl;
+import com.hasaker.common.consts.Consts;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
 import com.hasaker.component.elasticsearch.service.EsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +47,7 @@ public class FriendServiceImpl extends BaseServiceImpl<FriendMapper, Friend> imp
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void add(Long userId, Long friendId, String remark, String visibility) {
+    public void add(Long userId, Long friendId, String remark, Integer visibility) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(userId);
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(friendId);
 
@@ -59,7 +59,7 @@ public class FriendServiceImpl extends BaseServiceImpl<FriendMapper, Friend> imp
         friend.setUserId(userId);
         friend.setFriendId(friendId);
         friend.setRemark(remark);
-        friend.setVisibility(visibility != null ? visibility : VisibilityEnums.VISIBLE_FOR_BOTH.getCode());
+        friend.setVisibility(visibility != null ? visibility : Consts.FRIEND_BOTH);
         friend = this.saveId(friend);
 
         // index FriendDoc to es

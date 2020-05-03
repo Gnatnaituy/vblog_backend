@@ -14,7 +14,7 @@ import com.hasaker.common.base.BaseService;
  */
 public interface FriendService extends BaseService<Friend> {
 
-    void add(Long userId, Long friendId, String remark, String visibility);
+    void add(Long userId, Long friendId, String remark, Integer visibility);
 
     void delete(RequestFriendDeleteVo deleteVo);
 

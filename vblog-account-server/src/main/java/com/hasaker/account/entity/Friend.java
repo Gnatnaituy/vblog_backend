@@ -27,7 +27,7 @@ public class Friend extends BaseEntity {
     private String remark;
 
     // 好友权限
-    private String visibility;
+    private Integer visibility;
 
     public static final String USER_ID = "user_id";
     public static final String FRIEND_ID = "friend_id";

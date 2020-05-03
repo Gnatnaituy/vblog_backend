@@ -2,6 +2,7 @@ package com.hasaker.account.service.impl;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.Pair;
+import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.hasaker.account.document.FriendRequestDoc;
 import com.hasaker.account.entity.FriendRequest;
 import com.hasaker.account.entity.User;
@@ -15,6 +16,7 @@ import com.hasaker.account.service.UserService;
 import com.hasaker.account.vo.request.RequestFriendRequestAcceptVo;
 import com.hasaker.account.vo.request.RequestFriendRequestVo;
 import com.hasaker.common.base.impl.BaseServiceImpl;
+import com.hasaker.common.consts.Consts;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
 import com.hasaker.component.elasticsearch.service.EsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +63,8 @@ public class FriendRequestServiceImpl extends BaseServiceImpl<FriendRequestMappe
         FriendRequest friendRequest = Convert.convert(FriendRequest.class, requestVo);
         friendRequest.setSenderId(sender.getId());
         friendRequest.setReceiverId(receiver.getId());
+        friendRequest.setSenderVisibility(ObjectUtils.isNotNull(requestVo.getSenderVisibility())
+                ? requestVo.getSenderVisibility() : Consts.FRIEND_BOTH);
         friendRequest.setRequestStatus(FriendRequestStatusEnum.NOT_READ.getCode());
         friendRequest = this.saveId(friendRequest);
 
