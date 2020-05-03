@@ -40,4 +40,16 @@ public final class Consts {
     // redis key prefixes
     public static final String REDIS_FRIEND_ADD_REQUEST = "FRIEND:ADD:REQUEST:";
     public static final String REDIS_USER_LOGIN = "USER:LOGIN:";
+
+    // OSS directory
+    public static final String USER_AVATAR = "VBLOG/user_avatar/";
+    public static final String USER_BACKGROUND = "VBLOG/user_background/";
+    public static final String TOPIC_BACKGROUND = "VBLOG/topic_background/";
+    public static final String POST_IMAGE = "VBLOG/post_image/";
+    public static final String DEFAULT_PNG = "DEFAULT.png";
+    // OSS default file
+    public static final String DEFAULT_AVATAR = USER_AVATAR + DEFAULT_PNG;
+    public static final String DEFAULT_USER_BACKGROUND = USER_BACKGROUND + DEFAULT_PNG;
+    public static final String DEFAULT_TOPIC_BACKGROUND = TOPIC_BACKGROUND + DEFAULT_PNG;
+    public static final String TOPIC_NO_DESC = "该话题的创建者还未添加描述信息";
 }

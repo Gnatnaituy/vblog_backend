@@ -17,6 +17,7 @@ import com.hasaker.account.service.UserService;
 import com.hasaker.account.vo.request.RequestUserUpdateVo;
 import com.hasaker.account.vo.response.ResponseUserOAuthVo;
 import com.hasaker.common.base.impl.BaseServiceImpl;
+import com.hasaker.common.consts.Consts;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
 import com.hasaker.component.elasticsearch.service.EsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,6 +92,8 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
         // create a user
         user = new User(username, password);
         user.setNickname(username);
+        user.setAvatar(Consts.DEFAULT_AVATAR);
+        user.setBackground(Consts.DEFAULT_USER_BACKGROUND);
         user = this.saveId(user);
 
         // assign default role to user

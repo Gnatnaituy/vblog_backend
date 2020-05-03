@@ -57,12 +57,12 @@ public class QiniuUploadServiceImpl implements UploadService {
      * @throws QiniuException
      */
     @Override
-    public String upload(MultipartFile multipartFile) {
+    public String upload(MultipartFile multipartFile, String dir) {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(multipartFile);
 
         String originalFilename = multipartFile.getOriginalFilename();
         String suffix = Objects.requireNonNull(originalFilename).substring(originalFilename.lastIndexOf("."));
-        String key = snowFlakeIdGenerator.nextUUID(multipartFile) + suffix;
+        String key = dir + snowFlakeIdGenerator.nextUUID(multipartFile) + suffix;
 
         try {
             Response response = this.uploadManager.put(multipartFile.getBytes(), key, auth.uploadToken(BUCKET));

@@ -44,10 +44,10 @@ public class AliyunUploadServiceImpl implements UploadService {
      */
     @Override
     @SneakyThrows
-    public String upload(MultipartFile multipartFile) {
+    public String upload(MultipartFile multipartFile, String dir) {
         String originalFilename = multipartFile.getOriginalFilename();
         String suffix = Objects.requireNonNull(originalFilename).substring(originalFilename.lastIndexOf("."));
-        String key = snowFlakeIdGenerator.nextUUID(multipartFile) + suffix;
+        String key = dir + snowFlakeIdGenerator.nextUUID(multipartFile) + suffix;
 
         InputStream inputStream = multipartFile.getInputStream();
         ossClient.putObject(BUCKET, key, inputStream);

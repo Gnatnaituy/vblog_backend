@@ -4,6 +4,7 @@ import cn.hutool.core.convert.Convert;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.hasaker.common.base.impl.BaseServiceImpl;
+import com.hasaker.common.consts.Consts;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
 import com.hasaker.component.elasticsearch.service.EsService;
 import com.hasaker.post.document.ImageDoc;
@@ -91,6 +92,8 @@ public class PostServiceImpl extends BaseServiceImpl<PostMapper, Post> implement
                     .filter(o -> ObjectUtils.isNull(o.getTopicId()))
                     .map(o -> {
                         Topic topic = Convert.convert(Topic.class, o);
+                        topic.setDescription(Consts.TOPIC_NO_DESC);
+                        topic.setBackground(Consts.DEFAULT_TOPIC_BACKGROUND);
                         topic = topicService.saveId(topic);
                         o.setTopicId(topic.getId());
                         return Convert.convert(TopicDoc.class, topic);

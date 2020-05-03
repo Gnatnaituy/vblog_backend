@@ -26,6 +26,9 @@ public class TopicDoc {
     @Field(type = FieldType.Text, analyzer = "ik_smart", searchAnalyzer = "ik_smart", fielddata = true)
     private String description;
 
+    @Field(type = FieldType.Keyword)
+    private String background;
+
     @Field(type = FieldType.Long)
     private Long createUser;
 
@@ -34,4 +37,5 @@ public class TopicDoc {
 
     public static final String NAME = "name";
     public static final String DESCRIPTION = "description";
+    public static final String BACKGROUND = "background";
 }

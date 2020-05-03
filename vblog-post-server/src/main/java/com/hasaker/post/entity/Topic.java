@@ -19,6 +19,9 @@ public class Topic extends BaseEntity {
 
     private String description;
 
+    private String background;
+
     public static final String NAME = "name";
     public static final String DESCRIPTION = "description";
+    public static final String BACKGROUND = "background";
 }

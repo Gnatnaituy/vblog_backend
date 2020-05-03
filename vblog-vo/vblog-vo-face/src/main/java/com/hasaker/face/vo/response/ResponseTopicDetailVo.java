@@ -3,6 +3,8 @@ package com.hasaker.face.vo.response;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * @package com.hasaker.face.vo.response
  * @author 余天堂
@@ -18,6 +20,10 @@ public class ResponseTopicDetailVo {
     private String name;
 
     private String description;
+
+    private String background;
+
+    private List<ResponseUserInfoVo> activeUsers;
 
     private ResponseUserInfoVo createUser;
 
