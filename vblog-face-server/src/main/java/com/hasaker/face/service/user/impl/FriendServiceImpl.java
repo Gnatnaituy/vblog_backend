@@ -58,6 +58,7 @@ public class FriendServiceImpl implements FriendService {
             friendDocs.getContent().forEach(o -> friendDocMap.put(o.getFriendId(), o));
             friendPage.setContent(userDocs.stream().map(user -> {
                 ResponseFriendInfoVo friendInfoVo = Convert.convert(ResponseFriendInfoVo.class, user);
+                friendInfoVo.setAvatar(uploadService.generateAccessUrl(friendInfoVo.getAvatar()));
                 friendInfoVo.setRemark(friendDocMap.get(user.getId()).getRemark());
                 friendInfoVo.setVisibility(friendDocMap.get(user.getId()).getVisibility());
                 return friendInfoVo;

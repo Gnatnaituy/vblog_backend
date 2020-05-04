@@ -35,10 +35,7 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -122,6 +119,9 @@ public class UserServiceImpl implements UserService {
             userDetailVo.setBlocks(blockedUserDocs.stream()
                     .map(o -> Convert.convert(ResponseUserInfoVo.class, o))
                     .collect(Collectors.toList()));
+            userDetailVo.getBlocks().forEach(o -> o.setAvatar(uploadService.generateAccessUrl(o.getAvatar())));
+        } else {
+            userDetailVo.setBlocks(Collections.emptyList());
         }
 
         // User's topics
@@ -130,6 +130,8 @@ public class UserServiceImpl implements UserService {
             userDetailVo.setTopics(topicDocs.stream()
                     .map(o -> Convert.convert(ResponseTopicInfoVo.class, o))
                     .collect(Collectors.toList()));
+        } else {
+            userDetailVo.setTopics(Collections.emptyList());
         }
 
         // User's words
@@ -145,6 +147,8 @@ public class UserServiceImpl implements UserService {
             userDetailVo.setWords(buckets.stream()
                     .sorted((o1, o2) -> (int) (o2.getDocCount() - o1.getDocCount()))
                     .map(o -> o.getKey().toString()).collect(Collectors.toList()));
+        } else {
+            userDetailVo.setWords(Collections.emptyList());
         }
 
         if (ObjectUtils.isNotNull(loggedUserId) && !userId.equals(loggedUserId)) {

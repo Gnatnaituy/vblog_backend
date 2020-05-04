@@ -77,7 +77,7 @@ public class FriendController extends BaseController {
     }
 
     @ApiOperation(value = "List friends")
-    @GetMapping(value = "/list")
+    @PostMapping(value = "/list")
     public Ajax<PageInfo<ResponseFriendInfoVo>> listFriend(@RequestBody SearchVo searchVo) {
         searchVo.setUserId(getUserId());
 

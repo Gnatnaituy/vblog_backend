@@ -20,6 +20,7 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -62,11 +63,11 @@ public class TopicServiceImpl implements TopicService {
         ParsedLongTerms longTerms = res.getAggregations().get("longFieldAgg");
         List<ParsedLongTerms.ParsedBucket> buckets = (List<ParsedLongTerms.ParsedBucket>) longTerms.getBuckets();
 
-        List<Long> userIds = buckets.stream().map(o -> Long.valueOf(o.getKey().toString())).collect(Collectors.toList());
+        Set<Long> userIds = buckets.stream().map(o -> Long.valueOf(o.getKey().toString())).collect(Collectors.toSet());
         List<UserDoc> userDocs = esService.getByIds(userIds, UserDoc.class);
         topicDetailVo.setActiveUsers(userDocs.stream()
                 .map(o -> Convert.convert(ResponseUserInfoVo.class, userDoc))
-                .collect(Collectors.toList()));
+                .distinct().collect(Collectors.toList()));
         topicDetailVo.getActiveUsers().forEach(o -> o.setAvatar(uploadService.generateAccessUrl(o.getAvatar())));
 
         return topicDetailVo;
