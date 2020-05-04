@@ -59,13 +59,12 @@ public class CommentServiceImpl extends BaseServiceImpl<CommentMapper, Comment> 
         CommentMessageDoc commentMessageDoc = Convert.convert(CommentMessageDoc.class, comment);
         if (ObjectUtils.isNotNull(comment.getCommentId())) {
             CommentDoc originCommentDoc = esService.getById(comment.getCommentId(), CommentDoc.class);
-            commentMessageDoc.setCommentSummary(generateSummary(originCommentDoc.getContent()));
             commentMessageDoc.setReceiver(originCommentDoc.getCommenter());
         } else {
             PostDoc postDoc = esService.getById(comment.getPostId(), PostDoc.class);
-            commentMessageDoc.setPostSummary(generateSummary(postDoc.getContent()));
             commentMessageDoc.setReceiver(postDoc.getPoster());
         }
+        commentMessageDoc.setCommentSummary(generateSummary(comment.getContent()));
         commentMessageDoc.setStatus(Consts.MESSAGE_STATUS_UNREAD);
         esService.index(commentMessageDoc);
 

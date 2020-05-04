@@ -184,7 +184,9 @@ public class EsServiceImpl implements EsService {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(fieldValuePairs);
 
         UpdateRequest updateRequest = new UpdateRequest();
-        fieldValuePairs.forEach(o -> updateRequest.doc(o.getKey(), o.getValue()));
+        Map<String, Object> params = new HashMap<>(fieldValuePairs.size());
+        fieldValuePairs.forEach(o -> params.put(o.getKey(), o.getValue()));
+        updateRequest.doc(params);
 
         UpdateQuery updateQuery = new UpdateQuery();
         updateQuery.setId(String.valueOf(id));
@@ -219,7 +221,9 @@ public class EsServiceImpl implements EsService {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(fieldValuePairs);
 
         UpdateRequest updateRequest = new UpdateRequest();
-        fieldValuePairs.forEach(o -> updateRequest.doc(o.getKey(), o.getValue()));
+        Map<String, Object> params = new HashMap<>(fieldValuePairs.size());
+        fieldValuePairs.forEach(o -> params.put(o.getKey(), o.getValue()));
+        updateRequest.doc(params);
 
         List<UpdateQuery> updateQueries = ids.stream().map(String::valueOf).map(o -> {
             UpdateQuery updateQuery = new UpdateQuery();

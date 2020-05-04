@@ -18,8 +18,6 @@ public class ResponseMessageCommentVo {
 
     private Long commentId;
 
-    private String postSummary;
-
     private String commentSummary;
 
     private ResponseUserInfoVo createUser;

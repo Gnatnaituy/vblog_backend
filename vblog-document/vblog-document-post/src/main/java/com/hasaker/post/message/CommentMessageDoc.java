@@ -27,9 +27,6 @@ public class CommentMessageDoc {
     private Long commentId;
 
     @Field(type = FieldType.Keyword)
-    private String postSummary;
-
-    @Field(type = FieldType.Keyword)
     private String commentSummary;
 
     @Field(type = FieldType.Long)

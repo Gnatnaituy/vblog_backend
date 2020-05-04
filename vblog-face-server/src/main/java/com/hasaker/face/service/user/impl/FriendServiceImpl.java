@@ -97,12 +97,15 @@ public class FriendServiceImpl implements FriendService {
                 return userInfoVo;
             }).collect(Collectors.toMap(ResponseUserInfoVo::getId, o -> o, (o1, o2) -> o2));
 
-            return friendRequestDocs.stream().map(o -> {
-                ResponseFriendRequestVo requestVo = Convert.convert(ResponseFriendRequestVo.class, o);
-                requestVo.setSender(userMap.get(o.getSenderId()));
-                requestVo.setReceiver(userMap.get(o.getReceiverId()));
-                return requestVo;
-            }).collect(Collectors.toList());
+            return friendRequestDocs.stream()
+                    .filter(o -> !o.getRequestStatus().equals("FRIEND_REQUEST_STATUS_004"))
+                    .filter(o -> !(o.getRequestStatus().equals("FRIEND_REQUEST_STATUS_001") && o.getSenderId().equals(userId)))
+                    .map(o -> {
+                        ResponseFriendRequestVo requestVo = Convert.convert(ResponseFriendRequestVo.class, o);
+                        requestVo.setSender(userMap.get(o.getSenderId()));
+                        requestVo.setReceiver(userMap.get(o.getReceiverId()));
+                        return requestVo;
+                    }).collect(Collectors.toList());
         }
 
         return Collections.emptyList();
