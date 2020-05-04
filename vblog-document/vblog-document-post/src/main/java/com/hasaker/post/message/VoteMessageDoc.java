@@ -24,6 +24,15 @@ public class VoteMessageDoc {
     private Long postId;
 
     @Field(type = FieldType.Long)
+    private Long commentId;
+
+    @Field(type = FieldType.Keyword)
+    private String postSummary;
+
+    @Field(type = FieldType.Keyword)
+    private String commentSummary;
+
+    @Field(type = FieldType.Long)
     private Long receiver;
 
     @Field(type = FieldType.Long)

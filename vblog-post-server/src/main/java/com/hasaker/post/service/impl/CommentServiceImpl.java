@@ -59,9 +59,11 @@ public class CommentServiceImpl extends BaseServiceImpl<CommentMapper, Comment> 
         CommentMessageDoc commentMessageDoc = Convert.convert(CommentMessageDoc.class, comment);
         if (ObjectUtils.isNotNull(comment.getCommentId())) {
             CommentDoc originCommentDoc = esService.getById(comment.getCommentId(), CommentDoc.class);
+            commentMessageDoc.setCommentSummary(generateSummary(originCommentDoc.getContent()));
             commentMessageDoc.setReceiver(originCommentDoc.getCommenter());
         } else {
             PostDoc postDoc = esService.getById(comment.getPostId(), PostDoc.class);
+            commentMessageDoc.setPostSummary(generateSummary(postDoc.getContent()));
             commentMessageDoc.setReceiver(postDoc.getPoster());
         }
         commentMessageDoc.setStatus(Consts.MESSAGE_STATUS_UNREAD);
@@ -104,6 +106,19 @@ public class CommentServiceImpl extends BaseServiceImpl<CommentMapper, Comment> 
             }).collect(Collectors.toList());
 
             esService.index(commentDocs);
+        }
+    }
+
+    /**
+     * Generate summary of content
+     * @param content
+     * @return
+     */
+    private String generateSummary(String content) {
+        if (content.length() < 10) {
+            return content;
+        } else {
+            return content.substring(0, 10) + "...";
         }
     }
 }

@@ -80,9 +80,11 @@ public class VoteServiceImpl extends BaseServiceImpl<VoteMapper, Vote> implement
             VoteMessageDoc voteMessageDoc = Convert.convert(VoteMessageDoc.class, vote);
             if (ObjectUtils.isNotNull(vote.getCommentId())) {
                 CommentDoc commentDoc = esService.getById(vote.getCommentId(), CommentDoc.class);
+                voteMessageDoc.setCommentSummary(generateSummary(commentDoc.getContent()));
                 voteMessageDoc.setReceiver(commentDoc.getCommenter());
             } else {
                 PostDoc postDoc = esService.getById(vote.getPostId(), PostDoc.class);
+                voteMessageDoc.setPostSummary(generateSummary(postDoc.getContent()));
                 voteMessageDoc.setReceiver(postDoc.getPoster());
             }
             voteMessageDoc.setStatus(Consts.MESSAGE_STATUS_UNREAD);
@@ -103,5 +105,18 @@ public class VoteServiceImpl extends BaseServiceImpl<VoteMapper, Vote> implement
         }).collect(Collectors.toList());
 
         esService.index(voteDocs);
+    }
+
+    /**
+     * Generate summary of content
+     * @param content
+     * @return
+     */
+    private String generateSummary(String content) {
+        if (content.length() < 10) {
+            return content;
+        } else {
+            return content.substring(0, 10) + "...";
+        }
     }
 }

@@ -16,6 +16,8 @@ public class ResponseMessageVoteVo {
 
     private Long postId;
 
+    private String postSummary;
+
     private ResponseUserInfoVo createUser;
 
     private Long createTime;
