@@ -3,6 +3,7 @@ package com.hasaker.account.service.impl;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.Pair;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.hasaker.account.document.UserDoc;
 import com.hasaker.account.entity.Block;
 import com.hasaker.account.entity.User;
@@ -18,6 +19,8 @@ import com.hasaker.component.elasticsearch.service.EsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collections;
 
 /**
  * @package com.hasaker.account.service.impl
@@ -54,7 +57,11 @@ public class BlockServiceImpl extends BaseServiceImpl<BlockMapper, Block> implem
 
         // update user's blocks in es
         UserDoc userDoc = esService.getById(block.getUserId(), UserDoc.class);
-        userDoc.getBlocks().add(block.getBlockUserId());
+        if (ObjectUtils.isNotNull(userDoc.getBlocks())) {
+            userDoc.getBlocks().add(block.getBlockUserId());
+        } else {
+            userDoc.setBlocks(Collections.singleton(blockVo.getBlockUserId()));
+        }
         esService.update(userDoc.getId(), UserDoc.class, new Pair<>(UserDoc.BLOCKS, userDoc.getBlocks()));
     }
 

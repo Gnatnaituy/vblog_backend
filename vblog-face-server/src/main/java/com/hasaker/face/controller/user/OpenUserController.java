@@ -3,6 +3,7 @@ package com.hasaker.face.controller.user;
 import com.hasaker.account.feign.AccountClient;
 import com.hasaker.common.vo.Ajax;
 import com.hasaker.common.vo.PageInfo;
+import com.hasaker.face.controller.base.BaseController;
 import com.hasaker.face.service.user.UserService;
 import com.hasaker.face.vo.request.RequestUserSearchVo;
 import com.hasaker.face.vo.response.ResponseUserDetailVo;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping(value = "/open/user")
-public class OpenUserController {
+public class OpenUserController extends BaseController {
 
     @Autowired
     private UserService userService;
@@ -32,7 +33,7 @@ public class OpenUserController {
 
     @GetMapping("/detail/{userId}")
     public Ajax<ResponseUserDetailVo> detail(@PathVariable("userId") Long userId) {
-        return Ajax.getInstance().successT(userService.detail(userId));
+        return Ajax.getInstance().successT(userService.detail(userId, getUserId()));
     }
 
     @GetMapping("/index-all")

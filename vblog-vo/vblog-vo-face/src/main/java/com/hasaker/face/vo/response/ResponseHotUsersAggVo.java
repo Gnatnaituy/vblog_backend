@@ -17,5 +17,11 @@ public class ResponseHotUsersAggVo {
 
     private ResponseUserInfoVo user;
 
+    private Long postCount;
+
+    private Long commentCount;
+
+    private Long voteCount;
+
     private Long count;
 }

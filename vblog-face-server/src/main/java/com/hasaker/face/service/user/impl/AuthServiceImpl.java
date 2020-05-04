@@ -6,6 +6,7 @@ import com.hasaker.account.vo.response.ResponseUserOAuthVo;
 import com.hasaker.common.consts.RequestConsts;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
 import com.hasaker.common.vo.RedisAccessToken;
+import com.hasaker.component.oss.service.UploadService;
 import com.hasaker.component.redis.service.RedisService;
 import com.hasaker.face.exception.enums.UserExceptionEnums;
 import com.hasaker.face.service.user.AuthService;
@@ -35,6 +36,8 @@ public class AuthServiceImpl implements AuthService {
     private RestOperations restOperations;
     @Autowired
     private RedisService redisService;
+    @Autowired
+    private UploadService uploadService;
 
     /**
      * Login
@@ -68,8 +71,8 @@ public class AuthServiceImpl implements AuthService {
         assert redisAccessToken != null;
         redisAccessToken.setExpiresTime(System.currentTimeMillis() + redisAccessToken.getExpiresIn() * 1000);
         redisAccessToken.setNickname(userOAuthVo.getNickname());
-        redisAccessToken.setAvatar(userOAuthVo.getAvatar());
-        redisAccessToken.setBackground(userOAuthVo.getBackground());
+        redisAccessToken.setAvatar(uploadService.generateAccessUrl(userOAuthVo.getAvatar()));
+        redisAccessToken.setBackground(uploadService.generateAccessUrl(userOAuthVo.getBackground()));
         redisAccessToken.setBio(userOAuthVo.getBio());
         redisAccessToken.setRoles(userOAuthVo.getRoles());
 

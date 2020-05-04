@@ -15,9 +15,9 @@ public class ResponseFriendRequestVo {
 
     private Long id;
 
-    private Long senderId;
+    private ResponseUserInfoVo sender;
 
-    private Long receiverId;
+    private ResponseUserInfoVo receiver;
 
     private String senderRemark;
 

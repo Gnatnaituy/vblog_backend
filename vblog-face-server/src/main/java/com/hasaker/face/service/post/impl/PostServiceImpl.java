@@ -74,7 +74,7 @@ public class PostServiceImpl implements PostService {
 
         BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
         if (ObjectUtils.isNotNull(pageVo.getPostId())) {
-            boolQueryBuilder.must(QueryBuilders.termQuery(Consts.POST_ID, pageVo.getPostId()));
+            boolQueryBuilder.must(QueryBuilders.termQuery(Consts.ID, pageVo.getPostId()));
         }
         if (ObjectUtils.isNotNull(pageVo.getKeyword())) {
             boolQueryBuilder.must(QueryBuilders.matchQuery(PostDoc.CONTENT, pageVo.getKeyword()));
@@ -224,9 +224,11 @@ public class PostServiceImpl implements PostService {
         return userDocs.stream().map(o -> {
             ResponseHotUsersAggVo aggVo = new ResponseHotUsersAggVo();
             aggVo.setUser(Convert.convert(ResponseUserInfoVo.class, o));
-            aggVo.setCount(userPostCount.getOrDefault(o.getId(), 0L) * 5
-                    + userCommentCount.getOrDefault(o.getId(), 0L) * 2
-                    + userVoteCount.getOrDefault(o.getId(), 0L));
+            aggVo.getUser().setAvatar(uploadService.generateAccessUrl(aggVo.getUser().getAvatar()));
+            aggVo.setPostCount(userPostCount.getOrDefault(o.getId(), 0L));
+            aggVo.setCommentCount(userCommentCount.getOrDefault(o.getId(), 0L));
+            aggVo.setVoteCount(userVoteCount.getOrDefault(o.getId(), 0L));
+            aggVo.setCount(aggVo.getPostCount() * 5 + aggVo.getCommentCount() * 2 + aggVo.getVoteCount());
             return aggVo;
         }).sorted((o1, o2) -> (int) (o2.getCount() - o1.getCount()))
                 .limit(aggregationVo.getSize())

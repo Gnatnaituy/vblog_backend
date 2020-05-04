@@ -37,6 +37,12 @@ public final class Consts {
     public static final Integer FRIEND_NOT_ME = 3;
     public static final Integer FRIEND_NOT_BOTH = 4;
 
+    // Friend status
+    public static final String NOT_FRIEND = "NOT_FRIEND";
+    public static final String REQUEST_SEND = "REQUEST_SEND";
+    public static final String REQUEST_DENIED = "REQUEST_DENIED";
+    public static final String IS_FRIEND = "IS_FRIEND";
+
     // Message type & status
     public static final String MESSATE_TYPE_VOTE = "VOTE";
     public static final String MESSATE_TYPE_COMMENT = "COMMENT";

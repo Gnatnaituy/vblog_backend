@@ -62,4 +62,16 @@ public class ResponseUserDetailVo {
 
     @ApiModelProperty(value = "屏蔽用户")
     private List<ResponseUserInfoVo> blocks;
+
+    @ApiModelProperty(value = "用户创建的话题")
+    private List<ResponseTopicInfoVo> topics;
+
+    @ApiModelProperty(value = "用户热点词条")
+    private List<String> words;
+
+    @ApiModelProperty(value = "好友关系状态")
+    private String friendStatus;
+
+    @ApiModelProperty(value = "屏蔽关系状态")
+    private Boolean blocked;
 }

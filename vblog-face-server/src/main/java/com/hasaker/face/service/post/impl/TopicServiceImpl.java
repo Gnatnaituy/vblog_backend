@@ -67,6 +67,7 @@ public class TopicServiceImpl implements TopicService {
         topicDetailVo.setActiveUsers(userDocs.stream()
                 .map(o -> Convert.convert(ResponseUserInfoVo.class, userDoc))
                 .collect(Collectors.toList()));
+        topicDetailVo.getActiveUsers().forEach(o -> o.setAvatar(uploadService.generateAccessUrl(o.getAvatar())));
 
         return topicDetailVo;
     }

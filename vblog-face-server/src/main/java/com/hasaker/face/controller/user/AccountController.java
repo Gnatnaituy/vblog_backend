@@ -35,6 +35,6 @@ public class AccountController extends BaseController {
     @ApiOperation(value = "Obtain current user's detail information")
     @GetMapping(value = "/info")
     public Ajax<ResponseUserDetailVo> info() {
-        return Ajax.getInstance().successT(userService.detail(getUserId()));
+        return Ajax.getInstance().successT(userService.detail(getUserId(), getUserId()));
     }
 }

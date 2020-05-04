@@ -9,6 +9,7 @@ import com.hasaker.common.consts.Consts;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
 import com.hasaker.component.elasticsearch.service.EsService;
 import com.hasaker.post.document.CommentDoc;
+import com.hasaker.post.document.PostDoc;
 import com.hasaker.post.entity.Comment;
 import com.hasaker.post.exception.enums.PostExceptionEnum;
 import com.hasaker.post.mapper.CommentMapper;
@@ -56,7 +57,13 @@ public class CommentServiceImpl extends BaseServiceImpl<CommentMapper, Comment> 
 
         // Save comment message to ES
         CommentMessageDoc commentMessageDoc = Convert.convert(CommentMessageDoc.class, comment);
-        commentMessageDoc.setReceiver(comment.getCreateUser());
+        if (ObjectUtils.isNotNull(comment.getCommentId())) {
+            CommentDoc originCommentDoc = esService.getById(comment.getCommentId(), CommentDoc.class);
+            commentMessageDoc.setReceiver(originCommentDoc.getCommenter());
+        } else {
+            PostDoc postDoc = esService.getById(comment.getPostId(), PostDoc.class);
+            commentMessageDoc.setReceiver(postDoc.getPoster());
+        }
         commentMessageDoc.setStatus(Consts.MESSAGE_STATUS_UNREAD);
         esService.index(commentMessageDoc);
 

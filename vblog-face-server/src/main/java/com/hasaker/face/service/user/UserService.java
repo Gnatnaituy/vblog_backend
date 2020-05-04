@@ -19,7 +19,7 @@ public interface UserService {
 
     PageInfo<ResponseUserInfoVo> search(RequestUserSearchVo searchVo);
 
-    ResponseUserDetailVo detail(Long userId);
+    ResponseUserDetailVo detail(Long userId, Long loggedUserId);
 
     Map<Long, ResponseUserInfoVo> mapUserInfo(Collection<Long> userIds);
 

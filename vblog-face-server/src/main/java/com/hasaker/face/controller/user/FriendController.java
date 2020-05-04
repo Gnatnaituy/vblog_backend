@@ -8,9 +8,12 @@ import com.hasaker.face.controller.base.BaseController;
 import com.hasaker.face.service.user.FriendService;
 import com.hasaker.face.vo.request.SearchVo;
 import com.hasaker.face.vo.response.ResponseFriendInfoVo;
+import com.hasaker.face.vo.response.ResponseFriendRequestVo;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @package com.hasaker.face.controller.user
@@ -79,5 +82,11 @@ public class FriendController extends BaseController {
         searchVo.setUserId(getUserId());
 
         return Ajax.getInstance().successT(friendService.list(searchVo));
+    }
+
+    @GetMapping(value = "/list/request")
+    public Ajax<List<ResponseFriendRequestVo>> listFriendRequest() {
+
+        return Ajax.getInstance().successT(friendService.listFriendRequest(getUserId()));
     }
 }

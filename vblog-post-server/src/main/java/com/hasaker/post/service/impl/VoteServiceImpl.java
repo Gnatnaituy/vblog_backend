@@ -7,6 +7,8 @@ import com.hasaker.common.base.impl.BaseServiceImpl;
 import com.hasaker.common.consts.Consts;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
 import com.hasaker.component.elasticsearch.service.EsService;
+import com.hasaker.post.document.CommentDoc;
+import com.hasaker.post.document.PostDoc;
 import com.hasaker.post.document.VoteDoc;
 import com.hasaker.post.entity.Vote;
 import com.hasaker.post.exception.enums.PostExceptionEnum;
@@ -76,7 +78,13 @@ public class VoteServiceImpl extends BaseServiceImpl<VoteMapper, Vote> implement
 
             // Save vote message to ES
             VoteMessageDoc voteMessageDoc = Convert.convert(VoteMessageDoc.class, vote);
-            voteMessageDoc.setReceiver(vote.getCreateUser());
+            if (ObjectUtils.isNotNull(vote.getCommentId())) {
+                CommentDoc commentDoc = esService.getById(vote.getCommentId(), CommentDoc.class);
+                voteMessageDoc.setReceiver(commentDoc.getCommenter());
+            } else {
+                PostDoc postDoc = esService.getById(vote.getPostId(), PostDoc.class);
+                voteMessageDoc.setReceiver(postDoc.getPoster());
+            }
             voteMessageDoc.setStatus(Consts.MESSAGE_STATUS_UNREAD);
             esService.index(voteMessageDoc);
         }
