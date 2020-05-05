@@ -159,6 +159,8 @@ public class FriendRequestServiceImpl extends BaseServiceImpl<FriendRequestMappe
         QueryWrapper<FriendRequest> queryWrapper = new QueryWrapper<>();
         List<FriendRequest> friendRequests = this.list(queryWrapper);
 
+        esService.deleteIndex(FriendRequestDoc.class);
+        esService.createIndex(FriendRequestDoc.class);
         if (ObjectUtils.isNotNull(friendRequests)) {
             List<FriendRequestDoc> friendRequestDocs = friendRequests.stream().map(o -> {
                 FriendRequestDoc friendRequestDoc = Convert.convert(FriendRequestDoc.class, o);
@@ -172,8 +174,6 @@ public class FriendRequestServiceImpl extends BaseServiceImpl<FriendRequestMappe
                 }
                 return friendRequestDoc;
             }).collect(Collectors.toList());
-            esService.deleteIndex(FriendRequestDoc.class);
-            esService.createIndex(FriendRequestDoc.class);
             esService.index(friendRequestDocs);
         }
     }

@@ -145,14 +145,14 @@ public class FriendServiceImpl extends BaseServiceImpl<FriendMapper, Friend> imp
         QueryWrapper<Friend> queryWrapper = new QueryWrapper<>();
         List<Friend> friends = this.list(queryWrapper);
 
+        esService.deleteIndex(FriendDoc.class);
+        esService.createIndex(FriendDoc.class);
         if (ObjectUtils.isNotNull(friends)) {
             List<FriendDoc> friendDocs = friends.stream().map(o -> {
                 FriendDoc friendDoc = Convert.convert(FriendDoc.class, o);
                 friendDoc.setAddTime(o.getCreateTime());
                 return friendDoc;
             }).collect(Collectors.toList());
-            esService.deleteIndex(FriendDoc.class);
-            esService.createIndex(FriendDoc.class);
             esService.index(friendDocs);
         }
     }

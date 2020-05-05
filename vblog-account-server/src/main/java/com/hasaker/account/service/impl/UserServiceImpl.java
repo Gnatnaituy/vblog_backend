@@ -6,11 +6,13 @@ import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.hasaker.account.document.UserDoc;
+import com.hasaker.account.entity.Block;
 import com.hasaker.account.entity.User;
 import com.hasaker.account.entity.UserRole;
 import com.hasaker.account.enums.RoleEnums;
 import com.hasaker.account.exception.enums.UserExceptionEnums;
 import com.hasaker.account.mapper.UserMapper;
+import com.hasaker.account.service.BlockService;
 import com.hasaker.account.service.RoleService;
 import com.hasaker.account.service.UserRoleService;
 import com.hasaker.account.service.UserService;
@@ -24,8 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -41,6 +42,8 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
     private RoleService roleService;
     @Autowired
     private UserRoleService userRoleService;
+    @Autowired
+    private BlockService blockService;
     @Autowired
     private EsService esService;
 
@@ -158,14 +161,20 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         List<User> users = this.list(userQueryWrapper);
 
+        esService.deleteIndex(UserDoc.class);
+        esService.createIndex(UserDoc.class);
         if (ObjectUtil.isNotNull(users)) {
+            QueryWrapper<Block> blockQueryWrapper = new QueryWrapper<>();
+            List<Block> blocks = blockService.list(blockQueryWrapper);
+            Map<Long, Set<Long>> blockMap = blocks.stream().collect(Collectors.groupingBy(Block::getUserId,
+                    Collectors.mapping(Block::getBlockUserId, Collectors.toSet())));
+
             List<UserDoc> userDocs = users.stream().map(o -> {
                 UserDoc userDoc = Convert.convert(UserDoc.class, o);
                 userDoc.setRegisterTime(o.getCreateTime());
+                userDoc.setBlocks(blockMap.getOrDefault(o.getId(), Collections.emptySet()));
                 return userDoc;
             }).collect(Collectors.toList());
-            esService.deleteIndex(UserDoc.class);
-            esService.createIndex(UserDoc.class);
             esService.index(userDocs);
         }
     }
