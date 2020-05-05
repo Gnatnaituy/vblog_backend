@@ -21,4 +21,6 @@ public interface FriendService extends BaseService<Friend> {
     void changeRemark(RequestFriendRemarkVo remarkVo);
 
     void changeVisibility(RequestFriendVisibilityVo visibilityVo);
+
+    void indexAll();
 }

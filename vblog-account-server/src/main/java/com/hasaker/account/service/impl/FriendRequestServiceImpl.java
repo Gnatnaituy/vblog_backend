@@ -2,6 +2,7 @@ package com.hasaker.account.service.impl;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.Pair;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.hasaker.account.document.FriendRequestDoc;
 import com.hasaker.account.entity.FriendRequest;
@@ -24,6 +25,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @package com.hasaker.account.service.impl
@@ -146,5 +149,32 @@ public class FriendRequestServiceImpl extends BaseServiceImpl<FriendRequestMappe
         esService.update(friendRequest.getId(), FriendRequestDoc.class, Arrays.asList(
                 new Pair<>(FriendRequestDoc.REQUEST_STATUS, FriendRequestStatusEnum.IGNORED.getCode()),
                 new Pair<>(FriendRequestDoc.IGNORE_TIME, friendRequest.getUpdateTime())));
+    }
+
+    /**
+     * Index all friend to ES
+     */
+    @Override
+    public void indexAll() {
+        QueryWrapper<FriendRequest> queryWrapper = new QueryWrapper<>();
+        List<FriendRequest> friendRequests = this.list(queryWrapper);
+
+        if (ObjectUtils.isNotNull(friendRequests)) {
+            List<FriendRequestDoc> friendRequestDocs = friendRequests.stream().map(o -> {
+                FriendRequestDoc friendRequestDoc = Convert.convert(FriendRequestDoc.class, o);
+                friendRequestDoc.setSendTime(o.getCreateTime());
+                if (FriendRequestStatusEnum.ACCEPTED.equalStr(o.getRequestStatus())) {
+                    friendRequestDoc.setAcceptTime(o.getUpdateTime());
+                } else if (FriendRequestStatusEnum.DENIED.equalStr(o.getRequestStatus())) {
+                    friendRequestDoc.setDenyTime(o.getUpdateTime());
+                } else if (FriendRequestStatusEnum.IGNORED.equalStr(o.getRequestStatus())) {
+                    friendRequestDoc.setIgnoreTime(o.getUpdateTime());
+                }
+                return friendRequestDoc;
+            }).collect(Collectors.toList());
+            esService.deleteIndex(FriendRequestDoc.class);
+            esService.createIndex(FriendRequestDoc.class);
+            esService.index(friendRequestDocs);
+        }
     }
 }

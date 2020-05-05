@@ -20,4 +20,6 @@ public interface FriendRequestService extends BaseService<FriendRequest> {
     void deny(Long friendRequestId);
 
     void ignore(Long friendRequestId);
+
+    void indexAll();
 }

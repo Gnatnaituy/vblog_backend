@@ -1,5 +1,7 @@
 package com.hasaker.account.controller;
 
+import com.hasaker.account.service.FriendRequestService;
+import com.hasaker.account.service.FriendService;
 import com.hasaker.account.service.UserService;
 import com.hasaker.account.vo.request.RequestUserUpdateVo;
 import com.hasaker.account.vo.response.ResponseUserOAuthVo;
@@ -20,6 +22,10 @@ public class AccountController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private FriendService friendService;
+    @Autowired
+    private FriendRequestService friendRequestService;
 
     @ApiOperation(value = "Login")
     @GetMapping(value = "/{username}")
@@ -56,6 +62,8 @@ public class AccountController {
     @GetMapping(value = "/index-all")
     public Ajax indexAll() {
         userService.indexAll();
+        friendService.indexAll();
+        friendRequestService.indexAll();
 
         return Ajax.success();
     }

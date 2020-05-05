@@ -50,7 +50,7 @@ public class FriendServiceImpl implements FriendService {
         CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(searchVo);
 
         Page<FriendDoc> friendDocs = esService.page(new Pair<>(Consts.USER_ID, searchVo.getUserId()), FriendDoc.class);
-        if (ObjectUtils.isNotNull(friendDocs)) {
+        if (ObjectUtils.isNotNull(friendDocs.getContent())) {
             List<Long> friendIds = friendDocs.stream().map(FriendDoc::getFriendId).collect(Collectors.toList());
             List<UserDoc> userDocs = esService.getByIds(friendIds, UserDoc.class);
             PageInfo<ResponseFriendInfoVo> friendPage = new PageInfo<>(friendDocs);

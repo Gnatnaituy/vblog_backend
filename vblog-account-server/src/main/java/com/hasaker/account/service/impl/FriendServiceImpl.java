@@ -3,6 +3,7 @@ package com.hasaker.account.service.impl;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.Pair;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.hasaker.account.document.FriendDoc;
 import com.hasaker.account.entity.Friend;
 import com.hasaker.account.exception.enums.FriendExceptionEnums;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @package com.hasaker.account.service.impl
@@ -90,6 +92,29 @@ public class FriendServiceImpl extends BaseServiceImpl<FriendMapper, Friend> imp
     }
 
     /**
+     * 修改好友昵称
+     * @param remarkVo
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void changeRemark(RequestFriendRemarkVo remarkVo) {
+        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(remarkVo);
+
+        QueryWrapper<Friend> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(Friend.USER_ID, remarkVo.getUserId());
+        queryWrapper.eq(Friend.FRIEND_ID, remarkVo.getFriendId());
+        Friend friend = this.getOne(queryWrapper);
+        FriendExceptionEnums.FRIEND_NOT_EXISTS.assertNotEmpty(friend);
+
+        friend.setRemark(remarkVo.getRemark());
+        this.updateById(friend);
+
+        // update remark in es
+        esService.update(friend.getId(), FriendDoc.class, new Pair<>(FriendDoc.REMARK, friend.getRemark()));
+    }
+
+    /**
      * 改变好友可见性
      * @param visibilityVo
      * @return
@@ -113,25 +138,22 @@ public class FriendServiceImpl extends BaseServiceImpl<FriendMapper, Friend> imp
     }
 
     /**
-     * 修改好友昵称
-     * @param remarkVo
-     * @return
+     * Index all friend to ES
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void changeRemark(RequestFriendRemarkVo remarkVo) {
-        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(remarkVo);
-
+    public void indexAll() {
         QueryWrapper<Friend> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq(Friend.USER_ID, remarkVo.getUserId());
-        queryWrapper.eq(Friend.FRIEND_ID, remarkVo.getFriendId());
-        Friend friend = this.getOne(queryWrapper);
-        FriendExceptionEnums.FRIEND_NOT_EXISTS.assertNotEmpty(friend);
+        List<Friend> friends = this.list(queryWrapper);
 
-        friend.setRemark(remarkVo.getRemark());
-        this.updateById(friend);
-
-        // update remark in es
-        esService.update(friend.getId(), FriendDoc.class, new Pair<>(FriendDoc.REMARK, friend.getRemark()));
+        if (ObjectUtils.isNotNull(friends)) {
+            List<FriendDoc> friendDocs = friends.stream().map(o -> {
+                FriendDoc friendDoc = Convert.convert(FriendDoc.class, o);
+                friendDoc.setAddTime(o.getCreateTime());
+                return friendDoc;
+            }).collect(Collectors.toList());
+            esService.deleteIndex(FriendDoc.class);
+            esService.createIndex(FriendDoc.class);
+            esService.index(friendDocs);
+        }
     }
 }
