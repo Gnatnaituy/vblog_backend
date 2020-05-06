@@ -1,6 +1,9 @@
 package com.hasaker.face.service.post;
 
 import com.hasaker.face.vo.response.ResponseTopicDetailVo;
+import com.hasaker.face.vo.response.ResponseTopicInfoVo;
+
+import java.util.List;
 
 /**
  * @package com.hasaker.face.service.post
@@ -11,4 +14,6 @@ import com.hasaker.face.vo.response.ResponseTopicDetailVo;
 public interface TopicService {
 
     ResponseTopicDetailVo detail(Long topicId);
+
+    List<ResponseTopicInfoVo> getUserTopics(Long userId);
 }

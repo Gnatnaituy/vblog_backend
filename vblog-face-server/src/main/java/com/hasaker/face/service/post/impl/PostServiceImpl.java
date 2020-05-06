@@ -24,10 +24,14 @@ import com.hasaker.post.message.CommentMessageDoc;
 import com.hasaker.post.message.VoteMessageDoc;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.Aggregations;
+import org.elasticsearch.search.aggregations.bucket.terms.ParsedStringTerms;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
@@ -233,6 +237,28 @@ public class PostServiceImpl implements PostService {
         }).sorted((o1, o2) -> (int) (o2.getCount() - o1.getCount()))
                 .limit(aggregationVo.getSize())
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Get the frequently appeared words is user's posts
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<String> getUserWords(Long userId) {
+        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(userId);
+
+        NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
+        queryBuilder.withQuery(QueryBuilders.termQuery(PostDoc.POSTER, userId));
+        queryBuilder.addAggregation(AggregationBuilders.terms("stringFieldAgg").field(PostDoc.CONTENT).size(20));
+        AggregatedPage<PostDoc> res = (AggregatedPage<PostDoc>) esService.page(queryBuilder.build(), PostDoc.class);
+        Aggregations aggregations = res.getAggregations();
+        ParsedStringTerms stringTerms = aggregations.get("stringFieldAgg");
+        List<ParsedStringTerms.ParsedBucket> buckets = (List<ParsedStringTerms.ParsedBucket>) stringTerms.getBuckets();
+
+        return ObjectUtils.isNull(buckets) ? Collections.emptyList() :
+                buckets.stream().sorted((o1, o2) -> (int) (o2.getDocCount() - o1.getDocCount()))
+                        .map(o -> o.getKey().toString()).collect(Collectors.toList());
     }
 
     /**

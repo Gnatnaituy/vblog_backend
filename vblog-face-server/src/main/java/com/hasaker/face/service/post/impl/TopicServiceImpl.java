@@ -1,12 +1,14 @@
 package com.hasaker.face.service.post.impl;
 
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.lang.Pair;
 import com.hasaker.account.document.UserDoc;
 import com.hasaker.common.exception.enums.CommonExceptionEnums;
 import com.hasaker.component.elasticsearch.service.EsService;
 import com.hasaker.component.oss.service.UploadService;
 import com.hasaker.face.service.post.TopicService;
 import com.hasaker.face.vo.response.ResponseTopicDetailVo;
+import com.hasaker.face.vo.response.ResponseTopicInfoVo;
 import com.hasaker.face.vo.response.ResponseUserInfoVo;
 import com.hasaker.post.document.PostDoc;
 import com.hasaker.post.document.TopicDoc;
@@ -19,6 +21,7 @@ import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -57,6 +60,7 @@ public class TopicServiceImpl implements TopicService {
 
         // Analyze most active users for this topic
         NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
+        queryBuilder.withQuery(QueryBuilders.termQuery(PostDoc.TOPICS, topicId));
         queryBuilder.withFilter(QueryBuilders.termQuery(PostDoc.TOPICS, topicId));
         queryBuilder.addAggregation(AggregationBuilders.terms("longFieldAgg").field(PostDoc.POSTER).size(10));
         AggregatedPage<PostDoc> res = (AggregatedPage<PostDoc>) elasticsearchOperations.queryForPage(queryBuilder.build(), PostDoc.class);
@@ -66,10 +70,28 @@ public class TopicServiceImpl implements TopicService {
         Set<Long> userIds = buckets.stream().map(o -> Long.valueOf(o.getKey().toString())).collect(Collectors.toSet());
         List<UserDoc> userDocs = esService.getByIds(userIds, UserDoc.class);
         topicDetailVo.setActiveUsers(userDocs.stream()
-                .map(o -> Convert.convert(ResponseUserInfoVo.class, userDoc))
-                .distinct().collect(Collectors.toList()));
+                .map(o -> Convert.convert(ResponseUserInfoVo.class, o))
+                .collect(Collectors.toList()));
         topicDetailVo.getActiveUsers().forEach(o -> o.setAvatar(uploadService.generateAccessUrl(o.getAvatar())));
 
         return topicDetailVo;
+    }
+
+    /**
+     * Get the frequently appeared topics is user's posts
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<ResponseTopicInfoVo> getUserTopics(Long userId) {
+        CommonExceptionEnums.NOT_NULL_ARG.assertNotEmpty(userId);
+
+        List<PostDoc> postDocs = esService.list(new Pair<>(PostDoc.POSTER, userId), PostDoc.class);
+        Set<Long> topicIds = new HashSet<>();
+        postDocs.forEach(o -> topicIds.addAll(o.getTopics()));
+
+        List<TopicDoc> topicDocs = esService.getByIds(topicIds, TopicDoc.class);
+
+        return topicDocs.stream().map(o -> Convert.convert(ResponseTopicInfoVo.class, o)).collect(Collectors.toList());
     }
 }

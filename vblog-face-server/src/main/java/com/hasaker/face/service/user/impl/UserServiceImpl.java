@@ -12,25 +12,22 @@ import com.hasaker.common.vo.PageInfo;
 import com.hasaker.component.elasticsearch.service.EsService;
 import com.hasaker.component.oss.service.UploadService;
 import com.hasaker.face.exception.enums.UserExceptionEnums;
+import com.hasaker.face.service.post.PostService;
+import com.hasaker.face.service.post.TopicService;
 import com.hasaker.face.service.user.UserService;
 import com.hasaker.face.vo.request.RequestUserSearchVo;
 import com.hasaker.face.vo.response.ResponseTopicInfoVo;
 import com.hasaker.face.vo.response.ResponseUserDetailVo;
 import com.hasaker.face.vo.response.ResponseUserInfoVo;
 import com.hasaker.post.document.PostDoc;
-import com.hasaker.post.document.TopicDoc;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.search.aggregations.AggregationBuilders;
-import org.elasticsearch.search.aggregations.Aggregations;
-import org.elasticsearch.search.aggregations.bucket.terms.ParsedStringTerms;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
-import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Service;
@@ -47,6 +44,10 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
 
+    @Autowired
+    private PostService postService;
+    @Autowired
+    private TopicService topicService;
     @Autowired
     private UploadService uploadService;
     @Autowired
@@ -125,31 +126,9 @@ public class UserServiceImpl implements UserService {
         }
 
         // User's topics
-        List<TopicDoc> topicDocs = esService.list(new Pair<>(TopicDoc.CREATE_USER, userId), TopicDoc.class);
-        if (ObjectUtils.isNotNull(topicDocs)) {
-            userDetailVo.setTopics(topicDocs.stream()
-                    .map(o -> Convert.convert(ResponseTopicInfoVo.class, o))
-                    .collect(Collectors.toList()));
-        } else {
-            userDetailVo.setTopics(Collections.emptyList());
-        }
-
+        userDetailVo.setTopics(topicService.getUserTopics(userId));
         // User's words
-        NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
-        queryBuilder.withQuery(QueryBuilders.termQuery(PostDoc.POSTER, userId));
-        queryBuilder.addAggregation(AggregationBuilders.terms("stringFieldAgg").field(PostDoc.CONTENT).size(20));
-        AggregatedPage<PostDoc> res = (AggregatedPage<PostDoc>) elasticsearchOperations
-                .queryForPage(queryBuilder.build(), PostDoc.class);
-        Aggregations aggregations = res.getAggregations();
-        ParsedStringTerms stringTerms = aggregations.get("stringFieldAgg");
-        List<ParsedStringTerms.ParsedBucket> buckets = (List<ParsedStringTerms.ParsedBucket>) stringTerms.getBuckets();
-        if (ObjectUtils.isNotNull(buckets)) {
-            userDetailVo.setWords(buckets.stream()
-                    .sorted((o1, o2) -> (int) (o2.getDocCount() - o1.getDocCount()))
-                    .map(o -> o.getKey().toString()).collect(Collectors.toList()));
-        } else {
-            userDetailVo.setWords(Collections.emptyList());
-        }
+        userDetailVo.setWords(postService.getUserWords(userId));
 
         if (ObjectUtils.isNotNull(loggedUserId) && !userId.equals(loggedUserId)) {
             // Friend status
@@ -228,9 +207,9 @@ public class UserServiceImpl implements UserService {
     public ResponseUserDetailVo recommendUser(Long userId) {
 
         // Obtain topics and words for currentUser
-        ResponseUserDetailVo currentUser = detail(userId, null);
-        List<Long> topics = currentUser.getTopics().stream().map(ResponseTopicInfoVo::getId).collect(Collectors.toList());
-        List<String> words = currentUser.getWords();
+        List<Long> topics = topicService.getUserTopics(userId).stream()
+                .map(ResponseTopicInfoVo::getId).collect(Collectors.toList());
+        List<String> words = postService.getUserWords(userId);
         if (ObjectUtils.isEmpty(topics) && ObjectUtils.isEmpty(words)) {
             return null;
         }

@@ -29,6 +29,8 @@ public interface PostService {
 
     List<ResponseHotUsersAggVo> getHotUsers(RequestAggregationVo aggregationVo);
 
+    List<String> getUserWords(Long userId);
+
     void readMessage(RequestMessageReadVo readVo);
 
     void indexAll();
