@@ -3,6 +3,7 @@ package com.hasaker.face.service.post.impl;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.Pair;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
+import com.hasaker.account.document.FriendDoc;
 import com.hasaker.account.document.UserDoc;
 import com.hasaker.common.consts.Consts;
 import com.hasaker.common.consts.RequestConsts;
@@ -88,6 +89,22 @@ public class PostServiceImpl implements PostService {
         }
         if (ObjectUtils.isNotNull(pageVo.getTopic())) {
             boolQueryBuilder.must(QueryBuilders.termQuery(PostDoc.TOPICS, pageVo.getTopic()));
+        }
+        if (ObjectUtils.isNotNull(pageVo.getUserId())) {
+            List<FriendDoc> friends = esService.list(new Pair<>(Consts.USER_ID, pageVo.getUserId()), FriendDoc.class);
+            List<Long> friendIds = friends.stream().map(FriendDoc::getFriendId).collect(Collectors.toList());
+            if (ObjectUtils.isNotNull(pageVo.getOnlyFriends()) && pageVo.getOnlyFriends()) {
+                if (ObjectUtils.isNotNull(friends)) {
+                    boolQueryBuilder.must(QueryBuilders.termsQuery(PostDoc.POSTER, friendIds));
+                } else {
+                    boolQueryBuilder.must(QueryBuilders.termQuery(PostDoc.POSTER, -1L));
+                }
+            } else {
+                UserDoc userDoc = esService.getById(pageVo.getUserId(), UserDoc.class);
+                if (ObjectUtils.isNotNull(userDoc.getBlocks())) {
+                    boolQueryBuilder.mustNot(QueryBuilders.termsQuery(PostDoc.POSTER, userDoc.getBlocks()));
+                }
+            }
         }
 
         SearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder).build();

@@ -29,4 +29,6 @@ public class RequestPostSearchVo extends SearchVo {
 
     @ApiModelProperty(value = "filter by poster")
     private Long poster;
+
+    private Boolean onlyFriends;
 }
