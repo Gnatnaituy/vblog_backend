@@ -40,4 +40,9 @@ public class OpenUserController extends BaseController {
     public Ajax indexAll() {
         return accountClient.indexAllUsers();
     }
+
+    @GetMapping("/recommend")
+    public Ajax<ResponseUserDetailVo> recommendUser() {
+        return Ajax.getInstance().successT(userService.recommendUser(getUserId()));
+    }
 }

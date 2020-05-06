@@ -106,7 +106,9 @@ public class FriendServiceImpl implements FriendService {
                         requestVo.setSender(userMap.get(o.getSenderId()));
                         requestVo.setReceiver(userMap.get(o.getReceiverId()));
                         return requestVo;
-                    }).collect(Collectors.toList());
+                    })
+                    .sorted((o1, o2) -> (int) (o2.getSendTime() - o1.getSendTime()))
+                    .collect(Collectors.toList());
         }
 
         return Collections.emptyList();

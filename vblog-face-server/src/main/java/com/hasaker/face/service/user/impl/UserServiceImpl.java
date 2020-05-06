@@ -137,9 +137,9 @@ public class UserServiceImpl implements UserService {
         // User's words
         NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
         queryBuilder.withQuery(QueryBuilders.termQuery(PostDoc.POSTER, userId));
-        queryBuilder.addAggregation(AggregationBuilders.terms("stringFieldAgg").field(PostDoc.CONTENT).size(10));
-        AggregatedPage<PostDoc> res = (AggregatedPage<PostDoc>)
-                elasticsearchOperations.queryForPage(queryBuilder.build(), PostDoc.class);
+        queryBuilder.addAggregation(AggregationBuilders.terms("stringFieldAgg").field(PostDoc.CONTENT).size(20));
+        AggregatedPage<PostDoc> res = (AggregatedPage<PostDoc>) elasticsearchOperations
+                .queryForPage(queryBuilder.build(), PostDoc.class);
         Aggregations aggregations = res.getAggregations();
         ParsedStringTerms stringTerms = aggregations.get("stringFieldAgg");
         List<ParsedStringTerms.ParsedBucket> buckets = (List<ParsedStringTerms.ParsedBucket>) stringTerms.getBuckets();
@@ -216,5 +216,62 @@ public class UserServiceImpl implements UserService {
         List<UserDoc> userDocs = esService.list(QueryBuilders.termsQuery(Consts.ID, userIds), UserDoc.class);
 
         return userDocs.stream().map(o -> Convert.convert(ResponseUserInfoVo.class, o)).collect(Collectors.toList());
+    }
+
+    /**
+     * Recommend a user for current logged user
+     * Recommend by user's topics and words
+     * @param userId
+     * @return
+     */
+    @Override
+    public ResponseUserDetailVo recommendUser(Long userId) {
+
+        // Obtain topics and words for currentUser
+        ResponseUserDetailVo currentUser = detail(userId, null);
+        List<Long> topics = currentUser.getTopics().stream().map(ResponseTopicInfoVo::getId).collect(Collectors.toList());
+        List<String> words = currentUser.getWords();
+        if (ObjectUtils.isEmpty(topics) && ObjectUtils.isEmpty(words)) {
+            return null;
+        }
+
+        // Filter posts by topics and/or words
+        NativeSearchQueryBuilder nativeSearchQueryBuilder = new NativeSearchQueryBuilder();
+        if (ObjectUtils.isNotEmpty(topics)) {
+            nativeSearchQueryBuilder.withFilter(QueryBuilders.termsQuery(PostDoc.TOPICS, topics));
+        }
+        BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
+        boolQueryBuilder.mustNot(QueryBuilders.termQuery(PostDoc.POSTER, userId));
+        if (ObjectUtils.isNotEmpty(words)) {
+            words.forEach(o -> boolQueryBuilder.should(QueryBuilders.matchQuery(PostDoc.CONTENT, o)));
+            nativeSearchQueryBuilder.withQuery(boolQueryBuilder);
+        }
+        List<PostDoc> postDocs = esService.list(nativeSearchQueryBuilder.build(), PostDoc.class);
+        if (ObjectUtils.isEmpty(postDocs)) {
+            return null;
+        }
+
+        // Statistics user and score
+        Map<Long, Integer> userScore = new HashMap<>();
+        Integer score = userScore.size();
+        for (PostDoc postDoc : postDocs) {
+            if (userScore.containsKey(postDoc.getPoster())) {
+                userScore.put(postDoc.getPoster(), userScore.get(postDoc.getPoster()) + score);
+            } else {
+                userScore.put(postDoc.getPoster(), score);
+            }
+            score--;
+        }
+
+        // Obtain the max scored user
+        Long recommendUser = -1L;
+        Integer maxScore = -1;
+        for (Map.Entry<Long, Integer> entry : userScore.entrySet()) {
+            if (entry.getValue() > maxScore) {
+                recommendUser = entry.getKey();
+            }
+        }
+
+        return detail(recommendUser, userId);
     }
 }

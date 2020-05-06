@@ -24,4 +24,6 @@ public interface UserService {
     Map<Long, ResponseUserInfoVo> mapUserInfo(Collection<Long> userIds);
 
     List<ResponseUserInfoVo> listUserInfo(Collection<Long> userIds);
+
+    ResponseUserDetailVo recommendUser(Long userId);
 }

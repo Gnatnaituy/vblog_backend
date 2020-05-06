@@ -163,7 +163,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
 
         esService.deleteIndex(UserDoc.class);
         esService.createIndex(UserDoc.class);
-        if (ObjectUtil.isNotNull(users)) {
+        if (ObjectUtil.isNotEmpty(users)) {
             QueryWrapper<Block> blockQueryWrapper = new QueryWrapper<>();
             List<Block> blocks = blockService.list(blockQueryWrapper);
             Map<Long, Set<Long>> blockMap = blocks.stream().collect(Collectors.groupingBy(Block::getUserId,
