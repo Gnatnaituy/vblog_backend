@@ -32,6 +32,9 @@ public class PostController {
         if (ObjectUtils.isNotNull(postVo.getImages())) {
             postVo.getImages().forEach(o -> o.setUrl(uploadService.getKey(o.getUrl())));
         }
+        if (ObjectUtils.isNull(postVo.getVisibility())) {
+            postVo.setVisibility("1");
+        }
 
         return postClient.savePost(postVo);
     }

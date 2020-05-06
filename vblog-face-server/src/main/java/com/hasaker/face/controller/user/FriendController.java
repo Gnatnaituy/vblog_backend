@@ -1,5 +1,6 @@
 package com.hasaker.face.controller.user;
 
+import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.hasaker.account.feign.FriendClient;
 import com.hasaker.account.vo.request.*;
 import com.hasaker.common.vo.Ajax;
@@ -34,12 +35,18 @@ public class FriendController extends BaseController {
     @PostMapping(value = "/request/send")
     public Ajax sendFriendRequest(@RequestBody RequestFriendRequestVo requestVo) {
         requestVo.setSenderId(getUserId());
+        if (ObjectUtils.isNull(requestVo.getSenderVisibility())) {
+            requestVo.setSenderVisibility(1);
+        }
         return friendClient.sendFriendRequest(requestVo);
     }
 
     @ApiOperation(value = "Accept a friend request")
     @PostMapping(value = "/request/accept")
     public Ajax acceptFriendRequest(@RequestBody RequestFriendRequestAcceptVo acceptVo) {
+        if (ObjectUtils.isNull(acceptVo.getAccepterVisibility())) {
+            acceptVo.setAccepterVisibility(1);
+        }
         return friendClient.acceptFriendRequest(acceptVo);
     }
 

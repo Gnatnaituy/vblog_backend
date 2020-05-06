@@ -160,18 +160,15 @@ public class UserServiceImpl implements UserService {
                     userDetailVo.setFriendStatus(Consts.IS_FRIEND);
                 }
             } else {
-                List<FriendRequestDoc> friendRequestDocs = esService.list(
-                        new Pair<>(FriendRequestDoc.SENDER_ID, loggedUserId), FriendRequestDoc.class);
+                List<FriendRequestDoc> friendRequestDocs = esService.list(Arrays.asList(
+                        new Pair<>(FriendRequestDoc.SENDER_ID, loggedUserId),
+                        new Pair<>(FriendRequestDoc.RECEIVER_ID, userId)), FriendRequestDoc.class);
                 if (ObjectUtils.isNotNull(friendRequestDocs)) {
-                    Optional<FriendRequestDoc> friendRequest = friendRequestDocs.stream()
-                            .filter(o -> o.getSenderId().equals(loggedUserId))
-                            .findAny();
-                    if (friendRequest.isPresent()) {
-                        if (friendRequest.get().getRequestStatus().equals("FRIEND_REQUEST_STATUS_003")) {
-                            userDetailVo.setFriendStatus(Consts.REQUEST_DENIED);
-                        } else {
-                            userDetailVo.setFriendStatus(Consts.REQUEST_SEND);
-                        }
+                    FriendRequestDoc friendRequestDoc = friendRequestDocs.get(0);
+                    if (friendRequestDoc.getRequestStatus().equals("FRIEND_REQUEST_STATUS_003")) {
+                        userDetailVo.setFriendStatus(Consts.REQUEST_DENIED);
+                    } else {
+                        userDetailVo.setFriendStatus(Consts.REQUEST_SEND);
                     }
                 } else {
                     userDetailVo.setFriendStatus(Consts.NOT_FRIEND);

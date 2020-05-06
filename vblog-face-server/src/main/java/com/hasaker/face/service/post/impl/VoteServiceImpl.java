@@ -70,13 +70,14 @@ public class VoteServiceImpl implements VoteService {
         List<VoteMessageDoc> voteMessageDocs = esService.list(matchFields, VoteMessageDoc.class);
 
         if (ObjectUtils.isNotNull(voteMessageDocs)) {
-            List<Long> voterIds = voteMessageDocs.stream().map(VoteMessageDoc::getCreateUser).collect(Collectors.toList());
+            List<Long> voterIds = voteMessageDocs.stream()
+                    .map(VoteMessageDoc::getCreateUser).collect(Collectors.toList());
             List<UserDoc> voters = esService.getByIds(voterIds, UserDoc.class);
             Map<Long, ResponseUserInfoVo> userMap = voters.stream()
                     .map(o -> Convert.convert(ResponseUserInfoVo.class, o))
                     .collect(Collectors.toMap(ResponseUserInfoVo::getId, o -> o));
 
-            return voteMessageDocs.stream().map(o -> {
+            return voteMessageDocs.stream().filter(o -> !o.getCreateUser().equals(userId)).map(o -> {
                 ResponseMessageVoteVo voteVo = Convert.convert(ResponseMessageVoteVo.class, o);
                 voteVo.setCreateUser(userMap.get(o.getCreateUser()));
                 return voteVo;

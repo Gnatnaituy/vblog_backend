@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 import java.util.List;
 
@@ -19,11 +18,9 @@ import java.util.List;
 @ApiModel(description = "Create a post")
 public class RequestPostVo {
 
-    @NonNull
     @ApiModelProperty(value = "Post's content")
     private String content;
 
-    @NonNull
     @ApiModelProperty(value = "Post's visibility")
     private String visibility;
 

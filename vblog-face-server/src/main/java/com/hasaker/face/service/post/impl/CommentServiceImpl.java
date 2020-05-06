@@ -107,13 +107,14 @@ public class CommentServiceImpl implements CommentService {
         List<CommentMessageDoc> commentMessageDocs = esService.list(matchFields, CommentMessageDoc.class);
 
         if (ObjectUtils.isNotNull(commentMessageDocs)) {
-            List<Long> commenterIds = commentMessageDocs.stream().map(CommentMessageDoc::getCreateUser).collect(Collectors.toList());
+            List<Long> commenterIds = commentMessageDocs.stream()
+                    .map(CommentMessageDoc::getCreateUser).collect(Collectors.toList());
             List<UserDoc> commenters = esService.getByIds(commenterIds, UserDoc.class);
             Map<Long, ResponseUserInfoVo> userMap = commenters.stream()
                     .map(o -> Convert.convert(ResponseUserInfoVo.class, o))
                     .collect(Collectors.toMap(ResponseUserInfoVo::getId, o -> o));
 
-            return commentMessageDocs.stream().map(o -> {
+            return commentMessageDocs.stream().filter(o -> !o.getCreateUser().equals(userId)).map(o -> {
                 ResponseMessageCommentVo commentVo = Convert.convert(ResponseMessageCommentVo.class, o);
                 commentVo.setCreateUser(userMap.get(o.getCreateUser()));
                 return commentVo;

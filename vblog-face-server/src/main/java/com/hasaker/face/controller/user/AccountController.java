@@ -3,6 +3,7 @@ package com.hasaker.face.controller.user;
 import com.hasaker.account.feign.AccountClient;
 import com.hasaker.account.vo.request.RequestUserUpdateVo;
 import com.hasaker.common.vo.Ajax;
+import com.hasaker.component.oss.service.UploadService;
 import com.hasaker.face.controller.base.BaseController;
 import com.hasaker.face.service.user.UserService;
 import com.hasaker.face.vo.response.ResponseUserDetailVo;
@@ -24,11 +25,15 @@ public class AccountController extends BaseController {
     private AccountClient accountClient;
     @Autowired
     private UserService userService;
+    @Autowired
+    private UploadService uploadService;
 
     @ApiOperation(value = "Update user's detail information by username")
     @PostMapping(value = "/update")
     public Ajax update(@RequestBody RequestUserUpdateVo userUpdateVo) {
         userUpdateVo.setUserId(getUserId());
+        userUpdateVo.setAvatar(uploadService.getKey(userUpdateVo.getAvatar()));
+        userUpdateVo.setBackground(uploadService.getKey(userUpdateVo.getBackground()));
         return accountClient.update(userUpdateVo);
     }
 

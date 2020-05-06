@@ -26,7 +26,6 @@ public class RequestFriendRequestAcceptVo {
     @ApiModelProperty(value = "The remark set by accepter for sender")
     private String accepterRemark;
 
-    @NonNull
     @ApiModelProperty(value = "The visibility set by accepter for sender")
     private Integer accepterVisibility;
 }
